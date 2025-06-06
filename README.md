@@ -25,6 +25,8 @@ nan0in's dotfiles from his arch-linux,keep exploring
 
 ### 桌面系统
 有hyprland的但还没完全配置好，常用kde,系统通知使用mako
+![c72dc413-41b3-458e-84d4-b9e12b1af7eb](https://github.com/user-attachments/assets/fc79acf7-cbdb-42fc-868b-647402a1a26e)
+
 
 ### 依赖
 `.zshrc`中引入了uv管理，安装uv，还有conda
@@ -33,17 +35,28 @@ nan0in's dotfiles from his arch-linux,keep exploring
 使用fcitx5
 
 ### shell
+统一主题dracula
 zsh,终端模拟器为konsole
-tmux多窗口管理
+tmux多窗口管理 ranger文件管理
+![image](https://github.com/user-attachments/assets/55f1aab9-9410-4d43-baa1-43b8adfee067)
+
 
 ### editor
 neovim lazyvim管理
+![image](https://github.com/user-attachments/assets/633fbd6d-cb97-4d50-b408-4e975b308546)
+
 
 ### 办公文件
-libreoffice替代microsoft office on windows
+libreoffice替代microsoft office on windows  
+draw.io——绘制图像  
+drawpen——快速调出画笔批注  
+goldendict——字典  
+IMHEX——类010editor  
 
 ### music
 yesplaymusic
+
+
 
 ## license
 - MIT
