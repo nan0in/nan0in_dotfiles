@@ -1,0 +1,16 @@
+#!/bin/zsh
+
+CONFIG_DIR="$HOME/.config/hypr/custom/animations"
+CURRENT_LINK="$HOME/.config/hypr/custom/current-animation.conf"
+
+# 获取所有动画文件名（不带路径和扩展名）
+ANIMATIONS=($(basename -a -s .conf $CONFIG_DIR/*.conf))
+
+# 用Rofi显示选择菜单
+CHOICE=$(printf "%s\n" "${ANIMATIONS[@]}" | rofi -dmenu -p "Select Animation")
+
+if [[ -n "$CHOICE" ]]; then
+    ln -sf "$CONFIG_DIR/$CHOICE.conf" "$CURRENT_LINK"
+    notify-send "Hyprland Animation" "Switched to: $CHOICE" --icon=preferences-desktop-effects
+    hyprctl reload
+fi
