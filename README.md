@@ -35,9 +35,9 @@ nan0in's dotfiles from his arch-linux,keep exploring
 使用fcitx5
 
 ### shell
-统一主题dracula
-zsh,终端模拟器为konsole
-tmux多窗口管理 ranger文件管理
+统一主题dracula  
+使用zsh,终端模拟器为konsole  
+tmux多窗口管理 ranger文件管理  
 ![image](https://github.com/user-attachments/assets/55f1aab9-9410-4d43-baa1-43b8adfee067)
 
 
