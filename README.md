@@ -54,7 +54,7 @@ goldendict——字典
 IMHEX——类010editor  
 
 ### music
-yesplaymusic
+go-musicfox
 
 
 
