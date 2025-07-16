@@ -28,10 +28,28 @@ plugins=(git zsh-syntax-highlighting extract web-search jsontools z vi-mode zsh-
 export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 source $ZSH/oh-my-zsh.sh
 
+
+# 常规一些配置
+export EDITOR="nvim"          # 默认编辑器设为 Neovim,也是为了yazi配置的
+export VISUAL="nvim"          # 图形环境备用编辑器
+export YAZI_ZOXIDE_OPTS="--exclude /mnt /tmp"  # zoxide 排除目录（按需修改）
+
+
 alias ran='ranger'
 # alias vim='nvim'
 alias vim='nvim'
 alias neo='neovide'
+
+
+#configurations of yazi
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	yazi "$@" --cwd-file="$tmp"
+	IFS= read -r -d '' cwd < "$tmp"
+	[ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
+	rm -f -- "$tmp"
+}
+
 # >>> conda initialize >>>
 # !! contents within this block are managed by 'conda init' !!
 __conda_setup="$('/home/nan0in27/software/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
@@ -112,8 +130,11 @@ rm() {
 
 
 # 定义代理地址变量
-httpproxy=http://127.0.0.1:20171
-socksproxy=socks5://127.0.0.1:20170
+# httpproxy=http://127.0.0.1:20171
+# socksproxy=socks5://127.0.0.1:20170
+
+httpproxy=http://127.0.0.1:7890
+socksproxy=socks5://127.0.0.1:7890
 
 # 设置使用代理
 alias setproxy="export http_proxy=$httpproxy; export https_proxy=$httpproxy; export all_proxy=$socksproxy; echo 'Set proxy successfully'"
@@ -122,8 +143,16 @@ alias setproxy="export http_proxy=$httpproxy; export https_proxy=$httpproxy; exp
 alias unsetproxy="unset http_proxy; unset https_proxy; unset all_proxy; echo 'Unset proxy successfully'"
 
 # 查ip
-alias ipcn="curl myip.ipip.net"
-alias ip="curl ip.sb"
+# alias ipcn="curl myip.ipip.net"
+# alias ip="curl ip.sb"
 
 # bug 
 export PATH="$HOME/.local/bin:$PATH"
+
+
+# 南大pa
+export NEMU_HOME=/home/nan0in27/NJUPA/ics2024/nemu
+export AM_HOME=/home/nan0in27/NJUPA/ics2024/abstract-machine
+alias gcc='./usr/bin/ccache/gcc'
+
+

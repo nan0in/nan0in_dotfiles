@@ -4,22 +4,26 @@ background-color=#2e34407f
 width=450
 height=150
 border-size=3
-border-color=#99c0d0
+border-color=#6272a4
 border-radius=12
 icons=0
 max-icon-size=64
 default-timeout=5000
 ignore-timeout=0
 font="Noto Sans CJK SC" 14
+anchor=top-right
 margin=12
 padding=12,20
 
+
+# 不同通知级别颜色
 [urgency=low]
-border-color=#cccccc
+background-color=#44475a
 
 [urgency=normal]
-border-color=#99c0d0
+background-color=#282a36
 
 [urgency=critical]
-border-color=#bf616a
+background-color=#ff5555
+text-color=#f8f8f2
 default-timeout=0
