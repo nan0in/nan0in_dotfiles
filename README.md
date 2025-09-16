@@ -1,4 +1,7 @@
 # nan0in_dotfiles
+> [!IMPORTANT]
+> 已经重装3次Arch Linux
+
 nan0in's dotfiles from his arch-linux,keep exploring  
 我使用[GNU Stow](https://www.gnu.org/software/stow/)来帮助我管理我的linux配置文件
 简单讲一下Gnu Stow，实际上就是通过两个文件夹来管理文件  
@@ -37,6 +40,13 @@ nan0in's dotfiles from his arch-linux,keep exploring
 ### shell
 统一主题dracula  
 使用zsh,终端模拟器为konsole  
+
+#### 依赖
+`git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions`  
+`git clone https://github.com/zsh-users/zsh-syntax-highlighting ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting`  
+`sudo pacman -S fortune-mod cowsay lolcat`
+
+
 tmux多窗口管理 ranger文件管理  
 ![image](https://github.com/user-attachments/assets/55f1aab9-9410-4d43-baa1-43b8adfee067)
 
