@@ -44,11 +44,17 @@ nan0in's dotfiles from his arch-linux,keep exploring
 #### 依赖
 `git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions`  
 `git clone https://github.com/zsh-users/zsh-syntax-highlighting ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting`  
-`sudo pacman -S fortune-mod cowsay lolcat`
+`sudo pacman -S fortune-mod cowsay lolcat`  
 
-
-tmux多窗口管理 ranger文件管理  
+### tmux多窗口管理 ranger文件管理  
 ![image](https://github.com/user-attachments/assets/55f1aab9-9410-4d43-baa1-43b8adfee067)
+
+#### 依赖
+`git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm` --> tmux插件
+`git clone https://github.com/tmux-plugins/tmux-resurrect ~/.tmux/plugins/tmux-resurrect` -->构建  
+`git clone https://github.com/dracula/tmux ~/.tmux/plugins/dracula` -->主题
+
+
 
 
 ### editor
