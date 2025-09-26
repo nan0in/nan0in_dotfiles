@@ -7,9 +7,11 @@
 -- Or remove existing autocmds by their group name (which is prefixed with `lazyvim_` for the defaults)
 -- e.g. vim.api.nvim_del_augroup_by_name("lazyvim_wrap_spell")
 vim.api.nvim_create_autocmd("FileType", {
-  pattern = "lua",
+  pattern ={"lua","markdown","gitcommit"},
   callback = function()
     vim.opt_local.shiftwidth = 2
     vim.opt_local.tabstop = 2
+    vim.opt_local.wrap = true --自动拆行
+    vim.opt_local.spell = false -- 覆盖默认true,即拼写检查
   end,
 })

@@ -11,8 +11,6 @@ return {
   { "SirVer/ultisnips" },
   { "honza/vim-snippets" },
 
-  -- Markdown 预览
-  { "iamcco/markdown-preview.nvim", build = "cd app && npm install" },
 
   -- Markdown 支持
   { "tpope/vim-markdown" },
@@ -145,4 +143,38 @@ return {
       })
     end,
   },
+  {
+    "MeanderingProgrammer/render-markdown.nvim",
+    dependencies = { "nvim-treesitter/nvim-treesitter", "echasnovski/mini.nvim" }, -- if you use the mini.nvim suite
+    -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.icons' }, -- if you use standalone mini plugins
+    -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
+    ---@module 'render-markdown'
+    ---@type render.md.UserConfig
+    opts = {},
+  },
+  -- 图片粘贴
+  {
+    "HakonHarnes/img-clip.nvim",
+    event = "VeryLazy",
+    opts = {
+        clipboard_command = "wl-paste",
+        img_dir = {"src", "assets", "images"},
+        img_dir_txt = {"src", "assets", "images"},
+      -- add options here
+      -- or leave it empty to use the default settings
+    },
+    keys = {
+      -- suggested keymap
+      { "<leader>p", "<cmd>PasteImage<cr>", desc = "Paste image from system clipboard" },
+    },
+  },
+  -- 用于快速添加、删除、修改成对符号，如括号、引号等
+  {
+  "kylechui/nvim-surround",
+  version = "*", -- Use for stability; omit to use `main` branch for the latest features
+  event = "VeryLazy",
+  config = function()
+    require("nvim-surround").setup({})
+  end,
+},
 }

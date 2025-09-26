@@ -1,33 +1,16 @@
--- bootstrap lazy.nvim, LazyVim
--- 获取当前文件名（不带扩展名）
-local function get_filename()
-  return vim.fn.expand("%:r") -- %:r 去掉扩展名（如 main.cpp → main）
-end
-
--- F5: 编译当前文件
-vim.keymap.set("n", "<F5>", function()
-  local filetype = vim.bo.filetype
-  local filename = get_filename()
-  if filetype == "cpp" then
-    vim.cmd("!g++ -Wall -g % -o " .. filename)
-  elseif filetype == "c" then
-    vim.cmd("!gcc -Wall -g % -o " .. filename)
-  end
-  print("✅ 编译完成！可执行文件: ./" .. filename)
-end, { noremap = true, silent = false })
-
--- 启用系统剪贴板
-vim.opt.clipboard = "unnamedplus"
+vim.opt.tags = './tags;,tags;'
+vim.o.cmdheight = 0 -- 显示命令行区域
 
 -- 映射 Ctrl+Shift+V 粘贴（插入模式）
 vim.api.nvim_set_keymap("i", "<C-S-v>", "<C-r>+", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("n", "<C-S-v>", '"+p', { noremap = true, silent = true })
 ---
-
 if vim.g.neovide then
   vim.g.neovide_theme = "auto"
   vim.g.neovide_cursor_vfx_mode = "torpedo"
-  vim.o.guifont = "JetBrainsMono Nerd Font:h11"
+  vim.o.guifont = "Noto Sans Mono:h13"
+  vim.g.neovide_floating_blur = false -- 禁用浮动窗口模糊
+  vim.g.neovide_refresh_rate = 60      -- 确保刷新率正常
 end
 
 require("config.lazy")
@@ -44,7 +27,24 @@ require("mini.pairs").setup({
   },
 })
 
+-- 识别大型项目
+-- init.lua 配置
+require("lspconfig").clangd.setup({
+  cmd = {
+    "clangd",
+    "--background-index",
+    "--compile-commands-dir=.", -- 关键参数！指向项目根目录
+    "--query-driver=/usr/bin/gcc", -- 指定实际使用的编译器
+  },
+})
+
+vim.diagnostic.config({
+  virtual_text = false, -- 可以为 false，如果你不想让虚拟文字干扰代码行
+})
+
+--- 设置粘贴板
+vim.cmd([[set clipboard=unnamedplus]])
 -- themes --
-vim.cmd([[colorscheme dracula]])
+-- vim.cmd([[colorscheme dracula]])
 -- vim.cmd([[colorscheme catppuccin]])
--- vim.cmd([[colorscheme cyberdream]])
+vim.cmd([[colorscheme tokyonight]])

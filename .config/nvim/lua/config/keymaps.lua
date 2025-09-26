@@ -2,6 +2,9 @@
 -- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
 -- Add any additional keymaps here
 
+--- 调用compile模块
+local compile = require("config.compile")
+vim.keymap.set("n", "<F5>", compile.compile_current_file, { noremap = true, silent = false })
 -- 切换 Inlay Hints 显示/隐藏
 -- map("n", "<leader>h", ":call CocAction('toggleInlayHints')<CR>", opts)
 vim.opt.backup = false
@@ -19,3 +22,5 @@ end
 --" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list
 keyset("n", "-", "<Plug>(coc-diagnostic-prev)", { silent = true })
 keyset("n", "=", "<Plug>(coc-diagnostic-next)", { silent = true })
+
+

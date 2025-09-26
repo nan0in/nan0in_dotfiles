@@ -15,13 +15,26 @@ opt.updatetime = 100
 opt.shortmess:append("c")
 
 -- 补全菜单高度
-opt.pumheight = 5
+opt.pumheight = 10
 
 -- 系统剪贴板支持
 opt.clipboard = "unnamedplus"
 
 -- 语法高亮
 opt.syntax = "on"
+
+-- 禁用拼写
+opt.spell = false
+
+--- 关闭自动格式化
+vim.g.autoformat = false
+
+--- 设置conceals level 
+opt.conceallevel = 0 
+
+-- 显示空白字符为点
+opt.list = true
+opt.listchars = { space = "·" }
 
 local function augroup(name)
   return vim.api.nvim_create_augroup("lazyvim_" .. name, { clear = true })
@@ -36,3 +49,5 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.opt_local.spell = false -- 覆盖默认的 true
   end,
 })
+
+

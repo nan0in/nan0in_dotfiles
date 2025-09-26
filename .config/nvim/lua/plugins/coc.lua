@@ -18,12 +18,6 @@ keyset("n", "<leader>h", "<CMD>lua _G.show_docs()<CR>", { silent = true })
 keyset("n", "-", "<Plug>(coc-diagnostic-prev)", opts)
 keyset("n", "=", "<Plug>(coc-diagnostic-next)", opts)
 
--- GoTo code navigation 找到代码相关位置
-keyset("n", "gd", "<Plug>(coc-definition)", opts)
-keyset("n", "gy", "<Plug>(coc-type-definition)", opts)
-keyset("n", "gi", "<Plug>(coc-implementation)", opts)
-keyset("n", "gr", "<Plug>(coc-references)", opts)
-
 -- 高光突出悬停
 vim.api.nvim_create_augroup("CocGroup", {})
 vim.api.nvim_create_autocmd("CursorHold", {

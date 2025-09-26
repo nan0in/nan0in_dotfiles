@@ -1,5 +1,5 @@
 #美化这里的piano是我自己找的字符画
-fastfetch --logo none --structure title:os:host:kernel:uptime:shell:terminal:localip:disk:cpu:gpu:colors --data-raw "$(fortune | cowsay -W 30 -f piano)" | lolcat
+fastfetch --logo none --structure title:os:host:kernel:uptime:shell:terminal:localip:cpu:gpu:colors --data-raw "$(fortune | cowsay -W 30 -f piano)" | lolcat
 # fastfetch --logo none --data-raw "$(fortune | cowsay -W 30 -f piano)" | lolcat
 echo "------------------------------------------------------------------------------"
 echo "\n"
@@ -34,11 +34,14 @@ export EDITOR="nvim"          # 默认编辑器设为 Neovim,也是为了yazi配
 export VISUAL="nvim"          # 图形环境备用编辑器
 export YAZI_ZOXIDE_OPTS="--exclude /mnt /tmp"  # zoxide 排除目录（按需修改）
 
-
+alias gdb="gdb -q"
 alias ran='ranger'
-# alias vim='nvim'
 alias vim='nvim'
 alias neo='neovide'
+alias ls='exa'
+alias burp='/home/nan0in27/Burpsuite/burp/Linux/CN_Burp.sh'
+alias reload_kde="kquitapp5 plasmashell && kstart5 plasmashell"
+alias exp="cp ~/pwn/exp.py ./"
 
 
 #configurations of yazi
@@ -51,20 +54,20 @@ function y() {
 }
 
 # >>> conda initialize >>>
-# !! contents within this block are managed by 'conda init' !!
-__conda_setup="$('/home/nan0in27/software/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/home/nan0in27/miniforge3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
 if [ $? -eq 0 ]; then
     eval "$__conda_setup"
 else
-    if [ -f "/home/nan0in27/software/anaconda3/etc/profile.d/conda.sh" ]; then
-        . "/home/nan0in27/software/anaconda3/etc/profile.d/conda.sh"
+    if [ -f "/home/nan0in27/miniforge3/etc/profile.d/conda.sh" ]; then
+        . "/home/nan0in27/miniforge3/etc/profile.d/conda.sh"
     else
-        export path="/home/nan0in27/software/anaconda3/bin:$path"
+        export PATH="/home/nan0in27/miniforge3/bin:$PATH"
     fi
 fi
 unset __conda_setup
-# # <<< conda initialize <<<
-#
+# <<< conda initialize <<<
+
 
 # ======================
 # UV Python 包管理器配置
@@ -96,17 +99,14 @@ alias uvup='uv pip install --upgrade pip setuptools wheel'
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # shurufa
+export XMODIFIERS="@im=fcitx"
+export INPUT_METHOD=fcitx
 export GTK_IM_MODULE=fcitx
 export QT_IM_MODULE=fcitx
 export XMODIFIERS=@im=fcitx
 export RANGER_LOAD_DEFAULT_RC=false
 
 . "$HOME/.local/bin/env"
-source /usr/share/nvm/init-nvm.sh source /usr/share/nvm/init-nvm.sh
-source /usr/share/nvm/init-nvm.sh
-eval "$(rbenv init -)"
-
-
 
 rm() {
   if echo "$@" | grep -Eq -- '-[a-z]*f.*[a-z]*r|-[a-z]*r.*[a-z]*f'; then
@@ -130,11 +130,11 @@ rm() {
 
 
 # 定义代理地址变量
-# httpproxy=http://127.0.0.1:20171
-# socksproxy=socks5://127.0.0.1:20170
+httpproxy=http://127.0.0.1:20171
+socksproxy=socks5://127.0.0.1:20170
 
-httpproxy=http://127.0.0.1:7890
-socksproxy=socks5://127.0.0.1:7890
+# httpproxy=http://127.0.0.1:7890
+# socksproxy=socks5://127.0.0.1:7890
 
 # 设置使用代理
 alias setproxy="export http_proxy=$httpproxy; export https_proxy=$httpproxy; export all_proxy=$socksproxy; echo 'Set proxy successfully'"
@@ -149,10 +149,37 @@ alias unsetproxy="unset http_proxy; unset https_proxy; unset all_proxy; echo 'Un
 # bug 
 export PATH="$HOME/.local/bin:$PATH"
 
-
 # 南大pa
 export NEMU_HOME=/home/nan0in27/NJUPA/ics2024/nemu
 export AM_HOME=/home/nan0in27/NJUPA/ics2024/abstract-machine
-alias gcc='./usr/bin/ccache/gcc'
 
+export NVM_DIR="$HOME/.config/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
+# >>> mamba initialize >>>
+# !! Contents within this block are managed by 'mamba shell init' !!
+export MAMBA_EXE='/home/nan0in27/miniforge3/bin/mamba';
+export MAMBA_ROOT_PREFIX='/home/nan0in27/miniforge3';
+__mamba_setup="$("$MAMBA_EXE" shell hook --shell zsh --root-prefix "$MAMBA_ROOT_PREFIX" 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__mamba_setup"
+else
+    alias mamba="$MAMBA_EXE"  # Fallback on help from mamba activate
+fi
+unset __mamba_setup
+# <<< mamba initialize <<<
+
+# man使用nvim阅读
+export MANPAGER="nvim +Man!"
+[[ -s "/home/nan0in27/.gvm/scripts/gvm" ]] && source "/home/nan0in27/.gvm/scripts/gvm"
+
+# tmux添加为默认启动项，并保存上次会话回溯
+if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
+    # 尝试附加到现有会话，如果没有则创建新会话
+    exec tmux new-session -A -s main
+fi
+
+# 添加cargo到path->rustlings环境
+export PATH="$HOME/.cargo/bin:$PATH"
+export PATH=~/.npm-global/bin:$PATH
