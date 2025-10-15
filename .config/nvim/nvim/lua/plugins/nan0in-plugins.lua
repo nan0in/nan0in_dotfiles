@@ -1,4 +1,8 @@
 return {
+  {
+  "github/copilot.vim",
+  enabled = false, -- 完全禁用插件
+  },
   -- Vundle 替代: lazy.nvim 自动管理插件
   -- 大纲式导航（Go 需 gotags 支持）
   { "preservim/tagbar" },
@@ -62,26 +66,6 @@ return {
       vim.g.vim_markdown_spellcheck = 0 -- 关闭拼写检查
       vim.g.vim_markdown_conceal = 0 -- 关闭特殊符号隐藏
     end,
-  },
-  {
-    "saghen/blink.cmp",
-    event = { "BufReadPost", "BufNewFile" },
-    version = "1.*",
-    -- build = 'cargo build --realease',
-    opts = {
-      completion = {
-        documentation = {
-          auto_show = true,
-        },
-      },
-      keymap = {
-        ["<C-u>"] = { "scroll_documentation_up", "fallback" },
-        ["<C-d>"] = { "scroll_documentation_down", "fallback" },
-      },
-      signature = {
-        enabled = true,
-      },
-    },
   },
   {
     "norcalli/nvim-colorizer.lua",
