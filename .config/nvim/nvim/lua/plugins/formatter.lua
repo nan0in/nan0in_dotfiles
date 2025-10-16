@@ -4,7 +4,7 @@ return {
     require("formatter").setup({
       logging = true,
       log_level = vim.log.levels.WARN,
-      
+
       filetype = {
         lua = { require("formatter.filetypes.lua").stylua },
         python = {
@@ -25,22 +25,13 @@ return {
           require("formatter.filetypes.go").goimports,
         },
         sh = { require("formatter.filetypes.sh").shfmt },
+        c = {
+          require("formatter.filetypes.c").clangformat,
+        },
+        cpp = {
+          require("formatter.filetypes.cpp").clangformat,
+        },
       },
-    })
-
-    -- 保存时自动格式化
-    vim.api.nvim_create_autocmd("BufWritePre", {
-      pattern = "*",
-      callback = function()
-        local filetypes = {
-          "lua", "python", "javascript", "typescript", "vue",
-          "css", "html", "json", "yaml", "markdown", "rust", "go", "sh"
-        }
-        
-        if vim.tbl_contains(filetypes, vim.bo.filetype) then
-          vim.cmd("FormatWrite")
-        end
-      end,
     })
 
     -- 快捷键

@@ -27,17 +27,6 @@ require("mini.pairs").setup({
   },
 })
 
--- 识别大型项目
--- init.lua 配置
-require("lspconfig").clangd.setup({
-  cmd = {
-    "clangd",
-    "--background-index",
-    "--compile-commands-dir=.", -- 关键参数！指向项目根目录
-    "--query-driver=/usr/bin/gcc", -- 指定实际使用的编译器
-  },
-})
-
 vim.diagnostic.config({
   virtual_text = false, -- 可以为 false，如果你不想让虚拟文字干扰代码行
 })

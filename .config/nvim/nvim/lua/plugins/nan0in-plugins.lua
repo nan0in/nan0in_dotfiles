@@ -59,14 +59,14 @@ return {
       })
     end,
   },
-  {
-    "preservim/vim-markdown",
-    ft = "markdown",
-    init = function()
-      vim.g.vim_markdown_spellcheck = 0 -- 关闭拼写检查
-      vim.g.vim_markdown_conceal = 0 -- 关闭特殊符号隐藏
-    end,
-  },
+  -- {
+  --   "preservim/vim-markdown",
+  --   ft = "markdown",
+  --   init = function()
+  --     vim.g.vim_markdown_spellcheck = 0 -- 关闭拼写检查
+  --     vim.g.vim_markdown_conceal = 0 -- 关闭特殊符号隐藏
+  --   end,
+  -- },
   {
     "norcalli/nvim-colorizer.lua",
     config = function()
@@ -84,15 +84,6 @@ return {
         },
       })
     end,
-  },
-  {
-    "MeanderingProgrammer/render-markdown.nvim",
-    dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-mini/mini.nvim" }, -- if you use the mini.nvim suite
-    -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.icons' }, -- if you use standalone mini plugins
-    -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
-    ---@module 'render-markdown'
-    ---@type render.md.UserConfig
-    opts = {},
   },
   -- 图片粘贴
   {
