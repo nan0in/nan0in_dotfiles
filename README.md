@@ -50,9 +50,9 @@ nan0in's dotfiles from his arch-linux,keep exploring
 ![image](https://github.com/user-attachments/assets/55f1aab9-9410-4d43-baa1-43b8adfee067)
 
 #### 依赖
-`git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm` --> tmux插件
+`git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm` --> tmux插件  
 `git clone https://github.com/tmux-plugins/tmux-resurrect ~/.tmux/plugins/tmux-resurrect` -->构建  
-`git clone https://github.com/dracula/tmux ~/.tmux/plugins/dracula` -->主题
+`git clone https://github.com/dracula/tmux ~/.tmux/plugins/dracula` -->主题  
 
 
 
