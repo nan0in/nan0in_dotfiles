@@ -18,7 +18,7 @@ nan0in's dotfiles from his arch-linux,keep exploring
 然后我们就可以如法炮制进行添加
 
 ### 管理
-使用git进行管理，既方便管理也方便在另外的电脑上配置，一些关于`stow dir`的操作如下：  
+使用git和lazygit进行管理，既方便管理也方便在另外的电脑上配置，一些关于`stow dir`的操作如下：  
 - `-d`指定stow文件夹
 - `-t`指定target文件夹
 - `-D`移除已创建的文件树
@@ -27,8 +27,8 @@ nan0in's dotfiles from his arch-linux,keep exploring
 注意了当文件存在发生冲突，一可以删掉已存在文件，二可以`--adopt`选项+git操作将已存在配置文件移动到已在git管理下的`stow dir`选择性操作文件，git commit并checkout
 
 ### 桌面系统
-有hyprland的但还没完全配置好，常用kde,系统通知使用mako
-![c72dc413-41b3-458e-84d4-b9e12b1af7eb](https://github.com/user-attachments/assets/fc79acf7-cbdb-42fc-868b-647402a1a26e)
+常用kde,系统通知使用mako  
+字体:Noto Sans Mono,JetBrainsMono Nerd Font,Misans 
 
 
 ### 依赖
@@ -71,7 +71,6 @@ IMHEX——类010editor
 
 ### music
 go-musicfox
-
 
 
 ## license
