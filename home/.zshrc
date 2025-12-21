@@ -10,9 +10,8 @@ export XDG_CONFIG_HOME=/home/nan0in27/.config
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
 source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
-
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -22,8 +21,7 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 #extract--使用x 文件名 进行解压
 #z-- z 文件夹 快速跳转到上一次文件夹
 
-plugins=(git zsh-syntax-highlighting extract web-search jsontools z vi-mode zsh-autosuggestions )
-
+plugins=(z git zsh-syntax-highlighting extract web-search jsontools vi-mode zsh-autosuggestions )
 
 export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 source $ZSH/oh-my-zsh.sh
@@ -32,8 +30,6 @@ source $ZSH/oh-my-zsh.sh
 # 常规一些配置
 export EDITOR="nvim"          # 默认编辑器设为 Neovim,也是为了yazi配置的
 export VISUAL="nvim"          # 图形环境备用编辑器
-export YAZI_ZOXIDE_OPTS="--exclude /mnt /tmp"  # zoxide 排除目录（按需修改）
-
 alias gdb="gdb -q"
 alias ran='ranger'
 alias vim='nvim'
@@ -41,17 +37,6 @@ alias neo='neovide'
 alias ls='exa'
 alias burp='/home/nan0in27/Burpsuite/burp/Linux/CN_Burp.sh'
 alias reload_kde="kquitapp5 plasmashell && kstart5 plasmashell"
-alias exp="cp ~/pwn/exp.py ./"
-
-
-#configurations of yazi
-function y() {
-	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
-	yazi "$@" --cwd-file="$tmp"
-	IFS= read -r -d '' cwd < "$tmp"
-	[ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
-	rm -f -- "$tmp"
-}
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
@@ -68,13 +53,13 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
-
 # ======================
 # UV Python 包管理器配置
 # ======================
 
 # 确保本地 bin 目录在 PATH 中
 export PATH="$HOME/.local/bin:$PATH"
+export PATH=$PATH:/home/nan0in27/.miniforge3/bin
 
 # 初始化 UV
 if command -v uv > /dev/null 2>&1; then
@@ -95,10 +80,7 @@ alias uvinit='uv pip install -e .'
 alias uvup='uv pip install --upgrade pip setuptools wheel'
 
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-# shurufa
+# 输入法 
 export XMODIFIERS="@im=fcitx"
 export INPUT_METHOD=fcitx
 export GTK_IM_MODULE=fcitx
@@ -107,6 +89,41 @@ export XMODIFIERS=@im=fcitx
 export RANGER_LOAD_DEFAULT_RC=false
 
 . "$HOME/.local/bin/env"
+
+# some convenient fucntions for me 
+export PWN_TOOL_PATH="$HOME/pwn/tools/gen_pwn.py"
+function exp(){
+      python "$PWN_TOOL_PATH" "$@"
+}
+
+# exp() {
+#     if [ -f "./exp.py" ]; then
+#         echo "exp.py already exists in current directory."
+#         echo -n "Overwrite? (y/n/rename): "
+#         read choice
+#         case $choice in
+#             y|Y) 
+#                 cp ~/pwn/exp.py ./
+#                 echo "exp.py overwritten."
+#                 ;;
+#             n|N) 
+#                 echo "Operation cancelled." 
+#                 ;;
+#             r|R) 
+#                 echo -n "Enter new filename: "
+#                 read newname
+#                 cp ~/pwn/exp.py "./$newname"
+#                 echo "Copied to $newname"
+#                 ;;
+#             *) 
+#                 echo "Invalid choice. Operation cancelled." 
+#                 ;;
+#         esac
+#     else
+#         cp ~/pwn/exp.py ./
+#         echo "exp.py copied to current directory."
+#     fi
+# }
 
 rm() {
   if echo "$@" | grep -Eq -- '-[a-z]*f.*[a-z]*r|-[a-z]*r.*[a-z]*f'; then
@@ -128,13 +145,68 @@ rm() {
   fi
 }
 
+# pwncollege file transfer
+pwncp() {
+    if [ $# -lt 1 ]; then
+        echo "用法:"
+        echo "  上传文件: pwncp <本地文件> [远程路径]"
+        echo "  下载文件: pwncp -r <远程文件> [本地路径]"
+        echo ""
+        echo "示例:要用绝对路径"
+        echo "  pwncp socket.py"
+        echo "  pwncp script.py /subfolder/"
+        echo "  pwncp -r /remote/file.txt ."
+        return 1
+    fi
+
+    remote_host="hacker@dojo.pwn.college"
+    key_path="$HOME/.ssh/key"  
+
+    if [ "$1" = "-r" ]; then  # ⚠️ 用单等号，zsh 与 bash 兼容
+        # 从远程 -> 本地
+        if [ $# -lt 2 ]; then
+            echo "错误: 缺少远程文件路径"
+            return 1
+        fi
+        remote_file="$2"
+        local_path="${3:-.}"  # 默认下载到当前目录
+        echo "从 pwn.college 下载 $remote_file 到 $local_path ..."
+        scp -i "$key_path" "$remote_host:$remote_file" "$local_path"
+        if [ $? -eq 0 ]; then
+            echo "✓ 下载成功!"
+        else
+            echo "✗ 下载失败!"
+        fi
+    else
+        # 本地 -> 远程
+        file="$1"
+        remote_path="${2:-~}"
+        if [ ! -f "$file" ]; then
+            echo "错误: 文件 '$file' 不存在"
+            return 1
+        fi
+        echo "上传 $file 到 pwn.college..."
+        scp -i "$key_path" "$file" "$remote_host:$remote_path"
+        if [ $? -eq 0 ]; then
+            echo "✓ 上传成功!"
+        else
+            echo "✗ 上传失败!"
+        fi
+    fi
+}
+
+gdiff() {
+    if [ $# -eq 0 ]; then
+        git difftool --tool=nvimdiff
+    else
+        git difftool --tool=nvimdiff "$@"
+    fi
+}
+
 
 # 定义代理地址变量
 httpproxy=http://127.0.0.1:20171
 socksproxy=socks5://127.0.0.1:20170
-
-# httpproxy=http://127.0.0.1:7890
-# socksproxy=socks5://127.0.0.1:7890
 
 # 设置使用代理
 alias setproxy="export http_proxy=$httpproxy; export https_proxy=$httpproxy; export all_proxy=$socksproxy; echo 'Set proxy successfully'"
@@ -142,16 +214,9 @@ alias setproxy="export http_proxy=$httpproxy; export https_proxy=$httpproxy; exp
 # 设置取消使用代理
 alias unsetproxy="unset http_proxy; unset https_proxy; unset all_proxy; echo 'Unset proxy successfully'"
 
-# 查ip
-# alias ipcn="curl myip.ipip.net"
-# alias ip="curl ip.sb"
-
-# bug 
-export PATH="$HOME/.local/bin:$PATH"
-
 # 南大pa
-export NEMU_HOME=/home/nan0in27/NJUPA/ics2024/nemu
-export AM_HOME=/home/nan0in27/NJUPA/ics2024/abstract-machine
+export NEMU_HOME=/home/nan0in27/projects/NJUPA_nan0in/nemu
+export AM_HOME=/home/nan0in27/projects/NJUPA_nan0in/abstract-machine
 
 export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -172,7 +237,6 @@ unset __mamba_setup
 
 # man使用nvim阅读
 export MANPAGER="nvim +Man!"
-[[ -s "/home/nan0in27/.gvm/scripts/gvm" ]] && source "/home/nan0in27/.gvm/scripts/gvm"
 
 # tmux添加为默认启动项，并保存上次会话回溯
 if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
@@ -180,6 +244,25 @@ if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] &&
     exec tmux new-session -A -s main
 fi
 
+# 为kd设置tmux适配浮动窗口 pop  
+if [[ -n $TMUX ]]; then
+    __kdwithtmuxpopup() {
+        tmux display-popup "kd $@"
+    }
+    alias kd=__kdwithtmuxpopup
+fi
+
 # 添加cargo到path->rustlings环境
 export PATH="$HOME/.cargo/bin:$PATH"
 export PATH=~/.npm-global/bin:$PATH
+export OPENAI_API_KEY="sk-n9g3akoM0I6T4nFB1HkDnn82ScHEZdbE1iFx2dS5yRR8LfR9"
+export LIBC_DATABASE_PATH="$HOME/.libc-database"
+
+# go path
+[[ -s "/home/nan0in27/.gvm/scripts/gvm" ]] && source "/home/nan0in27/.gvm/scripts/gvm"
+export PATH=$PATH:$(go env GOPATH)/bin
+
+# zoxide 
+eval "$(zoxide init zsh)"
+unset YAZI_ZOXIDE_OPTS
+export _ZO_EXCLUDE_DIRS="/mnt:/tmp"

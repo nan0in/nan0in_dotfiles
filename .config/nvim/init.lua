@@ -5,13 +5,6 @@ vim.o.cmdheight = 0 -- 显示命令行区域
 vim.api.nvim_set_keymap("i", "<C-S-v>", "<C-r>+", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("n", "<C-S-v>", '"+p', { noremap = true, silent = true })
 ---
-if vim.g.neovide then
-  vim.g.neovide_theme = "auto"
-  vim.g.neovide_cursor_vfx_mode = "torpedo"
-  vim.o.guifont = "Noto Sans Mono:h13"
-  vim.g.neovide_floating_blur = false -- 禁用浮动窗口模糊
-  vim.g.neovide_refresh_rate = 60      -- 确保刷新率正常
-end
 
 require("config.lazy")
 
@@ -27,17 +20,6 @@ require("mini.pairs").setup({
   },
 })
 
--- 识别大型项目
--- init.lua 配置
-require("lspconfig").clangd.setup({
-  cmd = {
-    "clangd",
-    "--background-index",
-    "--compile-commands-dir=.", -- 关键参数！指向项目根目录
-    "--query-driver=/usr/bin/gcc", -- 指定实际使用的编译器
-  },
-})
-
 vim.diagnostic.config({
   virtual_text = false, -- 可以为 false，如果你不想让虚拟文字干扰代码行
 })
@@ -45,6 +27,4 @@ vim.diagnostic.config({
 --- 设置粘贴板
 vim.cmd([[set clipboard=unnamedplus]])
 -- themes --
--- vim.cmd([[colorscheme dracula]])
--- vim.cmd([[colorscheme catppuccin]])
-vim.cmd([[colorscheme tokyonight]])
+-- vim.cmd([[colorscheme tokyonight]])

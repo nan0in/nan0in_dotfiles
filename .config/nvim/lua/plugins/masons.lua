@@ -1,10 +1,17 @@
 return {
   {
     "mason-org/mason.nvim",
-    enabled=false,
+    -- enabled=false,
     build = ":MasonUpdate",
     config = function()
-      require("mason").setup()
+      require("mason").setup({
+        automatic_enable={
+          exclude={
+            marksman,
+          }
+        }
+ 
+      })
     end,
   },
   {
@@ -13,8 +20,12 @@ return {
     dependencies = { "mason.nvim" },
     config = function()
       require("mason-lspconfig").setup({
-        ensure_installed = {}, -- 不自动下载
-        automatic_installation = false, -- 关闭自动安装
+        ensure_installed = { "lua_ls" },
+        automatic_enable={
+          exclude={
+            marksman,
+          }
+        }
       })
     end,
   },

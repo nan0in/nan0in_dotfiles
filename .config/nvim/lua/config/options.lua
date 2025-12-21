@@ -9,7 +9,7 @@ opt.encoding = "utf-8"
 opt.fileencodings = { "utf-8", "gbk", "gb18030", "gb2312" }
 
 -- faster updates (默认 4000ms，这里设置为 100ms)
-opt.updatetime = 100
+opt.updatetime = 200
 
 -- 减少解释信息
 opt.shortmess:append("c")

@@ -1,19 +1,26 @@
 return {
+  {
+    "OXY2DEV/markview.nvim",
+    lazy = false,
+
+    -- For blink.cmp's completion
+    -- source
+    dependencies = {
+      "saghen/blink.cmp",
+    },
+  },
+
+  {
+    "github/copilot.vim",
+    -- enabled = false, -- 完全禁用插件
+  },
   -- Vundle 替代: lazy.nvim 自动管理插件
-
-  -- 代码自动完成，需要额外配置才能使用
-  -- { "neoclide/coc.nvim", branch = "release" },
-
   -- 大纲式导航（Go 需 gotags 支持）
   { "preservim/tagbar" },
 
   -- 代码片段系统
   { "SirVer/ultisnips" },
   { "honza/vim-snippets" },
-
-
-  -- Markdown 支持
-  { "tpope/vim-markdown" },
 
   -- Dracula 主题（设置别名为 dracula）
   { "dracula/vim", name = "dracula" },
@@ -63,68 +70,14 @@ return {
       })
     end,
   },
-  {
-    "hrsh7th/nvim-cmp",
-    opts = function(_, opts)
-      local cmp = require("cmp")
-
-      local has_words_before = function()
-        local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-        return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
-      end
-
-      opts.experimental = {
-        ghost_text = false,
-      }
-      opts.mapping = vim.tbl_extend("force", opts.mapping or {}, {
-        ["<Tab>"] = cmp.mapping(function(fallback)
-          if cmp.visible() then
-            cmp.select_next_item()
-          elseif has_words_before() then
-            cmp.complete()
-          else
-            fallback()
-          end
-        end, { "i", "s" }),
-
-        ["<S-Tab>"] = cmp.mapping(function(fallback)
-          if cmp.visible() then
-            cmp.select_prev_item()
-          else
-            fallback()
-          end
-        end, { "i", "s" }),
-      })
-    end,
-  },
-  {
-    "preservim/vim-markdown",
-    ft = "markdown",
-    init = function()
-      vim.g.vim_markdown_spellcheck = 0 -- 关闭拼写检查
-      vim.g.vim_markdown_conceal = 0 -- 关闭特殊符号隐藏
-    end,
-  },
-  {
-    "saghen/blink.cmp",
-    event = { "BufReadPost", "BufNewFile" },
-    version = "1.*",
-    -- build = 'cargo build --realease',
-    opts = {
-      completion = {
-        documentation = {
-          auto_show = true,
-        },
-      },
-      keymap = {
-        ["<C-u>"] = { "scroll_documentation_up", "fallback" },
-        ["<C-d>"] = { "scroll_documentation_down", "fallback" },
-      },
-      signature = {
-        enabled = true,
-      },
-    },
-  },
+  -- {
+  --   "preservim/vim-markdown",
+  --   ft = "markdown",
+  --   init = function()
+  --     vim.g.vim_markdown_spellcheck = 0 -- 关闭拼写检查
+  --     vim.g.vim_markdown_conceal = 0 -- 关闭特殊符号隐藏
+  --   end,
+  -- },
   {
     "norcalli/nvim-colorizer.lua",
     config = function()
@@ -143,23 +96,14 @@ return {
       })
     end,
   },
-  {
-    "MeanderingProgrammer/render-markdown.nvim",
-    dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-mini/mini.nvim" }, -- if you use the mini.nvim suite
-    -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.icons' }, -- if you use standalone mini plugins
-    -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
-    ---@module 'render-markdown'
-    ---@type render.md.UserConfig
-    opts = {},
-  },
   -- 图片粘贴
   {
     "HakonHarnes/img-clip.nvim",
     event = "VeryLazy",
     opts = {
-        clipboard_command = "wl-paste",
-        img_dir = {"src", "assets", "images"},
-        img_dir_txt = {"src", "assets", "images"},
+      clipboard_command = "wl-paste",
+      img_dir = { "src", "assets", "images" },
+      img_dir_txt = { "src", "assets", "images" },
       -- add options here
       -- or leave it empty to use the default settings
     },
@@ -170,11 +114,42 @@ return {
   },
   -- 用于快速添加、删除、修改成对符号，如括号、引号等
   {
-  "kylechui/nvim-surround",
-  version = "*", -- Use for stability; omit to use `main` branch for the latest features
-  event = "VeryLazy",
-  config = function()
-    require("nvim-surround").setup({})
-  end,
-},
+    "kylechui/nvim-surround",
+    version = "*", -- Use for stability; omit to use `main` branch for the latest features
+    event = "VeryLazy",
+    config = function()
+      require("nvim-surround").setup({})
+    end,
+  },
+  {
+    "SilverofLight/kd_translate.nvim",
+    config = function()
+      require("kd").setup({
+        window = {
+          -- your window config here
+        },
+      })
+    end,
+    keys = {
+      { "<leader>t", "<cmd>TranslateNormal<cr>", desc = "󰊿 TranslateNormal", mode = "n" },
+      { "<leader>T", "<cmd>TranslateVisual<cr>", desc = "󰊿 TranslateVisual", mode = "v" },
+    },
+  },
+  -- cooperate with tmux to navigate between vim and tmux splits seamlessly
+  {
+    "christoomey/vim-tmux-navigator",
+    cmd = {
+      "TmuxNavigateLeft",
+      "TmuxNavigateDown",
+      "TmuxNavigateUp",
+      "TmuxNavigateRight",
+    },
+    keys = {
+      -- 这里的快捷键必须和 Tmux 里的 M-a/s/w/d 一一对应
+      { "<A-a>", "<cmd>TmuxNavigateLeft<cr>", desc = "Go to left pane" },
+      { "<A-s>", "<cmd>TmuxNavigateDown<cr>", desc = "Go to lower pane" },
+      { "<A-w>", "<cmd>TmuxNavigateUp<cr>", desc = "Go to upper pane" },
+      { "<A-d>", "<cmd>TmuxNavigateRight<cr>", desc = "Go to right pane" },
+    },
+  },
 }
