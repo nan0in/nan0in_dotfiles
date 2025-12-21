@@ -36,6 +36,9 @@ opt.conceallevel = 0
 opt.list = true
 opt.listchars = { space = "·" }
 
+-- 设置列上限  
+opt.colorcolumn = ""
+
 local function augroup(name)
   return vim.api.nvim_create_augroup("lazyvim_" .. name, { clear = true })
 end

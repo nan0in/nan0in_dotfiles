@@ -9,9 +9,10 @@
 vim.api.nvim_create_autocmd("FileType", {
   pattern ={"lua","markdown","gitcommit"},
   callback = function()
+    vim.opt_local.textwidth = 0 -- 自动换行的长度，0为不自动换行
     vim.opt_local.shiftwidth = 2
     vim.opt_local.tabstop = 2
-    vim.opt_local.wrap = true --自动拆行
     vim.opt_local.spell = false -- 覆盖默认true,即拼写检查
+    vim.opt_local.wrap = true
   end,
 })
