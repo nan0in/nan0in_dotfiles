@@ -1,16 +1,5 @@
 return {
   {
-    "OXY2DEV/markview.nvim",
-    lazy = false,
-
-    -- For blink.cmp's completion
-    -- source
-    dependencies = {
-      "saghen/blink.cmp",
-    },
-  },
-
-  {
     "github/copilot.vim",
     -- enabled = false, -- 完全禁用插件
   },
@@ -20,11 +9,6 @@ return {
 
   -- 代码片段系统
   { "SirVer/ultisnips" },
-  { "honza/vim-snippets" },
-
-  -- Dracula 主题（设置别名为 dracula）
-  { "dracula/vim", name = "dracula" },
-
   {
     "nvim-tree/nvim-tree.lua",
     dependencies = {
@@ -70,14 +54,6 @@ return {
       })
     end,
   },
-  -- {
-  --   "preservim/vim-markdown",
-  --   ft = "markdown",
-  --   init = function()
-  --     vim.g.vim_markdown_spellcheck = 0 -- 关闭拼写检查
-  --     vim.g.vim_markdown_conceal = 0 -- 关闭特殊符号隐藏
-  --   end,
-  -- },
   {
     "norcalli/nvim-colorizer.lua",
     config = function()
@@ -150,6 +126,27 @@ return {
       { "<A-s>", "<cmd>TmuxNavigateDown<cr>", desc = "Go to lower pane" },
       { "<A-w>", "<cmd>TmuxNavigateUp<cr>", desc = "Go to upper pane" },
       { "<A-d>", "<cmd>TmuxNavigateRight<cr>", desc = "Go to right pane" },
+    },
+  },
+  {
+    "mfussenegger/nvim-lint",
+    opts = {
+      linters = {
+        markdownlint = {
+          -- 核心修改在这里：
+          -- 我们给 markdownlint 命令追加参数，告诉它全局禁用 MD013 规则
+          -- "--" 的作用是告诉命令行参数结束，后面跟文件名
+          args = { "--disable", "MD013", "--" },
+        },
+      },
+    },
+  },
+  git = {
+    throttle = {
+      enabled = true, -- not enabled by default
+      -- max 2 ops every 5 seconds
+      rate = 1,
+      duration = 15 * 1000, -- in ms
     },
   },
 }
