@@ -2,6 +2,16 @@ return {
   {
     "github/copilot.vim",
     -- enabled = false, -- 完全禁用插件
+    config = function()
+      -- 1. 禁用默认的 Tab 映射，防止冲突
+      -- vim.g.copilot_no_tab_map = true
+      -- 2. 设置快捷键：Ctrl + J 接受补全
+      -- <C-J> 代表 Ctrl+J，你也可以换成 <M-CR> (Alt+Enter)
+      vim.keymap.set("i", "<C-J>", 'copilot#Accept("\\<CR>")', {
+        expr = true,
+        replace_keycodes = false,
+      })
+    end,
   },
   -- Vundle 替代: lazy.nvim 自动管理插件
   -- 大纲式导航（Go 需 gotags 支持）
@@ -77,11 +87,18 @@ return {
     "HakonHarnes/img-clip.nvim",
     event = "VeryLazy",
     opts = {
-      clipboard_command = "wl-paste",
-      img_dir = { "src", "assets", "images" },
-      img_dir_txt = { "src", "assets", "images" },
-      -- add options here
-      -- or leave it empty to use the default settings
+      defalte = {
+        embed_image_as_base64 = false, -- 是否以 base64 格式嵌入图片 
+        prompt_for_filename = false, -- 是否在粘贴时提示输入文件名 
+        drag_and_drop = {
+          insert_mode = true, -- 是否在插入模式下启用拖放功能
+        },
+        clipboard_command = "wl-paste",
+        img_dir = { "src", "assets", "images" },
+        img_dir_txt = { "src", "assets", "images" },
+        -- add options here
+        -- or leave it empty to use the default settings
+      },
     },
     keys = {
       -- suggested keymap

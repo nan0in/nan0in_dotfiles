@@ -4,10 +4,11 @@ vim.o.cmdheight = 0 -- 显示命令行区域
 -- 映射 Ctrl+Shift+V 粘贴（插入模式）
 vim.api.nvim_set_keymap("i", "<C-S-v>", "<C-r>+", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("n", "<C-S-v>", '"+p', { noremap = true, silent = true })
----
 
+---set color 
+-- 设置 Avante 补全项的前景色（这里用的是淡蓝色）
+vim.api.nvim_set_hl(0, 'BlinkCmpKindAvante', { default = false, fg = '#89b4fa' })
 require("config.lazy")
-
 vim.opt.spelllang = "en,cjk" -- 允许中英文混合
 -- 禁用标点风格检查
 vim.g.vim_markdown_strikethrough = 0 -- 如果使用 vim-markdown 插件

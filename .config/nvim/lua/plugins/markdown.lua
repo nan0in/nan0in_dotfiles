@@ -7,6 +7,7 @@ return {
       "nvim-tree/nvim-web-devicons", -- 强制添加这个依赖，这是最通用的图标库
     },
     opts = {
+      file_types = { "markdown", "norg", "rmd", "org","Avante" },
       -- 显式开启渲染功能，防止被误关
       render_modes = { "n", "c", "t" }, -- 在普通模式和命令模式下渲染
       checkbox = {
@@ -57,23 +58,7 @@ return {
       },
       -- 标题渲染配置 end
     },
-    ft = { "markdown", "norg", "rmd", "org" },
-  },
-  {
-    "jakewvincent/mkdnflow.nvim",
-    ft = "markdown", -- 仅在 markdown 文件加载
-    config = function()
-      require("mkdnflow").setup({
-        mappings = {
-          MkdnEnter = { { "n", "v", "i" }, "<CR>" }, -- 回车键增强：列表续行、打开链接
-          MkdnTab = false, -- 禁用 tab 避免冲突，或者设为 true 用于缩进列表
-          MkdnFoldSection = false,
-        },
-        perspective = {
-          priority = "root",
-        },
-      })
-    end,
+    ft = { "markdown", "norg", "rmd", "org","Avante" },
   },
   {
     "iamcco/markdown-preview.nvim",
