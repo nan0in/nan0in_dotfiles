@@ -1,0 +1,17 @@
+[general]
+theme = "dark"
+
+[preview]
+# 图像预览（调整尺寸为当前终端窗口的 50%）
+image = "chafa -f symbols --size $((COLUMNS/2))x$((LINES/2)) \"$1\""
+
+# 视频预览（生成缩略图后转字符画）
+video = "ffmpegthumbnailer -i \"$1\" -o - | chafa -f symbols"
+
+# 其他文件类型示例
+pdf = "pdftoppm -jpeg -singlefile \"$1\" - | chafa"
+svg = "resvg \"$1\" - | chafa"
+
+[plugin]
+fetchers = [{ id = "mime", name = "*", run = "mime", if = "!mime", prio = "high" }]
+prepend_fetchers = [{ id = "git", name = "*", run = "git" }, { id = "git", name = "*/", run = "git" }]

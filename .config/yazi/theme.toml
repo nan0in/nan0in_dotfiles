@@ -1,0 +1,10 @@
+[preview]
+# 图像预览设置
+ueberzug = "none"
+image = "chafa -f symbols --size 60x30"            # 使用 chafa 显示图片
+video = "ffmpegthumbnailer -i \"$1\" -o - | chafa" # 视频缩略图
+
+# 文件类型高亮（示例）
+[filetype]
+image = { fg = "#ff79c6", bold = true }   # 粉色加粗显示图片文件
+video = { fg = "#bd93f9", italic = true } # 紫色斜体显示视频文件
