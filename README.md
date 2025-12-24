@@ -31,22 +31,19 @@ nan0in's dotfiles from his arch-linux,keep exploring
 字体:Noto Sans Mono,JetBrainsMono Nerd Font,Misans 
 
 
-### 依赖
-`.zshrc`中引入了uv管理，安装uv，还有conda
-
 ### 输入法
 使用fcitx5
 
 ### shell
-统一主题dracula  
-使用zsh,终端模拟器为konsole  
+统一主题dracula & tokyonight  
+使用oh-my-zsh+p10k,终端模拟器使用kitty  
 
 #### 依赖
 `git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions`  
 `git clone https://github.com/zsh-users/zsh-syntax-highlighting ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting`  
 `sudo pacman -S fortune-mod cowsay lolcat`  
 
-### tmux多窗口管理 ranger文件管理  
+### tmux多窗口管理   
 ![image](https://github.com/user-attachments/assets/55f1aab9-9410-4d43-baa1-43b8adfee067)
 
 #### 依赖
@@ -55,19 +52,25 @@ nan0in's dotfiles from his arch-linux,keep exploring
 `git clone https://github.com/dracula/tmux ~/.tmux/plugins/dracula` -->主题  
 
 
-
-
 ### editor
-neovim lazyvim管理
-![image](https://github.com/user-attachments/assets/633fbd6d-cb97-4d50-b408-4e975b308546)
+neovim lazyvim管理  
+antigravity for vibe coding  
+<img width="2559" height="1525" alt="image" src="https://github.com/user-attachments/assets/66219859-57b6-4cb9-ba96-98dc43703fc5" />
+
+<img width="2560" height="533" alt="image" src="https://github.com/user-attachments/assets/00cf4ff4-967d-4332-902b-11a197449254" />
 
 
-### 办公文件
-libreoffice替代microsoft office on windows  
+### 常用软件
+wps替代microsoft office on windows  
 draw.io——绘制图像  
 drawpen——快速调出画笔批注  
 goldendict——字典  
 IMHEX——类010editor  
+yazi——文件管理    
+btop——进程管理  
+virtual manager+qemu/kvm ——虚拟机  
+codesnap——代码截图  
+VLC——视频  
 
 ### music
 go-musicfox
