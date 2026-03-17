@@ -151,6 +151,8 @@ go install github.com/go-musicfox/go-musicfox@latest
 
 ### 输入法
 fcitx5 + 手搓的主题 `blog-dark`（Tokyo Night 毛玻璃磨砂暗色，位于 `fcitx5/` 包）
+<img width="822" height="88" alt="image" src="https://github.com/user-attachments/assets/a443702c-10c0-497e-85aa-71b569a378a5" />
+
 
 ### Shell
 oh-my-zsh + powerlevel10k，统一配色: Dracula & Tokyo Night
