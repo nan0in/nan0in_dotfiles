@@ -2,12 +2,29 @@
 > [!IMPORTANT]
 > 已经重装3次Arch Linux
 
-nan0in's dotfiles from his arch-linux,keep exploring  
-我使用[GNU Stow](https://www.gnu.org/software/stow/)来帮助我管理我的linux配置文件
-简单讲一下Gnu Stow，实际上就是通过两个文件夹来管理文件  
-- `stow dir`：默认的当前文件夹
-- `target dir`：默认当前文件夹的父文件夹  
-那么由此可知`stow dir`下的每一个顶层的子文件夹会是一个单独文件树，而`target dir`下多个这样的文件树会通过同一个起始路径层叠展开，我们 *符号链接* 就可以将文件树指引构建起来
+nan0in's dotfiles from his arch-linux, keep exploring  
+使用 [GNU Stow](https://www.gnu.org/software/stow/) 管理配置文件，通过符号链接让 `$HOME` 下的文件直接指向此仓库，编辑即追踪。
+
+## 快速安装（新机器）
+
+```bash
+git clone git@github.com:nan0in/nan0in_dotfiles.git ~/projects/nan0in_dotfiles
+cd ~/projects/nan0in_dotfiles
+bash install.sh
+```
+
+脚本会把 `config`、`fcitx5`、`home` 三个包 stow 到 `$HOME`，并从 `.zshrc.secrets.example` 生成 `~/.zshrc.secrets`（填入你的 API key 等敏感值）。
+
+> `theme/` 包含 SDDM/grub 主题，需要 root 权限手动安装，不在脚本范围内。
+
+### Stow 包结构
+
+| 包 | 内容 |
+|---|---|
+| `config/` | `~/.config/` 下的所有配置（hypr、nvim、kitty、mako、ranger、yazi 等） |
+| `fcitx5/` | fcitx5 主题及输入法配置 |
+| `home/` | `~/.zshrc`、`~/.p10k.zsh`、tmux 配置等 |
+| `theme/` | SDDM / grub 主题（需 root，手动安装） |
 
 ## 探索和收集配置文件
 如果你是第一次收集配置文件（在写这个文档的时候我也是），就推荐使用`--adopt`转移一系列的配置文件，参考[chaneyzorn](https://github.com/chaneyzorn/dotfiles?tab=readme-ov-file)的方法你就可以轻松实现一系列dotfiles的构建啦。  
@@ -26,30 +43,74 @@ nan0in's dotfiles from his arch-linux,keep exploring
 - `-R`移除并重新创建指定文件树  
 注意了当文件存在发生冲突，一可以删掉已存在文件，二可以`--adopt`选项+git操作将已存在配置文件移动到已在git管理下的`stow dir`选择性操作文件，git commit并checkout
 
+## 依赖清单（Arch Linux）
+
+### 基础工具
+
+```bash
+sudo pacman -S stow git lazygit
+```
+
+### Shell
+
+```bash
+# oh-my-zsh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+# 插件
+git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-syntax-highlighting ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+# p10k
+git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.oh-my-zsh/custom/themes/powerlevel10k
+# 美化
+sudo pacman -S fortune-mod cowsay lolcat fastfetch
+sudo pacman -S exa zoxide
+```
+
+### 终端 / 桌面
+
+```bash
+sudo pacman -S kitty tmux mako hyprland
+# tmux 插件管理器
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+git clone https://github.com/tmux-plugins/tmux-resurrect ~/.tmux/plugins/tmux-resurrect
+git clone https://github.com/dracula/tmux ~/.tmux/plugins/dracula
+```
+
+### 编辑器
+
+```bash
+sudo pacman -S neovim
+# 字体
+sudo pacman -S noto-fonts noto-fonts-cjk ttf-jetbrains-mono-nerd
+```
+
+### 输入法
+
+```bash
+sudo pacman -S fcitx5 fcitx5-chinese-addons fcitx5-configtool
+```
+
+### 文件管理 / 其他
+
+```bash
+sudo pacman -S ranger yazi btop
+```
+
 ### 桌面系统
 常用kde,系统通知使用mako  
 字体:Noto Sans Mono,JetBrainsMono Nerd Font,Misans 
 
 
 ### 输入法
-使用fcitx5
+使用fcitx5，主题 `blog-dark`（Tokyo Night 毛玻璃暗色，位于 `fcitx5/` 包）
+
 
 ### shell
 统一主题dracula & tokyonight  
 使用oh-my-zsh+p10k,终端模拟器使用kitty  
 
-#### 依赖
-`git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions`  
-`git clone https://github.com/zsh-users/zsh-syntax-highlighting ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting`  
-`sudo pacman -S fortune-mod cowsay lolcat`  
-
 ### tmux多窗口管理   
 ![image](https://github.com/user-attachments/assets/55f1aab9-9410-4d43-baa1-43b8adfee067)
-
-#### 依赖
-`git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm` --> tmux插件  
-`git clone https://github.com/tmux-plugins/tmux-resurrect ~/.tmux/plugins/tmux-resurrect` -->构建  
-`git clone https://github.com/dracula/tmux ~/.tmux/plugins/dracula` -->主题  
 
 
 ### editor

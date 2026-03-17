@@ -4,8 +4,8 @@ fastfetch --logo none --structure title:os:host:kernel:uptime:shell:terminal:loc
 echo "------------------------------------------------------------------------------"
 echo "\n"
 
-# 自己记得改
-export XDG_CONFIG_HOME=/home/nan0in27/.config
+# XDG base dirs
+export XDG_CONFIG_HOME="$HOME/.config"
 
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
 source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
@@ -35,19 +35,19 @@ alias ran='ranger'
 alias vim='nvim'
 alias neo='neovide'
 alias ls='exa'
-alias burp='/home/nan0in27/Burpsuite/burp/Linux/CN_Burp.sh'
+alias burp='$HOME/Burpsuite/burp/Linux/CN_Burp.sh'
 alias reload_kde="kquitapp5 plasmashell && kstart5 plasmashell"
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/home/nan0in27/miniforge3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+__conda_setup="$("$HOME/miniforge3/bin/conda" 'shell.zsh' 'hook' 2> /dev/null)"
 if [ $? -eq 0 ]; then
     eval "$__conda_setup"
 else
-    if [ -f "/home/nan0in27/miniforge3/etc/profile.d/conda.sh" ]; then
-        . "/home/nan0in27/miniforge3/etc/profile.d/conda.sh"
+    if [ -f "$HOME/miniforge3/etc/profile.d/conda.sh" ]; then
+        . "$HOME/miniforge3/etc/profile.d/conda.sh"
     else
-        export PATH="/home/nan0in27/miniforge3/bin:$PATH"
+        export PATH="$HOME/miniforge3/bin:$PATH"
     fi
 fi
 unset __conda_setup
@@ -59,7 +59,7 @@ unset __conda_setup
 
 # 确保本地 bin 目录在 PATH 中
 export PATH="$HOME/.local/bin:$PATH"
-export PATH=$PATH:/home/nan0in27/.miniforge3/bin
+export PATH=$PATH:$HOME/.miniforge3/bin
 
 # 初始化 UV
 if command -v uv > /dev/null 2>&1; then
@@ -215,8 +215,8 @@ alias setproxy="export http_proxy=$httpproxy; export https_proxy=$httpproxy; exp
 alias unsetproxy="unset http_proxy; unset https_proxy; unset all_proxy; echo 'Unset proxy successfully'"
 
 # 南大pa
-export NEMU_HOME=/home/nan0in27/projects/NJUPA_nan0in/nemu
-export AM_HOME=/home/nan0in27/projects/NJUPA_nan0in/abstract-machine
+export NEMU_HOME="$HOME/projects/NJUPA_nan0in/nemu"
+export AM_HOME="$HOME/projects/NJUPA_nan0in/abstract-machine"
 
 export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -224,8 +224,8 @@ export NVM_DIR="$HOME/.config/nvm"
 
 # >>> mamba initialize >>>
 # !! Contents within this block are managed by 'mamba shell init' !!
-export MAMBA_EXE='/home/nan0in27/miniforge3/bin/mamba';
-export MAMBA_ROOT_PREFIX='/home/nan0in27/miniforge3';
+export MAMBA_EXE="$HOME/miniforge3/bin/mamba"
+export MAMBA_ROOT_PREFIX="$HOME/miniforge3"
 __mamba_setup="$("$MAMBA_EXE" shell hook --shell zsh --root-prefix "$MAMBA_ROOT_PREFIX" 2> /dev/null)"
 if [ $? -eq 0 ]; then
     eval "$__mamba_setup"
@@ -255,11 +255,13 @@ fi
 # 添加cargo到path->rustlings环境
 export PATH="$HOME/.cargo/bin:$PATH"
 export PATH=~/.npm-global/bin:$PATH
-export OPENAI_API_KEY="sk-n9g3akoM0I6T4nFB1HkDnn82ScHEZdbE1iFx2dS5yRR8LfR9"
 export LIBC_DATABASE_PATH="$HOME/.libc-database"
 
+# secrets: API keys and other sensitive values (not tracked by git)
+[[ -f "$HOME/.zshrc.secrets" ]] && source "$HOME/.zshrc.secrets"
+
 # go path
-[[ -s "/home/nan0in27/.gvm/scripts/gvm" ]] && source "/home/nan0in27/.gvm/scripts/gvm"
+[[ -s "$HOME/.gvm/scripts/gvm" ]] && source "$HOME/.gvm/scripts/gvm"
 export PATH=$PATH:$(go env GOPATH)/bin
 
 # zoxide 

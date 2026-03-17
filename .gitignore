@@ -1,4 +1,11 @@
 *.bak
 *.tmp
-.config/nvim/lazy-lock.json
-.config/nvim/lua/*/*.bak
+
+# nvim lockfile (auto-generated)
+config/.config/nvim/lazy-lock.json
+config/.config/nvim/lua/*/*.bak
+
+# secrets — never commit these
+*.secrets
+.zshrc.secrets
+home/.zshrc.secrets
