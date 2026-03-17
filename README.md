@@ -21,7 +21,7 @@ bash install.sh
 
 | 包 | 内容 |
 |---|---|
-| `config/` | `~/.config/` 下的所有配置（hypr、nvim、kitty、mako、ranger、yazi 等） |
+| `config/` | `~/.config/` 下的所有配置（nvim、kitty、ranger、yazi、fontconfig 等） |
 | `fcitx5/` | fcitx5 主题及输入法配置 |
 | `home/` | `~/.zshrc`、`~/.p10k.zsh`、tmux 配置等 |
 | `theme/` | SDDM / grub 主题（需 root，手动安装） |
@@ -69,55 +69,10 @@ sudo pacman -S eza zoxide
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
-### 终端 / 窗口管理器
+### 终端
 
 ```bash
-# 终端 & Wayland 合成器
-sudo pacman -S kitty hyprland
-# 状态栏
-sudo pacman -S waybar
-# 壁纸管理（需联网安装 AUR）
-yay -S swww
-# 启动器
-sudo pacman -S rofi wofi
-# 截图
-yay -S hyprshot
-# 亮度 & 媒体控制
-sudo pacman -S brightnessctl playerctl
-# 音频（pipewire，wpctl 来自 wireplumber）
-sudo pacman -S pipewire pipewire-pulse wireplumber
-```
-
-### 剪切板 & 通知
-
-```bash
-sudo pacman -S wl-clipboard    # wl-copy / wl-paste
-yay -S cliphist                # 剪切板历史（配合 wofi/rofi 使用）
-yay -S wl-clip-persist         # 保持剪切板内容在程序关闭后不消失
-sudo pacman -S mako            # Wayland 桌面通知
-```
-
-### 系统托盘
-
-```bash
-sudo pacman -S network-manager-applet   # nm-applet（网络图标）
-sudo pacman -S blueman                  # 蓝牙管理
-```
-
-### 鼠标主题
-
-```bash
-# Bibata-Modern-Ice（exec_once.conf 中设定的光标主题）
-yay -S bibata-cursor-theme
-```
-
-### GTK / Qt 主题
-
-```bash
-# Catppuccin Mocha GTK（env.conf 中 GTK_THEME=Catppuccin-Mocha）
-yay -S catppuccin-gtk-theme-mocha
-# Qt 主题配置工具
-sudo pacman -S qt5ct qt6ct
+sudo pacman -S kitty
 ```
 
 ### tmux
@@ -144,10 +99,11 @@ sudo pacman -S neovim
 sudo pacman -S make cmake
 # kd 翻译（nan0in-plugins.lua 中使用，AUR）
 yay -S kd
-# 字体
-sudo pacman -S noto-fonts noto-fonts-cjk ttf-jetbrains-mono-nerd
-# Misans（AUR，hypr 主题字体）
-yay -S ttf-misans
+# 字体：Maple Mono NF CN（从 nan0in 自托管 release 下载）
+mkdir -p ~/.local/share/fonts/MapleMono
+curl -L -o /tmp/MapleMono-NF.zip https://github.com/nan0in/maple-font/releases/download/v1773727790/MapleMono-NF.zip
+unzip -o /tmp/MapleMono-NF.zip -d ~/.local/share/fonts/MapleMono/
+fc-cache -fv
 ```
 
 ### 输入法
@@ -190,17 +146,14 @@ go install github.com/go-musicfox/go-musicfox@latest
 
 ## 截图 & 功能介绍
 
-### 桌面 (Hyprland)
-- 窗口管理器: Hyprland，状态栏: Waybar，通知: mako  
-- 字体: Noto Sans Mono, JetBrainsMono Nerd Font, Misans  
-- 鼠标: Bibata-Modern-Ice，GTK 主题: Catppuccin Mocha  
+### 桌面 (KDE Plasma)
+终端: kitty，Shell: oh-my-zsh + powerlevel10k，字体: Maple Mono NF CN
 
 ### 输入法
-fcitx5 + 自制主题 `blog-dark`（Tokyo Night 毛玻璃磨砂暗色，位于 `fcitx5/` 包）
+fcitx5 + 手搓的主题 `blog-dark`（Tokyo Night 毛玻璃磨砂暗色，位于 `fcitx5/` 包）
 
 ### Shell
-oh-my-zsh + powerlevel10k，终端: kitty  
-统一配色: Dracula & Tokyo Night
+oh-my-zsh + powerlevel10k，统一配色: Dracula & Tokyo Night
 
 ### tmux
 ![image](https://github.com/user-attachments/assets/55f1aab9-9410-4d43-baa1-43b8adfee067)

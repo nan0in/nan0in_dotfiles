@@ -73,7 +73,7 @@ cmd_help() {
     help                 Show this help message
 
   Packages:
-    config   — ~/.config/* (hypr, nvim, kitty, mako, ranger, yazi …)
+    config   — ~/.config/* (nvim, kitty, ranger, yazi, fontconfig …)
     fcitx5   — fcitx5 theme (blog-dark) and input method config
     home     — ~/.zshrc, ~/.p10k.zsh, tmux config, …
     (theme/ requires root and is managed manually — see README)
