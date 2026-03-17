@@ -257,9 +257,6 @@ export PATH="$HOME/.cargo/bin:$PATH"
 export PATH=~/.npm-global/bin:$PATH
 export LIBC_DATABASE_PATH="$HOME/.libc-database"
 
-# secrets: API keys and other sensitive values (not tracked by git)
-[[ -f "$HOME/.zshrc.secrets" ]] && source "$HOME/.zshrc.secrets"
-
 # go path
 [[ -s "$HOME/.gvm/scripts/gvm" ]] && source "$HOME/.gvm/scripts/gvm"
 export PATH=$PATH:$(go env GOPATH)/bin
