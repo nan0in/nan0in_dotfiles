@@ -1,17 +1,124 @@
-[general]
-theme = "dark"
+"$schema" = "https://yazi-rs.github.io/schemas/yazi.json"
+
+[mgr]
+ratio          = [1, 3, 4]    # 父目录:当前目录:预览 比例
+sort_by        = "alphabetical"
+sort_sensitive = false
+sort_reverse   = false
+sort_dir_first = true
+linemode       = "size"
+show_hidden    = true         # 建议开启：作为开发者通常需要看 .config 等隐藏文件
+show_symlink   = true
+scrolloff      = 5
+mouse_events   = ["click", "scroll"]
+title_format   = "Yazi: {cwd}"
 
 [preview]
-# 图像预览（调整尺寸为当前终端窗口的 50%）
-image = "chafa -f symbols --size $((COLUMNS/2))x$((LINES/2)) \"$1\""
+tab_size        = 2
+max_width       = 1000        # 调大：适应高分屏
+max_height      = 1500        # 调大
+cache_dir       = ""
+image_filter    = "lanczos3"  # 优化：比 triangle 质量更好，虽然稍微慢一点点
+image_quality   = 90          # 提高预览图质量
+sixel_fraction  = 15
+ueberzug_scale  = 1
+ueberzug_offset = [0, 0, 0, 0]
 
-# 视频预览（生成缩略图后转字符画）
-video = "ffmpegthumbnailer -i \"$1\" -o - | chafa -f symbols"
+[opener]
+# --- 1. 编辑器 ---
+edit = [
+	# 优先使用 Neovim，如果没有则回退到 vi
+	{ run = '${EDITOR:-nvim} "$@"', desc = "Neovim", block = true, for = "unix" },
+]
 
-# 其他文件类型示例
-pdf = "pdftoppm -jpeg -singlefile \"$1\" - | chafa"
-svg = "resvg \"$1\" - | chafa"
+# --- 2. 系统默认打开 ---
+open = [
+	{ run = 'xdg-open "$1"', desc = "Open", for = "linux" },
+]
+
+# --- 3. 视频播放器 (VLC) ---
+# block=false: 不阻塞 yazi 界面
+# orphan=true: 即使 yazi 关闭，视频播放器依然保留
+play_video = [
+	{ run = 'vlc "$@"', block = false, orphan = true, desc = "VLC" },
+]
+
+# --- 4. 解压工具 ---
+# 默认解压命令，稍后我们会用插件增强预览
+extract = [
+	{ run = 'ya pub extract --list "$@"', desc = "Extract here", for = "unix" },
+]
+
+# --- 5. 终端内查看 ---
+reveal = [
+	{ run = 'xdg-open "$(dirname "$1")"', desc = "Reveal", for = "linux" },
+	{ run = '''exiftool "$1"; echo "按 Enter 退出"; read _''', block = true, desc = "Show EXIF", for = "unix" },
+]
+
+chrome = [
+    { run = 'google-chrome-stable "$@"', desc = "Google Chrome", orphan = true, for = "linux" },
+]
+
+[open]
+prepend_rules = [
+	# 1. 视频：使用 MIME 类型匹配所有视频，通过 VLC 打开
+	{ mime = "video/*", use = "play_video" },
+    
+    # 2. 如果有些视频 MIME 识别不准，补充后缀匹配（不区分大小写）
+    { name = '(?i).*\.(mov|mp4|mkv|avi|flv|wmv)$', use = "play_video" },
+
+  { mime = "application/pdf", use = "chrome" },
+
+]
+
+# 默认规则 (保留原样作为后备)
+rules = [
+	{ name = "*/", use = ["edit", "open", "reveal"] },
+	{ mime = "text/*", use = ["edit", "reveal"] },
+	{ mime = "image/*", use = ["open", "reveal"] },
+	{ mime = "{audio,video}/*", use = ["play", "reveal"] },
+	{ mime = "application/{,g}zip", use = ["extract", "reveal"] },
+	{ mime = "application/{tar,bzip*,7z*,xz,rar}", use = ["extract", "reveal"] },
+	{ mime = "application/{json,ndjson}", use = ["edit", "reveal"] },
+	{ mime = "*/javascript", use = ["edit", "reveal"] },
+	{ mime = "inode/empty", use = ["edit", "reveal"] },
+	{ name = "*", use = ["edit", "open", "reveal"] },
+]
 
 [plugin]
-fetchers = [{ id = "mime", name = "*", run = "mime", if = "!mime", prio = "high" }]
-prepend_fetchers = [{ id = "git", name = "*", run = "git" }, { id = "git", name = "*/", run = "git" }]
+# 这里配置插件行为
+
+preloaders = [
+    { name = "*.ouch", run = "ouch" },
+	{ mime = "image/{avif,hei?,jxl,svg+xml}", run = "magick" },
+	{ mime = "image/*", run = "image" },
+	{ mime = "video/*", run = "video" },
+	{ mime = "application/pdf", run = "pdf" },
+]
+
+previewers = [
+	{ name = "*/", run = "folder", sync = true },
+    
+    # --- ouch 预览配置 ---
+    # 匹配常见压缩格式
+    { mime = "application/*zip", run = "ouch" },
+    { mime = "application/x-tar", run = "ouch" },
+    { mime = "application/x-bzip2", run = "ouch" },
+    { mime = "application/x-7z-compressed", run = "ouch" },
+    { mime = "application/x-rar", run = "ouch" },
+    { mime = "application/x-xz", run = "ouch" },
+    
+	{ mime = "text/*", run = "code" },
+	{ mime = "*/{xml,javascript,x-wine-extension-ini}", run = "code" },
+	{ mime = "application/{json,x-ndjson}", run = "json" },
+	{ mime = "image/{avif,hei?,jxl,svg+xml}", run = "magick" },
+	{ mime = "image/*", run = "image" },
+	{ mime = "video/*", run = "video" },
+	{ mime = "application/pdf", run = "pdf" },
+	
+    # 原生归档预览作为 fallback
+    { mime = "application/{,g}zip", run = "archive" },
+	{ mime = "application/x-{tar,bzip*,7z-compressed,xz,rar,iso9660-image}", run = "archive" },
+    
+	{ name = "*", run = "file" },
+]

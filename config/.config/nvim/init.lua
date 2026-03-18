@@ -29,3 +29,11 @@ vim.diagnostic.config({
 vim.cmd([[set clipboard=unnamedplus]])
 -- themes --
 -- vim.cmd([[colorscheme tokyonight]])
+
+vim.api.nvim_create_autocmd("User", {
+  pattern = "VeryLazy",
+  once = true,
+  callback = function()
+    require("snippets.markdown")
+  end,
+})

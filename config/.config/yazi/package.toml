@@ -13,5 +13,20 @@ use = "Rolv-Apneseth/starship"
 rev = "eca1861"
 hash = "e519d894e94ded741e06aae4d4775981"
 
+[[plugin.deps]]
+use = "yazi-rs/plugins:smart-filter"
+rev = "7ca66b4"
+hash = "bcda8eeb3f4013bae156aecabfc745e8"
+
+[[plugin.deps]]
+use = "KKV9/compress"
+rev = "c264639"
+hash = "e17c11b605d989568a1d1741ca17c584"
+
+[[plugin.deps]]
+use = "yazi-rs/plugins:ouch"
+rev = "4e55902"
+hash = "99aa06d3014798d86001c324468d497f"
+
 [flavor]
 deps = []

@@ -4,8 +4,9 @@ fastfetch --logo none --structure title:os:host:kernel:uptime:shell:terminal:loc
 echo "------------------------------------------------------------------------------"
 echo "\n"
 
-# XDG base dirs
-export XDG_CONFIG_HOME="$HOME/.config"
+# 自己记得改
+export XDG_CONFIG_HOME=/home/nan0in27/.config
+export TERM=xterm-256color
 
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
 source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
@@ -17,7 +18,6 @@ fi
 export ZSH="$HOME/.oh-my-zsh"
 
 ZSH_THEME="powerlevel10k/powerlevel10k"
-
 #extract--使用x 文件名 进行解压
 #z-- z 文件夹 快速跳转到上一次文件夹
 
@@ -26,8 +26,13 @@ plugins=(z git zsh-syntax-highlighting extract web-search jsontools vi-mode zsh-
 export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 source $ZSH/oh-my-zsh.sh
 
+# open buffer line in editor
+autoload -Uz edit-command-line 
+zle -N edit-command-line 
+bindkey '^X^E' edit-command-line
 
 # 常规一些配置
+export SUDO_EDITOR="nvim"
 export EDITOR="nvim"          # 默认编辑器设为 Neovim,也是为了yazi配置的
 export VISUAL="nvim"          # 图形环境备用编辑器
 alias gdb="gdb -q"
@@ -35,19 +40,19 @@ alias ran='ranger'
 alias vim='nvim'
 alias neo='neovide'
 alias ls='exa'
-alias burp='$HOME/Burpsuite/burp/Linux/CN_Burp.sh'
+alias burp='/home/nan0in27/tools/Burpsuite/burp/Linux/CN_Burp.sh'
 alias reload_kde="kquitapp5 plasmashell && kstart5 plasmashell"
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$("$HOME/miniforge3/bin/conda" 'shell.zsh' 'hook' 2> /dev/null)"
+__conda_setup="$('/home/nan0in27/miniforge3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
 if [ $? -eq 0 ]; then
     eval "$__conda_setup"
 else
-    if [ -f "$HOME/miniforge3/etc/profile.d/conda.sh" ]; then
-        . "$HOME/miniforge3/etc/profile.d/conda.sh"
+    if [ -f "/home/nan0in27/miniforge3/etc/profile.d/conda.sh" ]; then
+        . "/home/nan0in27/miniforge3/etc/profile.d/conda.sh"
     else
-        export PATH="$HOME/miniforge3/bin:$PATH"
+        export PATH="/home/nan0in27/miniforge3/bin:$PATH"
     fi
 fi
 unset __conda_setup
@@ -59,7 +64,7 @@ unset __conda_setup
 
 # 确保本地 bin 目录在 PATH 中
 export PATH="$HOME/.local/bin:$PATH"
-export PATH=$PATH:$HOME/.miniforge3/bin
+export PATH=$PATH:/home/nan0in27/.miniforge3/bin
 
 # 初始化 UV
 if command -v uv > /dev/null 2>&1; then
@@ -90,59 +95,35 @@ export RANGER_LOAD_DEFAULT_RC=false
 
 . "$HOME/.local/bin/env"
 
-# some convenient fucntions for me 
+# ----------some convenient fucntions for me------------- 
 export PWN_TOOL_PATH="$HOME/pwn/tools/gen_pwn.py"
 function exp(){
       python "$PWN_TOOL_PATH" "$@"
 }
 
-# exp() {
-#     if [ -f "./exp.py" ]; then
-#         echo "exp.py already exists in current directory."
-#         echo -n "Overwrite? (y/n/rename): "
-#         read choice
-#         case $choice in
-#             y|Y) 
-#                 cp ~/pwn/exp.py ./
-#                 echo "exp.py overwritten."
-#                 ;;
-#             n|N) 
-#                 echo "Operation cancelled." 
-#                 ;;
-#             r|R) 
-#                 echo -n "Enter new filename: "
-#                 read newname
-#                 cp ~/pwn/exp.py "./$newname"
-#                 echo "Copied to $newname"
-#                 ;;
-#             *) 
-#                 echo "Invalid choice. Operation cancelled." 
-#                 ;;
-#         esac
-#     else
-#         cp ~/pwn/exp.py ./
-#         echo "exp.py copied to current directory."
-#     fi
-# }
-
 rm() {
   if echo "$@" | grep -Eq -- '-[a-z]*f.*[a-z]*r|-[a-z]*r.*[a-z]*f'; then
-    echo "[🚨警告] 你正在尝试使用 rm -rf，请小心！"
-    echo -n "你真的想继续吗？[yes/NO] "
+    local targets=()
+    for arg in "$@"; do
+      if [[ "$arg" != -* ]]; then
+        targets+=("$arg")
+      fi
+    done
+
+    echo -e "\033[1;31m[🚨警告] 你正在尝试使用 rm -rf！\033[0m"
+    echo -e "\033[1;33m待删除的目标对象：\033[0m"
+    printf "  - %s\n" "${targets[@]}"
+    
+    echo -n "确认执行？[y/N] "
     read answer
-    if [[ $answer != "yes" ]]; then
-      echo "❎ 已取消 rm -rf。"
+    
+    if [[ ! "$answer" =~ ^[Yy](es)?$ ]]; then
+      echo "❎ 操作已终止。"
       return
     fi
   fi
-  echo "[⚠️] 即将删除：$@"
-  echo -n "是否继续? [y/N] "
-  read ans
-  if [[ $ans == [Yy] ]]; then
-    command rm "$@"
-  else
-    echo "❎ 已取消删除。"
-  fi
+
+  command rm "$@"
 }
 
 # pwncollege file transfer
@@ -203,6 +184,21 @@ gdiff() {
     fi
 }
 
+snap-copy() {
+    local tmp_file="/tmp/codesnap_$(date +%s).png"
+    codesnap "$@" --output "$tmp_file"
+
+    # 检查文件是否生成成功
+    if [[ -f "$tmp_file" ]]; then
+        # --type image/png 明确告诉 KDE 这是图片
+        wl-copy --type image/png < "$tmp_file"
+        # 清理临时文件
+        rm "$tmp_file"
+        print -P "%F{green}✔ Snapshot copied to KDE clipboard!%f"
+    else
+        print -P "%F{red}✘ Failed to generate snapshot.%f"
+    fi
+}
 
 # 定义代理地址变量
 httpproxy=http://127.0.0.1:20171
@@ -215,8 +211,8 @@ alias setproxy="export http_proxy=$httpproxy; export https_proxy=$httpproxy; exp
 alias unsetproxy="unset http_proxy; unset https_proxy; unset all_proxy; echo 'Unset proxy successfully'"
 
 # 南大pa
-export NEMU_HOME="$HOME/projects/NJUPA_nan0in/nemu"
-export AM_HOME="$HOME/projects/NJUPA_nan0in/abstract-machine"
+export NEMU_HOME=/home/nan0in27/projects/NJUPA_nan0in/nemu
+export AM_HOME=/home/nan0in27/projects/NJUPA_nan0in/abstract-machine
 
 export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -224,8 +220,8 @@ export NVM_DIR="$HOME/.config/nvm"
 
 # >>> mamba initialize >>>
 # !! Contents within this block are managed by 'mamba shell init' !!
-export MAMBA_EXE="$HOME/miniforge3/bin/mamba"
-export MAMBA_ROOT_PREFIX="$HOME/miniforge3"
+export MAMBA_EXE='/home/nan0in27/miniforge3/bin/mamba';
+export MAMBA_ROOT_PREFIX='/home/nan0in27/miniforge3';
 __mamba_setup="$("$MAMBA_EXE" shell hook --shell zsh --root-prefix "$MAMBA_ROOT_PREFIX" 2> /dev/null)"
 if [ $? -eq 0 ]; then
     eval "$__mamba_setup"
@@ -239,10 +235,10 @@ unset __mamba_setup
 export MANPAGER="nvim +Man!"
 
 # tmux添加为默认启动项，并保存上次会话回溯
-if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
-    # 尝试附加到现有会话，如果没有则创建新会话
-    exec tmux new-session -A -s main
-fi
+# if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
+# #    尝试附加到现有会话，如果没有则创建新会话
+#    exec tmux new-session -A -s main
+# fi
 
 # 为kd设置tmux适配浮动窗口 pop  
 if [[ -n $TMUX ]]; then
@@ -258,10 +254,14 @@ export PATH=~/.npm-global/bin:$PATH
 export LIBC_DATABASE_PATH="$HOME/.libc-database"
 
 # go path
-[[ -s "$HOME/.gvm/scripts/gvm" ]] && source "$HOME/.gvm/scripts/gvm"
+[[ -s "/home/nan0in27/.gvm/scripts/gvm" ]] && source "/home/nan0in27/.gvm/scripts/gvm"
 export PATH=$PATH:$(go env GOPATH)/bin
 
 # zoxide 
 eval "$(zoxide init zsh)"
 unset YAZI_ZOXIDE_OPTS
 export _ZO_EXCLUDE_DIRS="/mnt:/tmp"
+export RVDIFF_HOME=/home/nan0in27/projects/riscv-lab/difftest
+
+# source secrets (API keys etc.) — not tracked by git
+[[ -f "$HOME/.zshrc.secrets" ]] && source "$HOME/.zshrc.secrets"

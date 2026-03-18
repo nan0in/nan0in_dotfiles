@@ -63,30 +63,122 @@ ls.add_snippets("markdown", {
     t("!["), i(1, "Alt text"), t("]("), i(2, "image_url"), t(")"),
   }),
 
-  -- === 下面是更多的 Callout，兼容hugo用的  ===
-   s("hnote", {
-    t({ "{{< notice notice-note>}}", "" }),
-    i(1, "内容"),
-    t({ "", "{{< /notice >}}" }),
+  -- === Hugo Admonition Shortcodes ===
+
+  -- 摘要 (abstract)
+  s("abstract", {
+    t('{{< admonition type=abstract title="'), i(1, "摘要"), t('" open=false >}}'),
+    t({ "", "" }), i(2, "内容"),
+    t({ "", "{{< /admonition >}}" }),
   }),
 
-   s("htip", {
-    t({ "{{< notice notice-tip>}}", "" }),
-    i(1, "内容"),
-    t({ "", "{{< /notice >}}" }),
+  -- Bug
+  s("bug", {
+    t('{{< admonition type=bug title="'), i(1, "bug"), t('" open=false >}}'),
+    t({ "", "" }), i(2, "内容"),
+    t({ "", "{{< /admonition >}}" }),
   }),
 
-   s("hwarn", {
-    t({ "{{< notice notice-warning >}}", "" }),
-    i(1, "内容"),
-    t({ "", "{{< /notice >}}" }),
+  -- 范例 (example)
+  s("example", {
+    t('{{< admonition type=example title="'), i(1, "范例"), t('" open=false >}}'),
+    t({ "", "" }), i(2, "内容"),
+    t({ "", "{{< /admonition >}}" }),
   }),
 
-  -- Info Notice
+  -- 失败 (failure)
+  s("failure", {
+    t('{{< admonition type=failure title="'), i(1, "失败"), t('" open=false >}}'),
+    t({ "", "" }), i(2, "内容"),
+    t({ "", "{{< /admonition >}}" }),
+  }),
+
+  -- 讯息 (info)
   s("hinfo", {
-    t({ "{{< notice notice-info >}}", "" }),
-    i(1, "内容"),
-    t({ "", "{{< /notice >}}" }),
+    t('{{< admonition type=info title="'), i(1, "讯息"), t('" open=false >}}'),
+    t({ "", "" }), i(2, "内容"),
+    t({ "", "{{< /admonition >}}" }),
   }),
+
+  -- 网站 (node)
+  s("node", {
+    t('{{< admonition type=node title="'), i(1, "網站"), t('" open=false >}}'),
+    t({ "", "" }), i(2, "内容"),
+    t({ "", "{{< /admonition >}}" }),
+  }),
+
+  -- 问题 (question)
+  s("question", {
+    t('{{< admonition type=question title="'), i(1, "问题"), t('" open=false >}}'),
+    t({ "", "" }), i(2, "内容"),
+    t({ "", "{{< /admonition >}}" }),
+  }),
+
+  -- 引用 (quote)
+  s("hquote", {
+    t('{{< admonition type=quote title="'), i(1, "引用"), t('" open=false >}}'),
+    t({ "", "" }), i(2, "内容"),
+    t({ "", "{{< /admonition >}}" }),
+  }),
+
+  -- 成功 (success)
+  s("success", {
+    t('{{< admonition type=success title="'), i(1, "成功"), t('" open=false >}}'),
+    t({ "", "" }), i(2, "内容"),
+    t({ "", "{{< /admonition >}}" }),
+  }),
+
+  -- 提示 (htip - Hugo admonition)
+  s("htip", {
+    t('{{< admonition type=tip title="'), i(1, "提示"), t('" open=false >}}'),
+    t({ "", "" }), i(2, "内容"),
+    t({ "", "{{< /admonition >}}" }),
+  }),
+
+  -- 警告 (hwarn - Hugo admonition)
+  s("hwarn", {
+    t('{{< admonition type=warning title="'), i(1, "警告"), t('" open=false >}}'),
+    t({ "", "" }), i(2, "内容"),
+    t({ "", "{{< /admonition >}}" }),
+  }),
+
+  -- === Hugo 特殊 Shortcodes ===
+
+  -- 聊天气泡 (chat)
+  s("chat", {
+    t('{{< chat position="'), i(1, "left"), t('" name="'), i(2, "Name"), t('" timestamp="'), i(3, "2024-01-01 12:00"), t('">}}'),
+    t({ "", "" }), i(4, "消息内容"),
+    t({ "", "{{< /chat >}}" }),
+  }),
+
+  -- 时间线 (timeline)
+  s("timeline", {
+    t('{{< timeline date="'), i(1, "2024-01-01"), t('" title="'), i(2, "标题"),
+    t('" description="'), i(3, "描述"), t('" tags="'), i(4, "标签"),
+    t('" url="'), i(5), t('" >}}'),
+  }),
+
+  -- 折叠块 Hugo版 (details)
+  s("details", {
+    t("{{< details >}}"),
+    t({ "", "" }), i(1, "内容"),
+    t({ "", "{{< /details >}}" }),
+  }),
+
+  -- 文件下载链接 (download)
+  s("download", {
+    t('<a href="'), i(1, "/downloads/example.pdf"), t('" download>下载 '), i(2, "example"), t("</a>"),
+  }),
+
+  -- 文章 frontmatter 模板 (front)
+  s("front", {
+    t({ "---", "title: " }), i(1, "标题"),
+    t({ "", "description: " }), i(2, "描述"),
+    t({ "", "featured: false", "categories:", "  - " }), i(3, "分类"),
+    t({ "", "math: true", "tags:", "  - " }), i(4, "标签"),
+    t({ "", "date: " }), i(5),
+    t({ "", "image: banner.png", "---" }),
+  }),
+
 })
 
