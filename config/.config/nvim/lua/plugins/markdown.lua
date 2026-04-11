@@ -61,15 +61,70 @@ return {
     ft = { "markdown", "norg", "rmd", "org","Avante" },
   },
   {
+    "jbyuki/nabla.nvim",
+    ft = { "markdown" },
+    keys = {
+      {
+        "<leader>mp",
+        function()
+          require("nabla").popup()
+        end,
+        desc = "Markdown formula popup",
+      },
+      {
+        "<leader>mv",
+        function()
+          require("nabla").enable_virt()
+        end,
+        desc = "Enable formula virtual text",
+      },
+      {
+        "<leader>mV",
+        function()
+          require("nabla").disable_virt()
+        end,
+        desc = "Disable formula virtual text",
+      },
+    },
+  },
+  {
     "iamcco/markdown-preview.nvim",
     cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
     ft = { "markdown" },
+    keys = {
+      { "<leader>mo", "<cmd>MarkdownPreview<CR>", desc = "Open Markdown preview" },
+      { "<leader>ms", "<cmd>MarkdownPreviewStop<CR>", desc = "Stop Markdown preview" },
+      { "<leader>mt", "<cmd>MarkdownPreviewToggle<CR>", desc = "Toggle Markdown preview" },
+    },
     build = function()
       vim.fn["mkdp#util#install"]()
     end,
     config = function()
-      -- 可选：设置快捷键
-      vim.g.mkdp_theme = "dark" -- 暗色主题
+      vim.g.mkdp_theme = "dark"
+      vim.g.mkdp_auto_start = 0
+      vim.g.mkdp_auto_close = 1
+      vim.g.mkdp_refresh_slow = 0
+      vim.g.mkdp_markdown_css = ""
+      vim.g.mkdp_highlight_css = ""
+      vim.g.mkdp_port = ""
+      vim.g.mkdp_browser = ""
+      vim.g.mkdp_echo_preview_url = 1
+      vim.g.mkdp_browserfunc = ""
+      vim.g.mkdp_preview_options = {
+        mkit = {},
+        katex = {},
+        uml = {},
+        maid = {},
+        disable_sync_scroll = 0,
+        sync_scroll_type = "middle",
+        hide_yaml_meta = 1,
+        sequence_diagrams = {},
+        flowchart_diagrams = {},
+        content_editable = false,
+        disable_filename = 0,
+        toc = {},
+      }
+      vim.g.mkdp_filetypes = { "markdown" }
     end,
   },
   {
