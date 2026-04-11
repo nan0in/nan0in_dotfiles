@@ -36,3 +36,7 @@ end, { desc = "Previous diagnostic" })
 keyset("n", "=", function()
   vim.diagnostic.goto_next({ float = { border = "rounded" } })
 end, { desc = "Next diagnostic" })
+
+-- 修复 Home 和 End 键在插入模式下的行为
+keyset("i", "<Home>", "<Cmd>normal! ^<CR>", { noremap = true, silent = true, desc = "Jump to line start" })
+keyset("i", "<End>", "<Cmd>normal! $<CR>", { noremap = true, silent = true, desc = "Jump to line end" })
