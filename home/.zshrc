@@ -38,11 +38,21 @@ export VISUAL="nvim"          # 图形环境备用编辑器
 alias gdb="gdb -q"
 alias ran='ranger'
 alias vim='nvim'
-alias neo='neovide'
 alias ls='exa'
 alias burp='/home/nan0in27/tools/Burpsuite/burp/Linux/CN_Burp.sh'
 alias reload_kde="kquitapp5 plasmashell && kstart5 plasmashell"
 
+# yazi 退出后同步 shell 当前目录
+yazi() {
+  local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+  command yazi "$@" --cwd-file="$tmp"
+  IFS= read -r -d '' cwd < "$tmp"
+  [[ -n "$cwd" && "$cwd" != "$PWD" && -d "$cwd" ]] && builtin cd -- "$cwd"
+  rm -f -- "$tmp"
+}
+
+alias y='yazi'
+ 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
 __conda_setup="$('/home/nan0in27/miniforge3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
@@ -132,16 +142,26 @@ pwncp() {
         echo "用法:"
         echo "  上传文件: pwncp <本地文件> [远程路径]"
         echo "  下载文件: pwncp -r <远程文件> [本地路径]"
-        echo ""
-        echo "示例:要用绝对路径"
-        echo "  pwncp socket.py"
-        echo "  pwncp script.py /subfolder/"
-        echo "  pwncp -r /remote/file.txt ."
         return 1
     fi
 
     remote_host="hacker@dojo.pwn.college"
     key_path="$HOME/.ssh/key"  
+    remote_base="/home/hacker"
+
+    # 把用户输入的远端路径变成绝对路径：
+    # - 以 / 开头：认为已经是绝对路径，原样返回
+    # - 以 ~ 开头：认为是家目录语义，原样返回（scp 让远端 shell 展开）
+    # - 其他：认为是相对 /home/hacker 的路径，自动拼上 remote_base
+    _remote_obs(){
+      local p="$1" 
+      if [[ "$p" == /* || "$p" == ~* ]]; then
+        echo "$p"
+      else
+        p="${p#./}" # 去掉开头的 ./ 
+        printf "%s/%s" "$remote_base" "$p"
+      fi
+    }
 
     if [ "$1" = "-r" ]; then  # ⚠️ 用单等号，zsh 与 bash 兼容
         # 从远程 -> 本地
@@ -149,10 +169,10 @@ pwncp() {
             echo "错误: 缺少远程文件路径"
             return 1
         fi
-        remote_file="$2"
+        remote_path="$(_remote_obs "$2")" 
         local_path="${3:-.}"  # 默认下载到当前目录
-        echo "从 pwn.college 下载 $remote_file 到 $local_path ..."
-        scp -i "$key_path" "$remote_host:$remote_file" "$local_path"
+        echo "从 pwn.college 下载 $remote_path 到 $local_path ..."
+        scp -i "$key_path" "$remote_host:$remote_path" "$local_path"
         if [ $? -eq 0 ]; then
             echo "✓ 下载成功!"
         else
@@ -161,7 +181,7 @@ pwncp() {
     else
         # 本地 -> 远程
         file="$1"
-        remote_path="${2:-~}"
+        remote_path="$(_remote_obs "$2")"  
         if [ ! -f "$file" ]; then
             echo "错误: 文件 '$file' 不存在"
             return 1
@@ -265,3 +285,4 @@ export RVDIFF_HOME=/home/nan0in27/projects/riscv-lab/difftest
 
 # source secrets (API keys etc.) — not tracked by git
 [[ -f "$HOME/.zshrc.secrets" ]] && source "$HOME/.zshrc.secrets"
+export PATH="$HOME/.local/bin:$PATH"
