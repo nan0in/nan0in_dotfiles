@@ -1,0 +1,41 @@
+name: blog-dark
+source:
+  fcitx5_theme: fcitx5/.local/share/fcitx5/themes/blog-dark/theme.conf
+  fcitx5_classicui: fcitx5/.config/fcitx5/conf/classicui.conf
+
+palette:
+  background: "#1a1b26"
+  text: "#a9b1d6"
+  selected_text: "#b0b8f0"
+  tray_text: "#c0caf5"
+  accent_blue: "#7aa2f7"
+  preedit_gold: "#e0af68"
+  highlight_bg: "#505aa0"
+  border: "#414868"
+
+typography:
+  fcitx5_input_font: "Noto Sans CJK SC 13"
+  fcitx5_menu_font: "Noto Sans CJK SC 11"
+  windows_weasel_font: "Maple Mono NF CN, Microsoft YaHei UI"
+
+layout:
+  candidate_direction: horizontal
+  spacing: 4
+  text_margin: [12, 12, 7, 7]
+  content_margin: [4, 4, 4, 4]
+  highlight_margin: [8, 8, 5, 5]
+
+effects:
+  linux_blur: true
+  linux_blur_mask: blurmask.png
+  windows_blur_supported: false
+  windows_strategy: solid-color approximation with alpha and shadow
+
+assets:
+  - panel.png
+  - highlight.png
+  - prev.png
+  - next.png
+  - radio.png
+  - arrow.png
+  - blurmask.png
