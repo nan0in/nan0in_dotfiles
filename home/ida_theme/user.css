@@ -21,3 +21,196 @@ text_area_t
     qproperty-preprocessor-fg: #8BE9FD;
     qproperty-user1-fg: #8BE9FD;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   精细字体配置 - JetBrains Mono + Maple Mono
+   ═══════════════════════════════════════════════════════════════ */
+
+/* 菜单栏 - Maple Mono (较大, 增加间距) - 重要导航 */
+QMenuBar {
+    font-family: "Maple Mono", "JetBrainsMono Nerd Font", monospace;
+    font-size: 11pt;
+    font-weight: normal;
+    spacing: 8px;
+}
+
+QMenuBar::item {
+    font-family: "Maple Mono", "JetBrainsMono Nerd Font", monospace;
+    font-size: 11pt;
+    font-weight: normal;
+    padding: 4px 12px;
+    margin: 0px 2px;
+}
+
+/* 下拉菜单 - JetBrains Mono */
+QMenu {
+    font-family: "JetBrainsMono Nerd Font", "Maple Mono", monospace;
+    font-size: 11pt;
+}
+
+QMenu::item {
+    font-family: "JetBrainsMono Nerd Font", "Maple Mono", monospace;
+    font-size: 11pt;
+    padding: 6px 20px;
+}
+
+/* 工具栏 - Maple Mono (Medium) - 重要操作 */
+QToolBar {
+    font-family: "Maple Mono", "JetBrainsMono Nerd Font", monospace;
+    font-size: 10pt;
+    font-weight: 500;
+    spacing: 4px;
+}
+
+QToolButton {
+    font-family: "Maple Mono", "JetBrainsMono Nerd Font", monospace;
+    font-size: 10pt;
+    padding: 4px 8px;
+}
+
+/* 状态栏 - JetBrains Mono (Medium, 较大) - 重要信息显示 */
+QStatusBar {
+    font-family: "JetBrainsMono Nerd Font", "Maple Mono", monospace;
+    font-size: 11pt;
+    font-weight: 500;
+}
+
+QStatusBar QLabel {
+    font-family: "JetBrainsMono Nerd Font", "Maple Mono", monospace;
+    font-size: 11pt;
+    padding: 2px 6px;
+}
+
+/* 标签页/选项卡 - Maple Mono (SemiBold, 较大) - 重要导航 */
+QTabBar::tab {
+    font-family: "Maple Mono", "JetBrainsMono Nerd Font", monospace;
+    font-size: 11pt;
+    font-weight: 600;
+    padding: 6px 16px;
+}
+
+/* 按钮 - JetBrains Mono (Medium) */
+QPushButton {
+    font-family: "JetBrainsMono Nerd Font", "Maple Mono", monospace;
+    font-size: 11pt;
+    font-weight: 500;
+    padding: 4px 12px;
+}
+
+/* 对话框 - JetBrains Mono */
+QDialog {
+    font-family: "JetBrainsMono Nerd Font", "Maple Mono", monospace;
+    font-size: 11pt;
+}
+
+/* 文件对话框（保存/打开） - JetBrains Mono */
+QFileDialog {
+    font-family: "JetBrainsMono Nerd Font", "Maple Mono", monospace;
+    font-size: 11pt;
+}
+
+/* 普通标签 - JetBrains Mono */
+QLabel {
+    font-family: "JetBrainsMono Nerd Font", "Maple Mono", monospace;
+    font-size: 11pt;
+}
+
+/* 输入框 - JetBrains Mono (等宽字体) */
+QLineEdit,
+QTextEdit,
+QPlainTextEdit {
+    font-family: "JetBrainsMono Nerd Font", "Maple Mono", monospace;
+    font-size: 11pt;
+    padding: 4px;
+}
+
+QLineEdit:focus,
+QTextEdit:focus,
+QPlainTextEdit:focus {
+    border: 1px solid #7aa2f7;
+}
+
+/* 列表和树形视图 - JetBrains Mono */
+QListView,
+QTreeView,
+QTableView {
+    font-family: "JetBrainsMono Nerd Font", "Maple Mono", monospace;
+    font-size: 11pt;
+    selection-background-color: #7aa2f7;
+    selection-color: #1a1b26;
+    alternate-background-color: #1f2335;
+    outline: 0;
+}
+
+QListView::item:hover,
+QTreeView::item:hover,
+QTableView::item:hover {
+    background-color: #292e42;
+    color: #c0caf5;
+}
+
+QListView::item:selected,
+QTreeView::item:selected,
+QTableView::item:selected {
+    background-color: #7aa2f7;
+    color: #1a1b26;
+}
+
+QListView::item:selected:hover,
+QTreeView::item:selected:hover,
+QTableView::item:selected:hover {
+    background-color: #89b4fa;
+    color: #1a1b26;
+}
+
+QListView:focus,
+QTreeView:focus,
+QTableView:focus {
+    border: 1px solid #7aa2f7;
+}
+
+/* 表头 - Maple Mono (Medium, 较大) - 重要列标题 */
+QHeaderView::section {
+    font-family: "Maple Mono", "JetBrainsMono Nerd Font", monospace;
+    font-size: 11pt;
+    font-weight: 500;
+    padding: 6px 8px;
+}
+
+/* 组框标题 - Maple Mono (Medium) */
+QGroupBox {
+    font-family: "Maple Mono", "JetBrainsMono Nerd Font", monospace;
+    font-size: 10pt;
+    font-weight: 500;
+    padding-top: 8px;
+}
+
+/* 复选框和单选按钮 - JetBrains Mono */
+QCheckBox,
+QRadioButton {
+    font-family: "JetBrainsMono Nerd Font", "Maple Mono", monospace;
+    font-size: 10pt;
+    spacing: 6px;
+}
+
+/* 组合框 - JetBrains Mono (等宽字体) */
+QComboBox {
+    font-family: "JetBrainsMono Nerd Font", "Maple Mono", monospace;
+    font-size: 10pt;
+    padding: 4px 8px;
+}
+
+/* Dock窗口标题 - Maple Mono (Medium, 较大) - 重要窗口标识 */
+QDockWidget::title {
+    font-family: "Maple Mono", "JetBrainsMono Nerd Font", monospace;
+    font-size: 11pt;
+    font-weight: 500;
+    padding: 4px;
+}
+
+/* 提示文本 - JetBrains Mono (较小) */
+QToolTip {
+    font-family: "JetBrainsMono Nerd Font", "Maple Mono", monospace;
+    font-size: 9pt;
+    padding: 4px 8px;
+}
