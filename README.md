@@ -153,7 +153,6 @@ go install github.com/go-musicfox/go-musicfox@latest
 fcitx5 + 手搓的主题 `blog-dark`（Tokyo Night 毛玻璃磨砂暗色，位于 `fcitx5/` 包）
 <img width="822" height="88" alt="image" src="https://github.com/user-attachments/assets/a443702c-10c0-497e-85aa-71b569a378a5" />
 
-
 ### Shell
 oh-my-zsh + powerlevel10k，统一配色: Dracula & Tokyo Night
 
@@ -161,7 +160,10 @@ oh-my-zsh + powerlevel10k，统一配色: Dracula & Tokyo Night
 ![image](https://github.com/user-attachments/assets/55f1aab9-9410-4d43-baa1-43b8adfee067)
 
 ### Neovim (LazyVim)
-antigravity for vibe coding  
+antigravity for vibe coding (免费额度还挺多)  
+opencode and oh-my-opencode  
+codex  
+cc-switch
 <img width="2559" height="1525" alt="image" src="https://github.com/user-attachments/assets/66219859-57b6-4cb9-ba96-98dc43703fc5" />
 
 <img width="2560" height="533" alt="image" src="https://github.com/user-attachments/assets/00cf4ff4-967d-4332-902b-11a197449254" />
@@ -177,9 +179,10 @@ antigravity for vibe coding
 | yazi / ranger | 文件管理 |
 | btop | 进程管理 |
 | virt-manager + qemu/kvm | 虚拟机 |
-| codesnap | 代码截图 |
 | VLC | 视频播放 |
 | go-musicfox | 命令行音乐 |
+| elisa| 兼容ambxst的音乐gui客户端 |
+|xiling vivado| FPGA开发 |
 
 ## license
 - MIT

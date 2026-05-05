@@ -1,4 +1,5 @@
 #美化这里的piano是我自己找的字符画
+#
 fastfetch --logo none --structure title:os:host:kernel:uptime:shell:terminal:localip:cpu:gpu:colors --data-raw "$(fortune | cowsay -W 30 -f piano)" | lolcat
 # fastfetch --logo none --data-raw "$(fortune | cowsay -W 30 -f piano)" | lolcat
 echo "------------------------------------------------------------------------------"
@@ -53,8 +54,11 @@ yazi() {
 
 alias y='yazi'
  
+# 防御性清理：移除从父进程继承的 conda 环境变量（如 tmux 会话）
+unset CONDA_PREFIX CONDA_DEFAULT_ENV CONDA_PROMPT_MODIFIER CONDA_SHLVL CONDA_PYTHON_EXE CONDA_EXE
+unset _CE_CONDA _CE_M
+
 # >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
 __conda_setup="$('/home/nan0in27/miniforge3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
 if [ $? -eq 0 ]; then
     eval "$__conda_setup"
@@ -69,30 +73,37 @@ unset __conda_setup
 # <<< conda initialize <<<
 
 # ======================
-# UV Python 包管理器配置
+# UV Python 环境配置
 # ======================
 
-# 确保本地 bin 目录在 PATH 中
+# 确保本地 bin 目录在 PATH 中 (uv tools, uv python)
 export PATH="$HOME/.local/bin:$PATH"
-export PATH=$PATH:/home/nan0in27/.miniforge3/bin
 
-# 初始化 UV
-if command -v uv > /dev/null 2>&1; then
-    # 设置 UV 的缓存和配置目录
-    export UV_CACHE_DIR="$HOME/.cache/uv"
-    export UV_CONFIG_HOME="$HOME/.config/uv"
-    
-    # 自动激活 UV (如果已安装)
-    # eval "$(uv activate zsh)"
-    
-    # 设置默认 Python 版本 (可选)
-    # alias uvpython='uv venv -p python3.11'
+# AwdPwnPatcher PYTHONPATH
+export PYTHONPATH=/home/nan0in27/pwn/tools/AwdPwnPatcher:$PYTHONPATH
+
+# UV 配置
+export UV_CACHE_DIR="$HOME/.cache/uv"
+export UV_CONFIG_HOME="$HOME/.config/uv"
+
+# 默认激活全局 base 工作环境 (CTF/日常开发)
+# 其他环境切换命令：
+#   ai    -> conda activate ai   (torch/tensorflow/CUDA)
+#   deact -> deactivate
+if [[ -z "$VIRTUAL_ENV" ]] && [[ -f "$HOME/.venvs/base/bin/activate" ]]; then
+    source "$HOME/.venvs/base/bin/activate"
 fi
+
+# 环境快速切换
+alias ai='conda activate ai'
+alias base='deactivate 2>/dev/null; source ~/.venvs/base/bin/activate'
+alias deact='deactivate'
 
 # 常用 UV 别名
 alias uvenv='uv venv'
-alias uvinit='uv pip install -e .'
-alias uvup='uv pip install --upgrade pip setuptools wheel'
+alias uvsync='uv sync'
+alias uvadd='uv add'
+alias powerprofilesctl='/usr/bin/python /usr/bin/powerprofilesctl'
 
 
 # 输入法 
@@ -238,17 +249,17 @@ export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-# >>> mamba initialize >>>
-# !! Contents within this block are managed by 'mamba shell init' !!
-export MAMBA_EXE='/home/nan0in27/miniforge3/bin/mamba';
-export MAMBA_ROOT_PREFIX='/home/nan0in27/miniforge3';
-__mamba_setup="$("$MAMBA_EXE" shell hook --shell zsh --root-prefix "$MAMBA_ROOT_PREFIX" 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__mamba_setup"
-else
-    alias mamba="$MAMBA_EXE"  # Fallback on help from mamba activate
-fi
-unset __mamba_setup
+# >>> mamba initialize >>> (DISABLED - migrated to uv)
+# To re-enable mamba temporarily, uncomment below:
+# export MAMBA_EXE='/home/nan0in27/miniforge3/bin/mamba';
+# export MAMBA_ROOT_PREFIX='/home/nan0in27/miniforge3';
+# __mamba_setup="$("$MAMBA_EXE" shell hook --shell zsh --root-prefix "$MAMBA_ROOT_PREFIX" 2> /dev/null)"
+# if [ $? -eq 0 ]; then
+#     eval "$__mamba_setup"
+# else
+#     alias mamba="$MAMBA_EXE"  # Fallback on help from mamba activate
+# fi
+# unset __mamba_setup
 # <<< mamba initialize <<<
 
 # man使用nvim阅读
@@ -270,7 +281,7 @@ fi
 
 # 添加cargo到path->rustlings环境
 export PATH="$HOME/.cargo/bin:$PATH"
-export PATH=~/.npm-global/bin:$PATH
+export PATH="$PATH:$HOME/.npm-global/bin"
 export LIBC_DATABASE_PATH="$HOME/.libc-database"
 
 # go path
