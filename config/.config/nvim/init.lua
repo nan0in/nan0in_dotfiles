@@ -1,5 +1,6 @@
 vim.opt.tags = './tags;,tags;'
 vim.o.cmdheight = 0 -- 显示命令行区域
+vim.o.exrc = true -- 允许加载受信任的项目本地 .nvim.lua/.nvimrc/.exrc
 
 -- 映射 Ctrl+Shift+V 粘贴（插入模式）
 vim.api.nvim_set_keymap("i", "<C-S-v>", "<C-r>+", { noremap = true, silent = true })

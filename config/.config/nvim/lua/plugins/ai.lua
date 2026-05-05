@@ -1,58 +1,4 @@
 return {
-  -- Minuet AI 配置
-  -- {
-  --   "milanglacier/minuet-ai.nvim",
-  --   enabled = false,
-  --   dependencies = {
-  --     "nvim-lua/plenary.nvim",
-  --     "Saghen/blink.cmp",
-  --   },
-  --   config = function()
-  --     require("minuet").setup({
-  --       n_completions = 1,
-  --       provider = "openai", -- 需要指定提供商
-  --       provider_options = {
-  --         openai = {
-  --           api_key = "OPENAI_API_KEY", -- 使用环境变量
-  --           end_point = "https://llm.imsy.cc/v1/chat/completions", -- 使用 chat/completions 端点
-  --           model = "gpt-4o",
-  --           stream = true, -- 添加流式传输
-  --           -- 可选参数
-  --           optional = {
-  --             max_tokens = 256,
-  --             top_p = 0.9,
-  --           },
-  --           -- 自定义 prompt 函数
-  --           prompt = function(context_before_cursor, context_after_cursor, _)
-  --             local prompt_message = ""
-  --
-  --             -- 检查是否有 vectorcode 配置
-  --             local has_vc, vectorcode_config = pcall(require, "vectorcode.config")
-  --             local vectorcode_cacher = nil
-  --             if has_vc then
-  --               vectorcode_cacher = vectorcode_config.get_cacher_backend()
-  --               for _, file in ipairs(vectorcode_cacher.get_files()) do
-  --                 prompt_message = prompt_message .. "<|file_sep|>" .. file.path .. "\n" .. file.document
-  --               end
-  --             end
-  --             return prompt_message
-  --               .. "<|file_prefix|>\n"
-  --               .. context_before_cursor
-  --               .. "<|fim_suffix|>"
-  --               .. context_after_cursor
-  --               .. "<|fim_middle|>"
-  --           end,
-  --           suffix = false,
-  --         },
-  --       },
-  --       -- 添加前端配置
-  --       blink = {
-  --         enable_auto_complete = true,
-  --       },
-  --       request_timeout = 15,
-  --     })
-  --   end,
-  -- },
   -- blink.cmp 配置
   {
     "saghen/blink.cmp",
@@ -88,9 +34,10 @@ return {
       },
 
       sources = {
-        default = { "avante", "lsp", "path", "snippets", "buffer" },
+        -- default = { "avante", "lsp", "path", "snippets", "buffer" },
+        default = {"lsp", "path", "snippets", "buffer" },
         providers = {
-          avante = { module = "blink-cmp-avante", name = "Avante", opts = {} },
+          -- avante = { module = "blink-cmp-avante", name = "Avante", opts = {} },
           lsp = { name = "LSP" },
           path = { name = "Path" },
           snippets = { name = "Snip" },
@@ -201,61 +148,61 @@ return {
     },
   },
   -- Avante 配置
-  {
-    "yetone/avante.nvim",
-    -- ⚠️ 一定要加上这一行配置！！！！！
-    build = vim.fn.has("win32") ~= 0 and "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false"
-      or "make",
-    event = "VeryLazy",
-    version = false, -- 永远不要将此值设置为 "*"！永远不要！
-    ---@module 'avante'
-    ---@type avante.Config
-    opts = {
-      provider = "claude",
-      providers = {
-        claude = {
-          endpoint = "https://api.anthropic.com",
-          model = "claude-sonnet-4-20250514",
-          timeout = 30000, -- Timeout in milliseconds
-          extra_request_body = {
-            temperature = 0.75,
-            max_tokens = 20480,
-          },
-        },
-        moonshot = {
-          endpoint = "https://api.moonshot.ai/v1",
-          model = "kimi-k2-0711-preview",
-          timeout = 30000, -- 超时时间（毫秒）
-          extra_request_body = {
-            temperature = 0.75,
-            max_tokens = 32768,
-          },
-        },
-      },
-    },
-    mappings = {
-      diff = {
-        ours = "co",
-        theirs = "ct",
-        all_theirs = "ca", -- 👈 在 Diff 界面按 ca 就会把 AI 代码插入文件
-        both = "cb",
-        cursor = "cc",
-        next = "]x",
-        prev = "[x",
-      },
-    },
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "MunifTanjim/nui.nvim",
-      --- 以下依赖项是可选的，
-      "nvim-mini/mini.pick", -- 用于文件选择器提供者 mini.pick
-      "nvim-telescope/telescope.nvim", -- 用于文件选择器提供者 telescope
-      "ibhagwan/fzf-lua", -- 用于文件选择器提供者 fzf
-      "nvim-tree/nvim-web-devicons", -- 或 echasnovski/mini.icons
-    },
-    web_search_engine = {
-      provider = "SerpApi",
-      proxy = "http://127.0.0.1:20171",
-    },
-  },
+  -- {
+  --   "yetone/avante.nvim",
+  --   -- ⚠️ 一定要加上这一行配置！！！！！
+  --   build = vim.fn.has("win32") ~= 0 and "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false"
+  --     or "make",
+  --   event = "VeryLazy",
+  --   version = false, -- 永远不要将此值设置为 "*"！永远不要！
+  --   ---@module 'avante'
+  --   ---@type avante.Config
+  --   opts = {
+  --     provider = "claude",
+  --     providers = {
+  --       claude = {
+  --         endpoint = "https://api.anthropic.com",
+  --         model = "claude-sonnet-4-20250514",
+  --         timeout = 30000, -- Timeout in milliseconds
+  --         extra_request_body = {
+  --           temperature = 0.75,
+  --           max_tokens = 20480,
+  --         },
+  --       },
+  --       moonshot = {
+  --         endpoint = "https://api.moonshot.ai/v1",
+  --         model = "kimi-k2-0711-preview",
+  --         timeout = 30000, -- 超时时间（毫秒）
+  --         extra_request_body = {
+  --           temperature = 0.75,
+  --           max_tokens = 32768,
+  --         },
+  --       },
+  --     },
+  --   },
+  --   mappings = {
+  --     diff = {
+  --       ours = "co",
+  --       theirs = "ct",
+  --       all_theirs = "ca", -- 👈 在 Diff 界面按 ca 就会把 AI 代码插入文件
+  --       both = "cb",
+  --       cursor = "cc",
+  --       next = "]x",
+  --       prev = "[x",
+  --     },
+  --   },
+  --   dependencies = {
+  --     "nvim-lua/plenary.nvim",
+  --     "MunifTanjim/nui.nvim",
+  --     --- 以下依赖项是可选的，
+  --     "nvim-mini/mini.pick", -- 用于文件选择器提供者 mini.pick
+  --     "nvim-telescope/telescope.nvim", -- 用于文件选择器提供者 telescope
+  --     "ibhagwan/fzf-lua", -- 用于文件选择器提供者 fzf
+  --     "nvim-tree/nvim-web-devicons", -- 或 echasnovski/mini.icons
+  --   },
+  --   web_search_engine = {
+  --     provider = "SerpApi",
+  --     proxy = "http://127.0.0.1:20171",
+  --   },
+  -- },
 }

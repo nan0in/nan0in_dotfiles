@@ -1,22 +1,31 @@
 return {
   {
     "folke/tokyonight.nvim",
-    lazy=false,
+    lazy = false,
     priority = 1000,
     opts = {
-      style = "moon", -- 还有 available: night | moon | day
-      transparent = false, -- 是否启用透明背景
-
+      style = "night",
+      transparent = true,
       styles = {
-        comments = { italic = false }, -- 批注（注释）字体设置为斜体
-        keywords = { italic = true }, -- 关键字也斜体（可选）
-        functions = {}, -- 函数默认样式
-        variables = {}, -- 变量默认样式
+        comments = { italic = true },
+        keywords = { italic = false },
+        functions = {},
+        variables = {},
+        floats = "transparent",
       },
-      config = function(_, opts)
-      require("tokyonight").setup(opts)
-      vim.cmd([[colorscheme tokyonight]]) -- 在插件加载完成后再执行
-    end,
+      dim_inactive = false,
+      on_highlights = function(hl, c)
+        hl.Visual = { bg = "#283aaa", blend = 20 }
+        hl.SignColumn = { bg = "NONE" }
+        hl.FoldColumn = { bg = "NONE" }
+        hl.EndOfBuffer = { bg = "NONE" }
+        hl.NormalNC = { bg = "NONE" }
+        hl.MsgArea = { bg = "NONE" }
+      end,
     },
+    config = function(_, opts)
+      require("tokyonight").setup(opts)
+      vim.cmd([[colorscheme tokyonight]])
+    end,
   },
 }
