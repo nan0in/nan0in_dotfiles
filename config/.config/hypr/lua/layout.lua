@@ -1,0 +1,22 @@
+hl.config({
+  dwindle = { preserve_split = true },
+  master  = { new_status = "master" },
+  misc = {
+    force_default_wallpaper = -1,
+    disable_hyprland_logo = false,
+    disable_splash_rendering = false,
+    always_follow_on_dnd = true,
+    layers_hog_keyboard_focus = true,
+    animate_manual_resizes = true,
+    animate_mouse_windowdragging = false,
+    disable_autoreload = false,
+    enable_swallow = false,
+    focus_on_activate = false,
+    allow_session_lock_restore = true,
+    mouse_move_focuses_monitor = true,
+    close_special_on_empty = true,
+    exit_window_retains_fullscreen = false,
+    initial_workspace_tracking = 0,
+    middle_click_paste = true,
+  },
+})

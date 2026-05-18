@@ -10,7 +10,7 @@ set -euo pipefail
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # Stow packages that map directly into $HOME (theme/ needs root — handled separately)
-ALL_PACKAGES=(config fcitx5 home)
+ALL_PACKAGES=(ambxst config fcitx5 home)
 
 # ── colours ──────────────────────────────────────────────────────────────────
 info() { printf '\033[1;34m[info]\033[0m  %s\n' "$*"; }
@@ -73,7 +73,8 @@ cmd_help() {
     help                 Show this help message
 
   Packages:
-    config   — ~/.config/* (nvim, kitty, ranger, yazi, fontconfig …)
+    ambxst   — ambxst source (stow to ~/.local/src/ambxst/)
+    config   — ~/.config/* (nvim, kitty, hypr, waybar, dunst, ambxst, ranger, yazi, fontconfig …)
     fcitx5   — fcitx5 theme (blog-dark) and input method config
     home     — ~/.zshrc, ~/.p10k.zsh, tmux config, …
     (theme/ requires root and is managed manually — see README)
