@@ -1,119 +1,129 @@
-#美化这里的piano是我自己找的字符画
-fastfetch --logo none --structure title:os:host:kernel:uptime:shell:terminal:localip:cpu:gpu:colors --data-raw "$(fortune | cowsay -W 30 -f piano)" | lolcat
-# fastfetch --logo none --data-raw "$(fortune | cowsay -W 30 -f piano)" | lolcat
-echo "------------------------------------------------------------------------------"
-echo "\n"
-
-# 自己记得改
-export XDG_CONFIG_HOME=/home/nan0in27/.config
+# 美化这里的 piano 是我自己找的字符画
 export TERM=xterm-256color
+export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+export PATH="/snap/bin:$PATH"
+# uv Python 3.13 as default python3/python
+export PATH="$HOME/.local/share/uv/python/cpython-3.13-linux-x86_64-gnu/bin:$HOME/.local/bin:$HOME/.cargo/bin:$HOME/.npm-global/bin:$PATH"
+
+if [[ -d "$HOME/.opencode/bin" ]]; then
+  export PATH="$HOME/.opencode/bin:$PATH"
+fi
+
+if [[ -o interactive && -z "$TMUX" ]] \
+  && command -v fastfetch >/dev/null 2>&1 \
+  && command -v fortune >/dev/null 2>&1 \
+  && command -v cowsay >/dev/null 2>&1 \
+  && command -v lolcat >/dev/null 2>&1; then
+  cowfile="piano"
+  [[ -f "$HOME/piano.cow" ]] && cowfile="$HOME/piano.cow"
+  fastfetch --logo none --structure title:os:host:kernel:uptime:shell:terminal:localip:cpu:gpu:colors --data-raw "$(fortune | cowsay -W 30 -f "$cowfile")" | lolcat
+  echo "------------------------------------------------------------------------------"
+  echo ""
+fi
 
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
-
 ZSH_THEME="powerlevel10k/powerlevel10k"
-#extract--使用x 文件名 进行解压
-#z-- z 文件夹 快速跳转到上一次文件夹
 
-plugins=(z git zsh-syntax-highlighting extract web-search jsontools vi-mode zsh-autosuggestions )
-
+# extract -- 使用 x 文件名 进行解压
+# z -- 快速跳转到上一次文件夹
+plugins=(git zsh-syntax-highlighting extract web-search jsontools vi-mode zsh-autosuggestions)
 export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
-source $ZSH/oh-my-zsh.sh
+[[ -r "$ZSH/oh-my-zsh.sh" ]] && source "$ZSH/oh-my-zsh.sh"
 
 # open buffer line in editor
-autoload -Uz edit-command-line 
-zle -N edit-command-line 
+autoload -Uz edit-command-line
+zle -N edit-command-line
 bindkey '^X^E' edit-command-line
 
 # 常规一些配置
 export SUDO_EDITOR="nvim"
-export EDITOR="nvim"          # 默认编辑器设为 Neovim,也是为了yazi配置的
-export VISUAL="nvim"          # 图形环境备用编辑器
-alias gdb="gdb -q"
-alias ran='ranger'
-alias vim='nvim'
-alias ls='exa'
-alias burp='/home/nan0in27/tools/Burpsuite/burp/Linux/CN_Burp.sh'
-alias reload_kde="kquitapp5 plasmashell && kstart5 plasmashell"
-
-# yazi 退出后同步 shell 当前目录
-yazi() {
-  local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
-  command yazi "$@" --cwd-file="$tmp"
-  IFS= read -r -d '' cwd < "$tmp"
-  [[ -n "$cwd" && "$cwd" != "$PWD" && -d "$cwd" ]] && builtin cd -- "$cwd"
-  rm -f -- "$tmp"
-}
-
-alias y='yazi'
- 
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/home/nan0in27/miniforge3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/home/nan0in27/miniforge3/etc/profile.d/conda.sh" ]; then
-        . "/home/nan0in27/miniforge3/etc/profile.d/conda.sh"
-    else
-        export PATH="/home/nan0in27/miniforge3/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-# <<< conda initialize <<<
-
-# ======================
-# UV Python 包管理器配置
-# ======================
-
-# 确保本地 bin 目录在 PATH 中
-export PATH="$HOME/.local/bin:$PATH"
-export PATH=$PATH:/home/nan0in27/.miniforge3/bin
-
-# 初始化 UV
-if command -v uv > /dev/null 2>&1; then
-    # 设置 UV 的缓存和配置目录
-    export UV_CACHE_DIR="$HOME/.cache/uv"
-    export UV_CONFIG_HOME="$HOME/.config/uv"
-    
-    # 自动激活 UV (如果已安装)
-    # eval "$(uv activate zsh)"
-    
-    # 设置默认 Python 版本 (可选)
-    # alias uvpython='uv venv -p python3.11'
-fi
-
-# 常用 UV 别名
-alias uvenv='uv venv'
-alias uvinit='uv pip install -e .'
-alias uvup='uv pip install --upgrade pip setuptools wheel'
-
-
-# 输入法 
+export EDITOR="nvim"
+export VISUAL="nvim"
+export MANPAGER="nvim +Man!"
+export RANGER_LOAD_DEFAULT_RC=false
 export XMODIFIERS="@im=fcitx"
 export INPUT_METHOD=fcitx
 export GTK_IM_MODULE=fcitx
 export QT_IM_MODULE=fcitx
-export XMODIFIERS=@im=fcitx
-export RANGER_LOAD_DEFAULT_RC=false
 
-. "$HOME/.local/bin/env"
+alias gdb="gdb -q"
+alias ran='ranger'
+alias vim='nvim'
 
-# ----------some convenient fucntions for me------------- 
+if command -v eza >/dev/null 2>&1; then
+  alias ls='eza'
+elif command -v exa >/dev/null 2>&1; then
+  alias ls='exa'
+fi
+
+[[ -x "$HOME/tools/Burpsuite/burp/Linux/CN_Burp.sh" ]] && alias burp="$HOME/tools/Burpsuite/burp/Linux/CN_Burp.sh"
+if command -v kquitapp5 >/dev/null 2>&1 && command -v kstart5 >/dev/null 2>&1; then
+  alias reload_kde="kquitapp5 plasmashell && kstart5 plasmashell"
+fi
+
+if command -v yazi >/dev/null 2>&1; then
+  yazi() {
+    local tmp cwd
+    tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
+    command yazi "$@" --cwd-file="$tmp"
+    if [[ -f "$tmp" ]]; then
+      IFS= read -r cwd < "$tmp"
+      [[ -n "$cwd" && "$cwd" != "$PWD" && -d "$cwd" ]] && builtin cd -- "$cwd"
+      rm -f -- "$tmp"
+    fi
+  }
+  alias y='yazi'
+fi
+
+MINIFORGE_HOME=""
+for candidate in "$HOME/miniforge3" "$HOME/.miniforge3"; do
+  if [[ -d "$candidate" ]]; then
+    MINIFORGE_HOME="$candidate"
+    break
+  fi
+done
+
+if command -v conda >/dev/null 2>&1; then
+  __conda_setup="$(conda shell.zsh hook 2>/dev/null)"
+  if [[ $? -eq 0 ]]; then
+    eval "$__conda_setup"
+  fi
+  unset __conda_setup
+elif [[ -n "$MINIFORGE_HOME" && -f "$MINIFORGE_HOME/etc/profile.d/conda.sh" ]]; then
+  . "$MINIFORGE_HOME/etc/profile.d/conda.sh"
+elif [[ -n "$MINIFORGE_HOME" ]]; then
+  export PATH="$MINIFORGE_HOME/bin:$PATH"
+fi
+
+if command -v uv >/dev/null 2>&1; then
+  export UV_CACHE_DIR="$HOME/.cache/uv"
+  export UV_CONFIG_HOME="$HOME/.config/uv"
+fi
+
+alias uvenv='uv venv'
+alias uvinit='uv pip install -e .'
+alias uvup='uv pip install --upgrade pip setuptools wheel'
+
+[[ -f "$HOME/.local/bin/env" ]] && . "$HOME/.local/bin/env"
+[[ "${OPENAI_API_KEY:-}" == "your-openai-api-key-here" ]] && unset OPENAI_API_KEY
+
+# ---------- some convenient functions for me -------------
 export PWN_TOOL_PATH="$HOME/pwn/tools/gen_pwn.py"
-function exp(){
-      python "$PWN_TOOL_PATH" "$@"
+exp() {
+  python "$PWN_TOOL_PATH" "$@"
 }
 
 rm() {
   if echo "$@" | grep -Eq -- '-[a-z]*f.*[a-z]*r|-[a-z]*r.*[a-z]*f'; then
     local targets=()
+    local arg
     for arg in "$@"; do
       if [[ "$arg" != -* ]]; then
         targets+=("$arg")
@@ -123,10 +133,9 @@ rm() {
     echo -e "\033[1;31m[🚨警告] 你正在尝试使用 rm -rf！\033[0m"
     echo -e "\033[1;33m待删除的目标对象：\033[0m"
     printf "  - %s\n" "${targets[@]}"
-    
     echo -n "确认执行？[y/N] "
     read answer
-    
+
     if [[ ! "$answer" =~ ^[Yy](es)?$ ]]; then
       echo "❎ 操作已终止。"
       return
@@ -136,153 +145,173 @@ rm() {
   command rm "$@"
 }
 
-# pwncollege file transfer
 pwncp() {
-    if [ $# -lt 1 ]; then
-        echo "用法:"
-        echo "  上传文件: pwncp <本地文件> [远程路径]"
-        echo "  下载文件: pwncp -r <远程文件> [本地路径]"
-        return 1
-    fi
+  if [ $# -lt 1 ]; then
+    echo "用法:"
+    echo "  上传文件: pwncp <本地文件> [远程路径]"
+    echo "  下载文件: pwncp -r <远程文件> [本地路径]"
+    return 1
+  fi
 
-    remote_host="hacker@dojo.pwn.college"
-    key_path="$HOME/.ssh/key"  
-    remote_base="/home/hacker"
+  local remote_host="hacker@dojo.pwn.college"
+  local key_path="$HOME/.ssh/key"
+  local remote_base="/home/hacker"
 
-    # 把用户输入的远端路径变成绝对路径：
-    # - 以 / 开头：认为已经是绝对路径，原样返回
-    # - 以 ~ 开头：认为是家目录语义，原样返回（scp 让远端 shell 展开）
-    # - 其他：认为是相对 /home/hacker 的路径，自动拼上 remote_base
-    _remote_obs(){
-      local p="$1" 
-      if [[ "$p" == /* || "$p" == ~* ]]; then
-        echo "$p"
-      else
-        p="${p#./}" # 去掉开头的 ./ 
-        printf "%s/%s" "$remote_base" "$p"
-      fi
-    }
-
-    if [ "$1" = "-r" ]; then  # ⚠️ 用单等号，zsh 与 bash 兼容
-        # 从远程 -> 本地
-        if [ $# -lt 2 ]; then
-            echo "错误: 缺少远程文件路径"
-            return 1
-        fi
-        remote_path="$(_remote_obs "$2")" 
-        local_path="${3:-.}"  # 默认下载到当前目录
-        echo "从 pwn.college 下载 $remote_path 到 $local_path ..."
-        scp -i "$key_path" "$remote_host:$remote_path" "$local_path"
-        if [ $? -eq 0 ]; then
-            echo "✓ 下载成功!"
-        else
-            echo "✗ 下载失败!"
-        fi
+  _remote_obs() {
+    local p="$1"
+    if [[ "$p" == /* || "$p" == ~* ]]; then
+      echo "$p"
     else
-        # 本地 -> 远程
-        file="$1"
-        remote_path="$(_remote_obs "$2")"  
-        if [ ! -f "$file" ]; then
-            echo "错误: 文件 '$file' 不存在"
-            return 1
-        fi
-        echo "上传 $file 到 pwn.college..."
-        scp -i "$key_path" "$file" "$remote_host:$remote_path"
-        if [ $? -eq 0 ]; then
-            echo "✓ 上传成功!"
-        else
-            echo "✗ 上传失败!"
-        fi
+      p="${p#./}"
+      printf "%s/%s" "$remote_base" "$p"
     fi
+  }
+
+  if [ "$1" = "-r" ]; then
+    if [ $# -lt 2 ]; then
+      echo "错误: 缺少远程文件路径"
+      return 1
+    fi
+    local remote_path="$(_remote_obs "$2")"
+    local local_path="${3:-.}"
+    echo "从 pwn.college 下载 $remote_path 到 $local_path ..."
+    scp -i "$key_path" "$remote_host:$remote_path" "$local_path"
+  else
+    local file="$1"
+    local remote_path="$(_remote_obs "$2")"
+    if [ ! -f "$file" ]; then
+      echo "错误: 文件 '$file' 不存在"
+      return 1
+    fi
+    echo "上传 $file 到 pwn.college..."
+    scp -i "$key_path" "$file" "$remote_host:$remote_path"
+  fi
 }
 
 gdiff() {
-    if [ $# -eq 0 ]; then
-        git difftool --tool=nvimdiff
-    else
-        git difftool --tool=nvimdiff "$@"
-    fi
+  if [ $# -eq 0 ]; then
+    git difftool --tool=nvimdiff
+  else
+    git difftool --tool=nvimdiff "$@"
+  fi
 }
 
 snap-copy() {
-    local tmp_file="/tmp/codesnap_$(date +%s).png"
-    codesnap "$@" --output "$tmp_file"
+  local tmp_file="/tmp/codesnap_$(date +%s).png"
+  codesnap "$@" --output "$tmp_file"
 
-    # 检查文件是否生成成功
-    if [[ -f "$tmp_file" ]]; then
-        # --type image/png 明确告诉 KDE 这是图片
-        wl-copy --type image/png < "$tmp_file"
-        # 清理临时文件
-        rm "$tmp_file"
-        print -P "%F{green}✔ Snapshot copied to KDE clipboard!%f"
+  if [[ -f "$tmp_file" ]]; then
+    if command -v wl-copy >/dev/null 2>&1; then
+      wl-copy --type image/png < "$tmp_file"
+    elif command -v xclip >/dev/null 2>&1; then
+      xclip -selection clipboard -t image/png -i "$tmp_file"
     else
-        print -P "%F{red}✘ Failed to generate snapshot.%f"
+      echo "没有可用的图片剪贴板命令，文件保留在: $tmp_file"
+      return 1
     fi
+    rm "$tmp_file"
+    print -P "%F{green}✔ Snapshot copied to clipboard!%f"
+  else
+    print -P "%F{red}✘ Failed to generate snapshot.%f"
+  fi
 }
 
-# 定义代理地址变量
-httpproxy=http://127.0.0.1:20171
-socksproxy=socks5://127.0.0.1:20170
+unalias setproxy unsetproxy 2>/dev/null
 
-# 设置使用代理
-alias setproxy="export http_proxy=$httpproxy; export https_proxy=$httpproxy; export all_proxy=$socksproxy; echo 'Set proxy successfully'"
+wsl_host_ip() {
+  awk '/^nameserver / {print $2; exit}' /etc/resolv.conf 2>/dev/null \
+    || ip route show default 2>/dev/null | awk '{print $3; exit}'
+}
 
-# 设置取消使用代理
-alias unsetproxy="unset http_proxy; unset https_proxy; unset all_proxy; echo 'Unset proxy successfully'"
+setproxy() {
+  local host="${1:-$(wsl_host_ip)}"
+  if [[ -z "$host" ]]; then
+    echo "Failed to detect WSL host IP"
+    return 1
+  fi
 
-# 南大pa
-export NEMU_HOME=/home/nan0in27/projects/NJUPA_nan0in/nemu
-export AM_HOME=/home/nan0in27/projects/NJUPA_nan0in/abstract-machine
+  echo "Set proxy successfully: ${host}:30000"
+}
+
+unsetproxy() {
+  unset http_proxy https_proxy all_proxy HTTP_PROXY HTTPS_PROXY ALL_PROXY
+  echo "Unset proxy successfully"
+}
+
+[[ -d "$HOME/projects/NJUPA_nan0in/nemu" ]] && export NEMU_HOME="$HOME/projects/NJUPA_nan0in/nemu"
+[[ -d "$HOME/projects/NJUPA_nan0in/abstract-machine" ]] && export AM_HOME="$HOME/projects/NJUPA_nan0in/abstract-machine"
+[[ -d "$HOME/projects/riscv-lab/difftest" ]] && export RVDIFF_HOME="$HOME/projects/riscv-lab/difftest"
 
 export NVM_DIR="$HOME/.config/nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
 
-# >>> mamba initialize >>>
-# !! Contents within this block are managed by 'mamba shell init' !!
-export MAMBA_EXE='/home/nan0in27/miniforge3/bin/mamba';
-export MAMBA_ROOT_PREFIX='/home/nan0in27/miniforge3';
-__mamba_setup="$("$MAMBA_EXE" shell hook --shell zsh --root-prefix "$MAMBA_ROOT_PREFIX" 2> /dev/null)"
-if [ $? -eq 0 ]; then
+if command -v mamba >/dev/null 2>&1; then
+  export MAMBA_EXE="$(command -v mamba)"
+  export MAMBA_ROOT_PREFIX="${MINIFORGE_HOME:-${MAMBA_ROOT_PREFIX:-$HOME/.mamba}}"
+  __mamba_setup="$("$MAMBA_EXE" shell hook --shell zsh --root-prefix "$MAMBA_ROOT_PREFIX" 2> /dev/null)"
+  if [ $? -eq 0 ]; then
     eval "$__mamba_setup"
-else
-    alias mamba="$MAMBA_EXE"  # Fallback on help from mamba activate
+  else
+    alias mamba="$MAMBA_EXE"
+  fi
+  unset __mamba_setup
 fi
-unset __mamba_setup
-# <<< mamba initialize <<<
 
-# man使用nvim阅读
-export MANPAGER="nvim +Man!"
-
-# tmux添加为默认启动项，并保存上次会话回溯
+# tmux 添加为默认启动项，并保存上次会话回溯
 # if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
-# #    尝试附加到现有会话，如果没有则创建新会话
-#    exec tmux new-session -A -s main
+#   exec tmux new-session -A -s main
 # fi
 
-# 为kd设置tmux适配浮动窗口 pop  
-if [[ -n $TMUX ]]; then
-    __kdwithtmuxpopup() {
-        tmux display-popup "kd $@"
-    }
-    alias kd=__kdwithtmuxpopup
+if [[ -n $TMUX ]] && command -v kd >/dev/null 2>&1; then
+  __kdwithtmuxpopup() {
+    tmux display-popup "kd $@"
+  }
+  alias kd=__kdwithtmuxpopup
 fi
 
-# 添加cargo到path->rustlings环境
-export PATH="$HOME/.cargo/bin:$PATH"
-export PATH=~/.npm-global/bin:$PATH
 export LIBC_DATABASE_PATH="$HOME/.libc-database"
 
-# go path
-[[ -s "/home/nan0in27/.gvm/scripts/gvm" ]] && source "/home/nan0in27/.gvm/scripts/gvm"
-export PATH=$PATH:$(go env GOPATH)/bin
+[[ -s "$HOME/.gvm/scripts/gvm" ]] && source "$HOME/.gvm/scripts/gvm"
+if command -v go >/dev/null 2>&1; then
+  export PATH="$PATH:$(go env GOPATH)/bin"
+fi
 
-# zoxide 
-eval "$(zoxide init zsh)"
+if command -v zoxide >/dev/null 2>&1; then
+  eval "$(zoxide init zsh)"
+fi
 unset YAZI_ZOXIDE_OPTS
 export _ZO_EXCLUDE_DIRS="/mnt:/tmp"
-export RVDIFF_HOME=/home/nan0in27/projects/riscv-lab/difftest
 
-# source secrets (API keys etc.) — not tracked by git
 [[ -f "$HOME/.zshrc.secrets" ]] && source "$HOME/.zshrc.secrets"
-export PATH="$HOME/.local/bin:$PATH"
+
+# === WSL Proxy Control ===
+unalias setproxy unsetproxy 2>/dev/null
+
+wsl_host_ip() {
+  awk '/^nameserver / {print $2; exit}' /etc/resolv.conf 2>/dev/null \
+    || ip route show default 2>/dev/null | awk '{print $3; exit}'
+}
+
+setproxy() {
+  local host="${1:-$(wsl_host_ip)}"
+  if [[ -z "$host" ]]; then
+    echo "Failed to detect WSL host IP"
+    return 1
+  fi
+
+  export http_proxy="http://${host}:30000"
+  export https_proxy="$http_proxy"
+  export all_proxy="socks5://${host}:30000"
+  export HTTP_PROXY="$http_proxy"
+  export HTTPS_PROXY="$https_proxy"
+  export ALL_PROXY="$all_proxy"
+  export no_proxy="localhost,127.0.0.1,::1"
+  export NO_PROXY="$no_proxy"
+  echo "Proxy ON: ${host}:30000"
+}
+
+unsetproxy() {
+  unset http_proxy https_proxy all_proxy HTTP_PROXY HTTPS_PROXY ALL_PROXY no_proxy NO_PROXY
+  echo "Proxy OFF"
+}

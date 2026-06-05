@@ -127,20 +127,4 @@ return {
       vim.g.mkdp_filetypes = { "markdown" }
     end,
   },
-  {
-    "3rd/image.nvim",
-    opts = {
-      backend = "kitty", -- 或者 "ueberzug"
-      tmux_show_only_in_active_window = true,
-      integrations = {
-        markdown = {
-          enabled = true,
-          clear_in_insert_mode = true,
-          download_remote_images = true, -- 甚至能渲染网络图片
-          only_render_image_at_cursor = true,  --只渲染光标下的图片 
-          only_render_image_at_cursor_mode = "popup",  --只渲染光标下的图片 
-        },
-      },
-    },
-  },
 }

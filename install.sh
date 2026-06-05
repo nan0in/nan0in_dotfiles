@@ -10,7 +10,7 @@ set -euo pipefail
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # Stow packages that map directly into $HOME (theme/ needs root — handled separately)
-ALL_PACKAGES=(config fcitx5 home)
+ALL_PACKAGES=(config fcitx5 home tmux)
 
 # ── colours ──────────────────────────────────────────────────────────────────
 info() { printf '\033[1;34m[info]\033[0m  %s\n' "$*"; }

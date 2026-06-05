@@ -13,7 +13,7 @@ cd ~/projects/nan0in_dotfiles
 bash install.sh
 ```
 
-脚本会把 `config`、`fcitx5`、`home` 三个包 stow 到 `$HOME`，并从 `.zshrc.secrets.example` 生成 `~/.zshrc.secrets`（填入你的 API key 等敏感值）。
+脚本会把 `config`、`fcitx5`、`home`、`tmux` 四个包 stow 到 `$HOME`，并从 `.zshrc.secrets.example` 生成 `~/.zshrc.secrets`（填入你的 API key 等敏感值）。
 
 > `theme/` 包含 SDDM/grub 主题，需要 root 权限手动安装，不在脚本范围内。
 
@@ -24,6 +24,7 @@ bash install.sh
 | `config/` | `~/.config/` 下的所有配置（nvim、kitty、ranger、yazi、fontconfig 等） |
 | `fcitx5/` | fcitx5 主题及输入法配置 |
 | `home/` | `~/.zshrc`、`~/.p10k.zsh`、tmux 配置等 |
+| `tmux/` | `~/.tmux.conf` |
 | `theme/` | SDDM / grub 主题（需 root，手动安装） |
 
 ## 探索和收集配置文件
