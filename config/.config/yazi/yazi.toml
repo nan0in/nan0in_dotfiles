@@ -1,4 +1,3 @@
-"$schema" = "https://yazi-rs.github.io/schemas/yazi.json"
 
 [mgr]
 ratio          = [1, 3, 4]    # 父目录:当前目录:预览 比例
@@ -7,7 +6,7 @@ sort_sensitive = false
 sort_reverse   = false
 sort_dir_first = true
 linemode       = "size"
-show_hidden    = true         # 建议开启：作为开发者通常需要看 .config 等隐藏文件
+show_hidden    =  false# 建议开启：作为开发者通常需要看 .config 等隐藏文件
 show_symlink   = true
 scrolloff      = 5
 mouse_events   = ["click", "scroll"]
@@ -64,8 +63,6 @@ prepend_rules = [
 	# 1. 视频：使用 MIME 类型匹配所有视频，通过 VLC 打开
 	{ mime = "video/*", use = "play_video" },
     
-    # 2. 如果有些视频 MIME 识别不准，补充后缀匹配（不区分大小写）
-    { name = '(?i).*\.(mov|mp4|mkv|avi|flv|wmv)$', use = "play_video" },
 
   { mime = "application/pdf", use = "chrome" },
 
@@ -73,7 +70,7 @@ prepend_rules = [
 
 # 默认规则 (保留原样作为后备)
 rules = [
-	{ name = "*/", use = ["edit", "open", "reveal"] },
+	{ mime = "inode/directory", use = ["edit", "open", "reveal"] },
 	{ mime = "text/*", use = ["edit", "reveal"] },
 	{ mime = "image/*", use = ["open", "reveal"] },
 	{ mime = "{audio,video}/*", use = ["play", "reveal"] },
@@ -82,14 +79,13 @@ rules = [
 	{ mime = "application/{json,ndjson}", use = ["edit", "reveal"] },
 	{ mime = "*/javascript", use = ["edit", "reveal"] },
 	{ mime = "inode/empty", use = ["edit", "reveal"] },
-	{ name = "*", use = ["edit", "open", "reveal"] },
+	# catch-all: yazi provides built-in fallback, no explicit rule needed
 ]
 
 [plugin]
 # 这里配置插件行为
 
 preloaders = [
-    { name = "*.ouch", run = "ouch" },
 	{ mime = "image/{avif,hei?,jxl,svg+xml}", run = "magick" },
 	{ mime = "image/*", run = "image" },
 	{ mime = "video/*", run = "video" },
@@ -97,7 +93,7 @@ preloaders = [
 ]
 
 previewers = [
-	{ name = "*/", run = "folder", sync = true },
+	{ mime = "inode/directory", run = "folder", sync = true },
     
     # --- ouch 预览配置 ---
     # 匹配常见压缩格式
@@ -120,5 +116,5 @@ previewers = [
     { mime = "application/{,g}zip", run = "archive" },
 	{ mime = "application/x-{tar,bzip*,7z-compressed,xz,rar,iso9660-image}", run = "archive" },
     
-	{ name = "*", run = "file" },
+	# catch-all: yazi provides built-in fallback, no explicit rule needed
 ]

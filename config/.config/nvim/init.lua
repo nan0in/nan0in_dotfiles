@@ -36,5 +36,6 @@ vim.api.nvim_create_autocmd("User", {
   once = true,
   callback = function()
     require("snippets.markdown")
+    require("snippets.cpp")
   end,
 })

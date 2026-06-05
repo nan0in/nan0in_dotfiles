@@ -28,5 +28,10 @@ use = "yazi-rs/plugins:ouch"
 rev = "4e55902"
 hash = "99aa06d3014798d86001c324468d497f"
 
+[[plugin.deps]]
+use = "yazi-rs/plugins:chmod"
+rev = "c2c16c8"
+hash = "f0c8c378184d5f8abd1b095a443d336d"
+
 [flavor]
 deps = []
