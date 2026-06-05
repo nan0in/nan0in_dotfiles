@@ -123,7 +123,7 @@ Singleton {
     property int dashboardCurrentTab: 0
     
     // Widgets tab internal state (for prefix-based tabs)
-    // 0=launcher, 1=clipboard, 2=emoji, 3=tmux, 4=wallpapers
+    // 0=launcher, 1=clipboard, 2=emoji, 3=tmux, 4=notes, 5=calculator, 6=convert
     property int widgetsTabCurrentIndex: 0
 
     // Persistent wallpaper navigation state

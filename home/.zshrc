@@ -57,6 +57,7 @@ alias y='yazi'
 # 防御性清理：移除从父进程继承的 conda 环境变量（如 tmux 会话）
 unset CONDA_PREFIX CONDA_DEFAULT_ENV CONDA_PROMPT_MODIFIER CONDA_SHLVL CONDA_PYTHON_EXE CONDA_EXE
 unset _CE_CONDA _CE_M
+unset VIRTUAL_ENV VIRTUAL_ENV_PROMPT
 
 # >>> conda initialize >>>
 __conda_setup="$('/home/nan0in27/miniforge3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
@@ -86,7 +87,6 @@ export PYTHONPATH=/home/nan0in27/pwn/tools/AwdPwnPatcher:$PYTHONPATH
 export UV_CACHE_DIR="$HOME/.cache/uv"
 export UV_CONFIG_HOME="$HOME/.config/uv"
 
-# 默认激活全局 base 工作环境 (CTF/日常开发)
 # 其他环境切换命令：
 #   ai    -> conda activate ai   (torch/tensorflow/CUDA)
 #   deact -> deactivate
@@ -249,6 +249,14 @@ export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
+
+# ---- TTY 优化：英文 locale + 大字体 ----
+if tty | grep -q '/dev/tty[0-9]'; then
+    export LANG=en_US.UTF-8
+    export LANGUAGE=en_US
+    [ -f /usr/share/kbd/consolefonts/sun12x22.psfu.gz ] && setfont sun12x22 >/dev/null
+fi
+
 # >>> mamba initialize >>> (DISABLED - migrated to uv)
 # To re-enable mamba temporarily, uncomment below:
 # export MAMBA_EXE='/home/nan0in27/miniforge3/bin/mamba';
@@ -297,3 +305,10 @@ export RVDIFF_HOME=/home/nan0in27/projects/riscv-lab/difftest
 # source secrets (API keys etc.) — not tracked by git
 [[ -f "$HOME/.zshrc.secrets" ]] && source "$HOME/.zshrc.secrets"
 export PATH="$HOME/.local/bin:$PATH"
+
+# oslab: fix permissions after Docker build (Docker runs as root, host as nan0in27)
+fixoslab() {
+    local dir="${1:-/home/nan0in27/projects/oslab}"
+    docker exec 798c1a238ef9 chown -R 1000:1000 /root/oslab/ 2>/dev/null
+    echo "oslab permissions synced"
+}

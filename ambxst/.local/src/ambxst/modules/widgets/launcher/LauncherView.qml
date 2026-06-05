@@ -10,6 +10,8 @@ import qs.modules.globals
 import qs.modules.services
 import qs.config
 import "../dashboard/clipboard"
+import "../dashboard/calculator"
+import "../dashboard/convert"
 import "../dashboard/emoji"
 import "../dashboard/tmux"
 import "../dashboard/notes"
@@ -18,14 +20,14 @@ Rectangle {
     id: root
     color: "transparent"
     
-    readonly property bool isCompact: currentTab === 0 || currentTab === 2
+    readonly property bool isCompact: currentTab === 0 || currentTab === 2 || currentTab === 5 || currentTab === 6
     implicitWidth: isCompact ? 464 : 900
     implicitHeight: isCompact ? 296 : 392
     
     focus: true
 
     property int leftPanelWidth: isCompact ? 464 : 300
-    property int currentTab: GlobalStates.widgetsTabCurrentIndex  // 0=launcher, 1=clip, 2=emoji, 3=tmux, 4=notes
+    property int currentTab: GlobalStates.widgetsTabCurrentIndex  // 0=launcher, 1=clip, 2=emoji, 3=tmux, 4=notes, 5=calc, 6=conv
     property bool prefixDisabled: false  // Flag to prevent re-activation after backspace
 
     // Sync with GlobalStates
@@ -83,18 +85,21 @@ Rectangle {
 
     // Handle prefix detection in launcher
     function detectPrefix(text) {
+        let calcPrefix = Config.prefix.calculator + " ";
         let clipPrefix = Config.prefix.clipboard + " ";
+        let convPrefix = Config.prefix.convert + " ";
         let emojiPrefix = Config.prefix.emoji + " ";
         let tmuxPrefix = Config.prefix.tmux + " ";
         let notesPrefix = Config.prefix.notes + " ";
+        let calcMatches = text === Config.prefix.calculator || text.startsWith(calcPrefix) || (Config.prefix.calculator === "=" && text.startsWith("="));
 
         // If prefix was manually disabled, don't re-enable until conditions are met
         if (prefixDisabled) {
             // Only re-enable prefix if user deletes the prefix text or adds valid content
-            if (text === clipPrefix || text === emojiPrefix || text === tmuxPrefix || text === notesPrefix) {
+            if (text === Config.prefix.calculator || text === calcPrefix || text === clipPrefix || text === convPrefix || text === emojiPrefix || text === tmuxPrefix || text === notesPrefix) {
                 // Still at exact prefix - keep disabled
                 return 0;
-            } else if (!text.startsWith(clipPrefix) && !text.startsWith(emojiPrefix) && !text.startsWith(tmuxPrefix) && !text.startsWith(notesPrefix)) {
+            } else if (!text.startsWith(Config.prefix.calculator) && !text.startsWith(clipPrefix) && !text.startsWith(convPrefix) && !text.startsWith(emojiPrefix) && !text.startsWith(tmuxPrefix) && !text.startsWith(notesPrefix)) {
                 // User deleted the prefix - re-enable detection
                 prefixDisabled = false;
                 return 0;
@@ -105,8 +110,12 @@ Rectangle {
         }
 
         // Normal prefix detection - only activate if exactly "prefix " (nothing after)
-        if (text === clipPrefix) {
+        if (calcMatches) {
+            return 5;
+        } else if (text === clipPrefix) {
             return 1;
+        } else if (text === convPrefix) {
+            return 6;
         } else if (text === emojiPrefix) {
             return 2;
         } else if (text === tmuxPrefix) {
@@ -136,6 +145,48 @@ Rectangle {
         // Animated model for smooth filtering
         property var filteredApps: []
         property var appsById: ({})
+        property var utilityEntries: [
+            {
+                id: "ambxst-calculator",
+                name: "Calculator",
+                icon: "accessories-calculator",
+                comment: "Open the built-in calculator with = prefix",
+                execString: "ambxst run calculator",
+                categories: ["Utility", "Ambxst"],
+                runInTerminal: false,
+                internalAction: true,
+                keywords: ["calc", "calculator", "math", "="],
+                execute: function() {
+                    root.currentTab = 5;
+                    GlobalStates.widgetsTabCurrentIndex = 5;
+                    GlobalStates.launcherSearchText = Config.prefix.calculator;
+                    GlobalStates.launcherSelectedIndex = -1;
+                    Qt.callLater(() => {
+                        root.focusSearchInput();
+                    });
+                }
+            },
+            {
+                id: "ambxst-converter",
+                name: "Converter",
+                icon: "preferences-desktop-locale",
+                comment: "Open the built-in converter with cv prefix",
+                execString: "ambxst run convert",
+                categories: ["Utility", "Ambxst"],
+                runInTerminal: false,
+                internalAction: true,
+                keywords: ["conv", "convert", "converter", "timestamp", "hex", "celsius"],
+                execute: function() {
+                    root.currentTab = 6;
+                    GlobalStates.widgetsTabCurrentIndex = 6;
+                    GlobalStates.launcherSearchText = Config.prefix.convert + " ";
+                    GlobalStates.launcherSelectedIndex = -1;
+                    Qt.callLater(() => {
+                        root.focusSearchInput();
+                    });
+                }
+            }
+        ]
 
         // Incremental loading state
         property var pendingApps: []
@@ -171,11 +222,38 @@ Rectangle {
         }
 
         function updateFilteredApps() {
+            let customEntries = [];
             if (searchText.length > 0) {
-                filteredApps = AppSearch.fuzzyQuery(searchText);
+                const query = searchText.toLowerCase();
+                customEntries = utilityEntries.filter(function(entry) {
+                    const haystack = [
+                        entry.name,
+                        entry.comment,
+                        entry.execString,
+                        entry.id
+                    ].join(" ").toLowerCase();
+
+                    if (haystack.includes(query)) {
+                        return true;
+                    }
+
+                    if (entry.keywords) {
+                        return entry.keywords.some(function(keyword) {
+                            return String(keyword).toLowerCase().includes(query) || query.includes(String(keyword).toLowerCase());
+                        });
+                    }
+
+                    return false;
+                });
+                filteredApps = customEntries.concat(AppSearch.fuzzyQuery(searchText));
             } else {
                 filteredApps = AppSearch.getAllApps();
             }
+        }
+
+        function shouldCloseAfterExecution(appId) {
+            let app = appsById[appId];
+            return !(app && app.internalAction);
         }
 
         onFilteredAppsChanged: {
@@ -282,8 +360,15 @@ Rectangle {
 
                     // Extract the text after the prefix
                     let prefixLength = 0;
-                    if (searchText.startsWith(Config.prefix.clipboard + " "))
+                    if (searchText.startsWith(Config.prefix.calculator)) {
+                        prefixLength = Config.prefix.calculator.length;
+                        if (searchText.startsWith(Config.prefix.calculator + " "))
+                            prefixLength = Config.prefix.calculator.length + 1;
+                    }
+                    else if (searchText.startsWith(Config.prefix.clipboard + " "))
                         prefixLength = Config.prefix.clipboard.length + 1;
+                    else if (searchText.startsWith(Config.prefix.convert + " "))
+                        prefixLength = Config.prefix.convert.length + 1;
                     else if (searchText.startsWith(Config.prefix.emoji + " "))
                         prefixLength = Config.prefix.emoji.length + 1;
                     else if (searchText.startsWith(Config.prefix.tmux + " "))
@@ -300,6 +385,10 @@ Rectangle {
 
                         if (detectedTab === 1) {
                             targetLoader = clipboardLoader;
+                        } else if (detectedTab === 5) {
+                            targetLoader = calcLoader;
+                        } else if (detectedTab === 6) {
+                            targetLoader = convertLoader;
                         } else if (detectedTab === 2) {
                             targetLoader = emojiLoader;
                         } else if (detectedTab === 3) {
@@ -434,7 +523,9 @@ Rectangle {
                             // Build options array
                             let options = [function () {
                                     appLauncher.executeApp(selectedApp.appId);
-                                    Visibilities.setActiveModule("");
+                                    if (appLauncher.shouldCloseAfterExecution(selectedApp.appId)) {
+                                        Visibilities.setActiveModule("");
+                                    }
                                 }, function () {
                                     // Pin/Unpin from dock
                                     TaskbarApps.togglePin(selectedApp.appId);
@@ -463,7 +554,9 @@ Rectangle {
                             let selectedApp = appsModel.get(appLauncher.selectedIndex);
                             if (selectedApp) {
                                 appLauncher.executeApp(selectedApp.appId);
-                                Visibilities.setActiveModule("");
+                                if (appLauncher.shouldCloseAfterExecution(selectedApp.appId)) {
+                                    Visibilities.setActiveModule("");
+                                }
                             }
                         }
                     }
@@ -696,7 +789,9 @@ Rectangle {
                             if (mouse.button === Qt.LeftButton) {
                                 if (!isExpanded) {
                                     appLauncher.executeApp(appId);
-                                    Visibilities.setActiveModule("");
+                                    if (appLauncher.shouldCloseAfterExecution(appId)) {
+                                        Visibilities.setActiveModule("");
+                                    }
                                 }
                             } else if (mouse.button === Qt.RightButton) {
                                 // Toggle expanded state
@@ -1185,6 +1280,56 @@ Rectangle {
             }
             onLoaded: {
                 if (currentTab === 4 && item && item.focusSearchInput) {
+                    root.focusSearchInput();
+                }
+            }
+        }
+
+        Loader {
+            id: calcLoader
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            active: currentTab === 5 || item !== null
+            sourceComponent: Component {
+                CalcTab {
+                    anchors.fill: parent
+                    leftPanelWidth: root.width
+                    prefixIcon: Icons.plus
+                    onBackspaceOnEmpty: {
+                        prefixDisabled = true;
+                        currentTab = 0;
+                        GlobalStates.launcherSearchText = Config.prefix.calculator;
+                        root.focusSearchInput();
+                    }
+                }
+            }
+            onLoaded: {
+                if (currentTab === 5 && item && item.focusSearchInput) {
+                    root.focusSearchInput();
+                }
+            }
+        }
+
+        Loader {
+            id: convertLoader
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            active: currentTab === 6 || item !== null
+            sourceComponent: Component {
+                ConvertTab {
+                    anchors.fill: parent
+                    leftPanelWidth: root.width
+                    prefixIcon: Icons.range
+                    onBackspaceOnEmpty: {
+                        prefixDisabled = true;
+                        currentTab = 0;
+                        GlobalStates.launcherSearchText = Config.prefix.convert + " ";
+                        root.focusSearchInput();
+                    }
+                }
+            }
+            onLoaded: {
+                if (currentTab === 6 && item && item.focusSearchInput) {
                     root.focusSearchInput();
                 }
             }

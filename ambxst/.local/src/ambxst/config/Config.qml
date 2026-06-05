@@ -965,7 +965,9 @@ Singleton {
         }
 
         adapter: JsonAdapter {
+            property string calculator: "="
             property string clipboard: "cc"
+            property string convert: "cv"
             property string emoji: "ee"
             property string tmux: "tt"
             property string wallpapers: "ww"

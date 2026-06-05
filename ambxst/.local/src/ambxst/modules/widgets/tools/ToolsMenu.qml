@@ -29,6 +29,19 @@ ActionGrid {
 
     actions: [
         {
+            icon: Icons.plus,
+            tooltip: "Calculator",
+            command: ""
+        },
+        {
+            icon: Icons.range,
+            tooltip: "Converter",
+            command: ""
+        },
+        {
+            type: "separator"
+        },
+        {
             icon: Icons.camera,
             tooltip: "Screenshot",
             command: ""
@@ -98,7 +111,21 @@ ActionGrid {
     onActionTriggered: action => {
         console.log("Tools action triggered:", action.tooltip);
 
-        if (action.tooltip === "Screenshot") {
+        if (action.tooltip === "Calculator") {
+            GlobalStates.widgetsTabCurrentIndex = 5;
+            GlobalStates.launcherSearchText = Config.prefix.calculator;
+            root.itemSelected();
+            Qt.callLater(() => {
+                Visibilities.setActiveModule("launcher");
+            });
+        } else if (action.tooltip === "Converter") {
+            GlobalStates.widgetsTabCurrentIndex = 6;
+            GlobalStates.launcherSearchText = Config.prefix.convert + " ";
+            root.itemSelected();
+            Qt.callLater(() => {
+                Visibilities.setActiveModule("launcher");
+            });
+        } else if (action.tooltip === "Screenshot") {
             Screenshot.initialize();
             GlobalStates.screenshotToolVisible = true;
             root.itemSelected();

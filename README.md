@@ -368,10 +368,12 @@ fcitx5 + blog-dark 主题（Tokyo Night 毛玻璃磨砂暗色）
 | btop | 进程管理 |
 | virt-manager + qemu/kvm | 虚拟机 |
 | VLC | 视频播放 |
-| go-musicfox | 命令行音乐 |
-| elisa | 兼容 ambxst 的音乐 GUI 客户端 |
+| [go-musicfox](https://github.com/go-musicfox/go-musicfox) | 命令行音乐 |
 | xiling vivado | FPGA 开发 |
+| [思源笔记](https://github.com/siyuan-note/siyuan)| 主笔记软件| 
+| meld | 文件diff工具 |
 
 ## License
 
-MIT
+MIT  
+

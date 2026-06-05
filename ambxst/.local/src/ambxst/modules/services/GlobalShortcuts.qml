@@ -34,7 +34,9 @@ QtObject {
         switch (command) {
             // Launcher (Standalone Notch Module)
             case "launcher": toggleLauncher(); break;
+            case "calculator": toggleLauncherWithPrefix(5, Config.prefix.calculator); break;
             case "clipboard": toggleLauncherWithPrefix(1, Config.prefix.clipboard + " "); break;
+            case "convert": toggleLauncherWithPrefix(6, Config.prefix.convert + " "); break;
             case "emoji": toggleLauncherWithPrefix(2, Config.prefix.emoji + " "); break;
             case "tmux": toggleLauncherWithPrefix(3, Config.prefix.tmux + " "); break;
             case "notes": toggleLauncherWithPrefix(4, Config.prefix.notes + " "); break;
