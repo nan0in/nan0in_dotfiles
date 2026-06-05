@@ -1,7 +1,7 @@
 # nan0in_dotfiles
 
 > [!IMPORTANT]
-> 已经重装3次Arch Linux
+> 已经重装3次Arch Linux，btrfs损坏直接repair修复好了一次
 
 nan0in's dotfiles for Arch Linux — **Hyprland + KDE Plasma** 双桌面环境.
 使用 [GNU Stow](https://www.gnu.org/software/stow/) 管理配置文件，通过符号链接让 `$HOME` 下的文件直接指向此仓库，编辑即追踪。
