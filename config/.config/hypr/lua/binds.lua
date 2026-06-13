@@ -57,3 +57,25 @@ hl.bind("XF86AudioPlay", hl.dsp.exec_cmd("playerctl play-pause"), { locked = tru
 hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"), { locked = true })
 
 hl.bind(mainMod .. " + SHIFT + B", hl.dsp.exec_cmd("~/.config/hypr/scripts/recover-tray.sh"))
+
+-- axctl 0.0.11 still emits hyprland.conf while Hyprland uses the Lua
+-- provider. Keep Ambxst shortcuts available until it emits hyprland.lua.
+if not ambxstConfigLoaded then
+  hl.bind(mainMod .. " + super_L", hl.dsp.exec_cmd("ambxst run launcher"), { repeating = true })
+  hl.bind(mainMod .. " + D", hl.dsp.exec_cmd("ambxst run dashboard"))
+  hl.bind(mainMod .. " + V", hl.dsp.exec_cmd("ambxst run clipboard"))
+  hl.bind(mainMod .. " + PERIOD", hl.dsp.exec_cmd("ambxst run emoji"))
+  hl.bind(mainMod .. " + N", hl.dsp.exec_cmd("ambxst run notes"))
+  hl.bind(mainMod .. " + T", hl.dsp.exec_cmd("ambxst run tmux"))
+  hl.bind(mainMod .. " + SHIFT + W", hl.dsp.exec_cmd("ambxst run wallpapers"))
+  hl.bind(mainMod .. " + TAB", hl.dsp.exec_cmd("ambxst run overview"))
+  hl.bind(mainMod .. " + ESCAPE", hl.dsp.exec_cmd("ambxst run powermenu"))
+  hl.bind(mainMod .. " + SHIFT + C", hl.dsp.exec_cmd("ambxst run config"))
+  hl.bind(mainMod .. " + L", hl.dsp.exec_cmd("loginctl lock-session"))
+  hl.bind(mainMod .. " + S", hl.dsp.exec_cmd("ambxst run tools"))
+  hl.bind(mainMod .. " + R", hl.dsp.exec_cmd("ambxst run screenshot"))
+  hl.bind(mainMod .. " + SHIFT + R", hl.dsp.exec_cmd("ambxst run screenrecord"))
+  hl.bind(mainMod .. " + SHIFT + A", hl.dsp.exec_cmd("ambxst run lens"))
+  hl.bind(mainMod .. " + ALT + B", hl.dsp.exec_cmd("ambxst reload"))
+  hl.bind(mainMod .. " + CTRL + ALT + B", hl.dsp.exec_cmd("ambxst quit"))
+end
