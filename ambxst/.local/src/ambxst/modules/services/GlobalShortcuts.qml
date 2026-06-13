@@ -87,10 +87,13 @@ QtObject {
     }
 
     function toggleSettings() {
-        GlobalStates.settingsWindowVisible = !GlobalStates.settingsWindowVisible;
-        if (GlobalStates.settingsWindowVisible) {
+        const willOpen = !GlobalStates.settingsWindowVisible;
+        if (willOpen) {
+            GlobalStates.settingsTargetWorkspaceId = AxctlService.focusedMonitor?.activeWorkspace?.id || AxctlService.focusedWorkspace?.id || 0;
+            GlobalStates.settingsTargetScreenName = AxctlService.focusedMonitor?.name || "";
             Visibilities.setActiveModule("");
         }
+        GlobalStates.settingsWindowVisible = willOpen;
     }
 
     function toggleSimpleModule(moduleName) {

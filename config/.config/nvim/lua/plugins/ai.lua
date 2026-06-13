@@ -8,20 +8,34 @@ return {
     },
     event = { "BufReadPost", "BufNewFile" },
 
-    config = function(_, opts)
-      require("blink.cmp").setup(opts)
-      --配色1 类dracula
-      -- vim.api.nvim_set_hl(0, "BlinkCmpMenu", { bg = "#2b2b3c" })
-      -- vim.api.nvim_set_hl(0, "BlinkCmpDoc", { bg = "#2b2b3c" })
-      -- vim.api.nvim_set_hl(0, "BlinkCmpMenuSelection", { bg = "#bd93f9", fg = "#191b28", bold = true })
-      -- vim.api.nvim_set_hl(0, "BlinkCmpMenuBorder", { fg = "#565f89", bg = "#2b2b3c" })
-      -- vim.api.nvim_set_hl(0, "BlinkCmpDocBorder", { fg = "#565f89", bg = "#2b2b3c" })
-      --配色2 类tokyonight
-      vim.api.nvim_set_hl(0, "BlinkCmpMenu", { bg = "#191b28", fg = "#c0caf5" })
-      vim.api.nvim_set_hl(0, "BlinkCmpDoc", { bg = "#191b28", fg = "#c0caf5" })
-      vim.api.nvim_set_hl(0, "BlinkCmpMenuBorder", { fg = "#3d59a1", bg = "#191b28" })
-      vim.api.nvim_set_hl(0, "BlinkCmpDocBorder", { fg = "#3d59a1", bg = "#191b28" })
-      vim.api.nvim_set_hl(0, "BlinkCmpMenuSelection", { bg = "#7aa2f7", fg = "#191b28", bold = true })
+    init = function()
+      local function set_blink_cmp_highlights()
+        -- 配色1 类dracula
+        -- vim.api.nvim_set_hl(0, "BlinkCmpMenu", { bg = "#2b2b3c" })
+        -- vim.api.nvim_set_hl(0, "BlinkCmpDoc", { bg = "#2b2b3c" })
+        -- vim.api.nvim_set_hl(0, "BlinkCmpMenuSelection", { bg = "#bd93f9", fg = "#191b28", bold = true })
+        -- vim.api.nvim_set_hl(0, "BlinkCmpMenuBorder", { fg = "#565f89", bg = "#2b2b3c" })
+        -- vim.api.nvim_set_hl(0, "BlinkCmpDocBorder", { fg = "#565f89", bg = "#2b2b3c" })
+        -- 配色2 类tokyonight
+        vim.api.nvim_set_hl(0, "BlinkCmpMenu", { bg = "#191b28", fg = "#c0caf5" })
+        vim.api.nvim_set_hl(0, "BlinkCmpDoc", { bg = "#191b28", fg = "#c0caf5" })
+        vim.api.nvim_set_hl(0, "BlinkCmpMenuBorder", { fg = "#3d59a1", bg = "#191b28" })
+        vim.api.nvim_set_hl(0, "BlinkCmpDocBorder", { fg = "#3d59a1", bg = "#191b28" })
+        vim.api.nvim_set_hl(0, "BlinkCmpMenuSelection", { bg = "#7aa2f7", fg = "#191b28", bold = true })
+      end
+
+      vim.api.nvim_create_autocmd({ "ColorScheme", "VimEnter" }, {
+        callback = function()
+          vim.schedule(set_blink_cmp_highlights)
+        end,
+      })
+      vim.api.nvim_create_autocmd("User", {
+        pattern = { "VeryLazy", "LazyVimStarted" },
+        callback = function()
+          vim.schedule(set_blink_cmp_highlights)
+        end,
+      })
+      set_blink_cmp_highlights()
     end,
 
     opts = {
@@ -35,7 +49,7 @@ return {
 
       sources = {
         -- default = { "avante", "lsp", "path", "snippets", "buffer" },
-        default = {"lsp", "path", "snippets", "buffer" },
+        default = { "lsp", "path", "snippets", "buffer" },
         providers = {
           -- avante = { module = "blink-cmp-avante", name = "Avante", opts = {} },
           lsp = { name = "LSP" },
@@ -47,6 +61,12 @@ return {
 
       completion = {
         trigger = { prefetch_on_insert = false },
+        list = {
+          selection = {
+            preselect = true,
+            auto_insert = false,
+          },
+        },
 
         documentation = {
           auto_show = true,
@@ -54,12 +74,14 @@ return {
           window = {
             border = "rounded",
             winblend = 0,
+            winhighlight = "Normal:BlinkCmpDoc,FloatBorder:BlinkCmpDocBorder,EndOfBuffer:BlinkCmpDoc",
           },
         },
 
         menu = {
           border = "rounded",
           winblend = 0,
+          winhighlight = "Normal:BlinkCmpMenu,FloatBorder:BlinkCmpMenuBorder,CursorLine:BlinkCmpMenuSelection,Search:None",
 
           draw = {
             columns = {
