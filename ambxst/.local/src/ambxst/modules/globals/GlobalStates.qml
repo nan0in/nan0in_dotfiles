@@ -53,7 +53,7 @@ Singleton {
     // ═══════════════════════════════════════════════════════════════
     property string compositorLayout: ""
     property bool compositorLayoutReady: false
-    readonly property var availableLayouts: ["dwindle", "master", "scrolling"]
+    readonly property var availableLayouts: ["dwindle", "master", "scrolling", "float"]
 
     Process {
         id: getLayoutProcess
@@ -83,16 +83,70 @@ Singleton {
     }
 
     function setCompositorLayout(layout) {
-        if (availableLayouts.includes(layout)) {
+        if (!availableLayouts.includes(layout)) return;
+
+        // Float is a pseudo-layout: toggle all windows floating/tiled
+        if (layout === "float") {
+            compositorLayout = "float";
+            StateService.set("compositorLayout", "float");
+            toggleFloatWorkspaceProcess.running = true;
+            return;
+        }
+
+        // If currently in float mode, restore tiling first
+        if (compositorLayout === "float" && layout !== "float") {
             compositorLayout = layout;
             StateService.set("compositorLayout", layout);
+            restoreFloatWorkspaceProcess.nextLayout = layout;
+            restoreFloatWorkspaceProcess.running = true;
+            return;
         }
+
+        compositorLayout = layout;
+        StateService.set("compositorLayout", layout);
     }
 
     function cycleCompositorLayout() {
         const currentIndex = availableLayouts.indexOf(compositorLayout);
         const nextIndex = (currentIndex + 1) % availableLayouts.length;
         setCompositorLayout(availableLayouts[nextIndex]);
+    }
+
+    // Float pseudo-layout: runs the workspace float toggle script
+    property Process toggleFloatWorkspaceProcess: Process {
+        command: [Quickshell.env("HOME") + "/.config/hypr/scripts/toggle-floating-workspace.sh"]
+        running: false
+    }
+
+    property Process restoreFloatWorkspaceProcess: Process {
+        property string nextLayout: "dwindle"
+        command: [
+            "/bin/sh", "-c",
+            Quickshell.env("HOME") + "/.config/hypr/scripts/toggle-floating-workspace.sh && hyprctl keyword general:layout " + nextLayout
+        ]
+        running: false
+    }
+
+    // Float state detection timer: if all windows on active workspace are floating, treat as float layout
+    Timer {
+        id: floatDetectTimer
+        interval: 2000
+        repeat: true
+        running: true
+        onTriggered: {
+            if (compositorLayout === "float") return;
+            let clients = AxctlService.clients.values || [];
+            if (clients.length === 0) return;
+            let activeWs = AxctlService.focusedWorkspace ? AxctlService.focusedWorkspace.id : -1;
+            if (activeWs < 0) return;
+            let wsClients = clients.filter(c => c.workspace && c.workspace.id === activeWs);
+            if (wsClients.length === 0) return;
+            let allFloating = wsClients.every(c => c.floating);
+            if (allFloating) {
+                compositorLayout = "float";
+                StateService.set("compositorLayout", "float");
+            }
+        }
     }
 
 
@@ -196,6 +250,8 @@ Singleton {
 
     // Settings Window state
     property bool settingsWindowVisible: false
+    property int settingsTargetWorkspaceId: 0
+    property string settingsTargetScreenName: ""
 
     // Theme editor state - persists across tab switches
     property bool themeHasChanges: false

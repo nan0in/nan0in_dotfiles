@@ -1,17 +1,22 @@
 hl.config({
-    general = {
-        gaps_in = 5,
-        gaps_out = 20,
-        border_size = 2,
-        col = {
-            active_border = {
-                colors = { "rgba(444693ff)", "rgba(2a5caaff)" },
-                angle = 45
-            },
-            inactive_border = "rgba(595959aa)"  -- 单色不需要表结构
-        },
-        layout = "dwindle"
+  general = {
+    layout = "dwindle",
+    gaps_in = 5,
+    gaps_out = 10,
+    border_size = 2,
+    col = {
+      active_border = {
+        colors = { "rgb(444693)", "rgb(2a5caa)" },
+        angle = 45,
+      },
+      inactive_border = "rgba(595959aa)",
+      nogroup_border = "rgb(ffaaff)",
+      nogroup_border_active = "rgb(ff00ff)",
     },
+    resize_on_border = true,
+    extend_border_grab_area = 15,
+    hover_icon_on_border = true,
+  },
   decoration = {
     rounding = 10,
     rounding_power = 4,
@@ -37,11 +42,11 @@ hl.config({
       xray = true,
       ignore_opacity = false,
       noise = 0.0,
-      contrast = 1.0,
-      brightness = 1.0,
+      contrast = 0.9,
+      brightness = 0.8,
       special = false,
       vibrancy = 0.1696,
-      vibrancy_darkness = 0.0,
+      vibrancy_darkness = 0.5,
       popups_ignorealpha = 0.25,
     },
   },

@@ -18,7 +18,7 @@
   "qtThemingEnabled": true,
   "cursorTheme": "猫标",
   "cursorSize": 48,
-  "iconTheme": "Tela-circle-grey",
+  "iconTheme": "Gruvbox-Plus-Dark",
   "srBg": {
     "label": "Background",
     "gradient": [
