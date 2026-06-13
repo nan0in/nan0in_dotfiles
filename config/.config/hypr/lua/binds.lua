@@ -61,7 +61,7 @@ hl.bind(mainMod .. " + SHIFT + B", hl.dsp.exec_cmd("~/.config/hypr/scripts/recov
 -- axctl 0.0.11 still emits hyprland.conf while Hyprland uses the Lua
 -- provider. Keep Ambxst shortcuts available until it emits hyprland.lua.
 if not ambxstConfigLoaded then
-  hl.bind(mainMod .. " + super_L", hl.dsp.exec_cmd("ambxst run launcher"), { repeating = true })
+  hl.bind(mainMod .. " + super_L", hl.dsp.exec_cmd("ambxst run launcher"), { release = true })
   hl.bind(mainMod .. " + D", hl.dsp.exec_cmd("ambxst run dashboard"))
   hl.bind(mainMod .. " + V", hl.dsp.exec_cmd("ambxst run clipboard"))
   hl.bind(mainMod .. " + PERIOD", hl.dsp.exec_cmd("ambxst run emoji"))
