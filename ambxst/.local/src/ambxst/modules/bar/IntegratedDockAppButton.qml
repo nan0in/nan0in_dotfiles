@@ -175,7 +175,7 @@ Button {
         if (appToplevel.toplevelCount === 0) {
             // Launch the app
             if (desktopEntry) {
-                AppSearch.launchApp(desktopEntry);
+                desktopEntry.execute();
             }
             return;
         }
@@ -197,7 +197,7 @@ Button {
             if (mouse.button === Qt.MiddleButton) {
                 // Launch new instance
                 if (root.desktopEntry) {
-                    AppSearch.launchApp(root.desktopEntry);
+                    root.desktopEntry.execute();
                 }
             } else if (mouse.button === Qt.RightButton) {
                 // Toggle pin

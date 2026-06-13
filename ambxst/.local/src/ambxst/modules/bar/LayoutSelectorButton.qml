@@ -42,8 +42,6 @@ Item {
             return Icons.master;
         case "scrolling":
             return Icons.scrolling;
-        case "float":
-            return Icons.float;
         default:
             return Icons.dwindle;
         }
@@ -57,8 +55,6 @@ Item {
             return "Master";
         case "scrolling":
             return "Scrolling";
-        case "float":
-            return "Float";
         default:
             return layout;
         }
