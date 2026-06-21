@@ -1,17 +1,7 @@
 return {
   {
     "github/copilot.vim",
-    -- enabled = false, -- 完全禁用插件
-    config = function()
-      -- 1. 禁用默认的 Tab 映射，防止冲突
-      -- vim.g.copilot_no_tab_map = true
-      -- 2. 设置快捷键：Ctrl + J 接受补全
-      -- <C-J> 代表 Ctrl+J，你也可以换成 <M-CR> (Alt+Enter)
-      vim.keymap.set("i", "<C-J>", 'copilot#Accept("\\<CR>")', {
-        expr = true,
-        replace_keycodes = false,
-      })
-    end,
+    enabled = false,
   },
   -- Vundle 替代: lazy.nvim 自动管理插件
   -- 大纲式导航（Go 需 gotags 支持）

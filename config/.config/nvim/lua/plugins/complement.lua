@@ -48,10 +48,8 @@ return {
       },
 
       sources = {
-        -- default = { "avante", "lsp", "path", "snippets", "buffer" },
         default = { "lsp", "path", "snippets", "buffer" },
         providers = {
-          -- avante = { module = "blink-cmp-avante", name = "Avante", opts = {} },
           lsp = { name = "LSP" },
           path = { name = "Path" },
           snippets = { name = "Snip" },
@@ -169,62 +167,22 @@ return {
       },
     },
   },
-  -- Avante 配置
-  -- {
-  --   "yetone/avante.nvim",
-  --   -- ⚠️ 一定要加上这一行配置！！！！！
-  --   build = vim.fn.has("win32") ~= 0 and "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false"
-  --     or "make",
-  --   event = "VeryLazy",
-  --   version = false, -- 永远不要将此值设置为 "*"！永远不要！
-  --   ---@module 'avante'
-  --   ---@type avante.Config
-  --   opts = {
-  --     provider = "claude",
-  --     providers = {
-  --       claude = {
-  --         endpoint = "https://api.anthropic.com",
-  --         model = "claude-sonnet-4-20250514",
-  --         timeout = 30000, -- Timeout in milliseconds
-  --         extra_request_body = {
-  --           temperature = 0.75,
-  --           max_tokens = 20480,
-  --         },
-  --       },
-  --       moonshot = {
-  --         endpoint = "https://api.moonshot.ai/v1",
-  --         model = "kimi-k2-0711-preview",
-  --         timeout = 30000, -- 超时时间（毫秒）
-  --         extra_request_body = {
-  --           temperature = 0.75,
-  --           max_tokens = 32768,
-  --         },
-  --       },
-  --     },
-  --   },
-  --   mappings = {
-  --     diff = {
-  --       ours = "co",
-  --       theirs = "ct",
-  --       all_theirs = "ca", -- 👈 在 Diff 界面按 ca 就会把 AI 代码插入文件
-  --       both = "cb",
-  --       cursor = "cc",
-  --       next = "]x",
-  --       prev = "[x",
-  --     },
-  --   },
-  --   dependencies = {
-  --     "nvim-lua/plenary.nvim",
-  --     "MunifTanjim/nui.nvim",
-  --     --- 以下依赖项是可选的，
-  --     "nvim-mini/mini.pick", -- 用于文件选择器提供者 mini.pick
-  --     "nvim-telescope/telescope.nvim", -- 用于文件选择器提供者 telescope
-  --     "ibhagwan/fzf-lua", -- 用于文件选择器提供者 fzf
-  --     "nvim-tree/nvim-web-devicons", -- 或 echasnovski/mini.icons
-  --   },
-  --   web_search_engine = {
-  --     provider = "SerpApi",
-  --     proxy = "http://127.0.0.1:20171",
-  --   },
-  -- },
+  {
+    "zbirenbaum/copilot.lua",
+    opts = function(_, opts)
+      opts.copilot_node_command = vim.fn.expand("~/.local/bin/node-lsp-stable")
+      opts.should_attach = function(bufnr, bufname)
+        if vim.bo[bufnr].buftype ~= "" or not vim.bo[bufnr].modifiable then
+          return false
+        end
+
+        if bufname == "" then
+          return false
+        end
+
+        local stat = vim.uv.fs_stat(bufname)
+        return not stat or stat.size <= 2 * 1024 * 1024
+      end
+    end,
+  },
 }
