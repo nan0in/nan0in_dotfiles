@@ -5,7 +5,21 @@
 config/.config/nvim/lazy-lock.json
 config/.config/nvim/lua/*/*.bak
 
+# hypr — debug logs and backups
+config/.config/hypr/hypr_config.md
+config/.config/hypr/*.bak
+
 # secrets — never commit these
 *.secrets
 .zshrc.secrets
 home/.zshrc.secrets
+
+# IDA theme backup
+home/ida_theme/*.css.backup*
+
+# tmux plugins (installed separately via tpm)
+home/tmux/.tmux/plugins/
+
+# ambxst runtime state
+config/.config/ambxst/presets/active_preset
+config/.config/ambxst/presets/*.example

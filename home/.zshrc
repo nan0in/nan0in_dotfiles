@@ -3,11 +3,18 @@ export TERM=xterm-256color
 export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 export PATH="/snap/bin:$PATH"
 # uv Python 3.13 as default python3/python
-export PATH="$HOME/.local/share/uv/python/cpython-3.13-linux-x86_64-gnu/bin:$HOME/.local/bin:$HOME/.cargo/bin:$HOME/.npm-global/bin:$PATH"
+export PATH="$HOME/.local/share/uv/python/cpython-3.13-linux-x86_64-gnu/bin:$HOME/.local/bin:$HOME/.cargo/bin:$HOME/.npm-global/bin:$HOME/.local/share/nvim/mason/bin:$PATH"
 
 if [[ -d "$HOME/.opencode/bin" ]]; then
   export PATH="$HOME/.opencode/bin:$PATH"
 fi
+
+# p10k instant prompt — must be sourced BEFORE any console I/O
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 if [[ -o interactive && -z "$TMUX" ]] \
   && command -v fastfetch >/dev/null 2>&1 \
@@ -20,12 +27,6 @@ if [[ -o interactive && -z "$TMUX" ]] \
   echo "------------------------------------------------------------------------------"
   echo ""
 fi
-
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -48,10 +49,6 @@ export EDITOR="nvim"
 export VISUAL="nvim"
 export MANPAGER="nvim +Man!"
 export RANGER_LOAD_DEFAULT_RC=false
-export XMODIFIERS="@im=fcitx"
-export INPUT_METHOD=fcitx
-export GTK_IM_MODULE=fcitx
-export QT_IM_MODULE=fcitx
 
 alias gdb="gdb -q"
 alias ran='ranger'
@@ -283,6 +280,74 @@ fi
 unset YAZI_ZOXIDE_OPTS
 export _ZO_EXCLUDE_DIRS="/mnt:/tmp"
 
+__wsl_windows_path_to_unix() {
+  emulate -L zsh
+
+  local winpath="$1"
+  [[ -z "$winpath" ]] && return 1
+
+  if [[ "$winpath" == file://* ]]; then
+    winpath="${winpath#file://}"
+    winpath="${winpath#localhost}"
+    [[ "$winpath" == /[A-Za-z]:[\\/]* ]] && winpath="${winpath#/}"
+    winpath="${winpath//%20/ }"
+  fi
+
+  [[ "$winpath" == [A-Za-z]:[\\/]* ]] || return 1
+
+  if command -v wslpath >/dev/null 2>&1; then
+    local converted
+    converted="$(wslpath -u "$winpath" 2>/dev/null)" && [[ -n "$converted" ]] && {
+      print -r -- "$converted"
+      return 0
+    }
+  fi
+
+  [[ "$winpath" =~ '^([A-Za-z]):[\\/]' ]] || return 1
+
+  local drive="${(L)match[1]}"
+  local rest="${winpath#?:}"
+  rest="${rest//\\//}"
+  rest="${rest#/}"
+  print -r -- "/mnt/$drive/$rest"
+}
+
+cd() {
+  emulate -L zsh
+
+  local -a args
+  args=("$@")
+
+  local idx=1
+  while (( idx <= ${#args} )); do
+    case "${args[$idx]}" in
+      --)
+        (( idx++ ))
+        break
+        ;;
+      -)
+        builtin cd "$@"
+        return
+        ;;
+      -[qPLs]*|-[0-9]*|+[0-9]*)
+        (( idx++ ))
+        ;;
+      *)
+        break
+        ;;
+    esac
+  done
+
+  if (( idx <= ${#args} )); then
+    local converted
+    if converted="$(__wsl_windows_path_to_unix "${args[$idx]}")"; then
+      args[$idx]="$converted"
+    fi
+  fi
+
+  builtin cd "${args[@]}"
+}
+
 [[ -f "$HOME/.zshrc.secrets" ]] && source "$HOME/.zshrc.secrets"
 
 # === WSL Proxy Control ===
@@ -315,3 +380,6 @@ unsetproxy() {
   unset http_proxy https_proxy all_proxy HTTP_PROXY HTTPS_PROXY ALL_PROXY no_proxy NO_PROXY
   echo "Proxy OFF"
 }
+
+export PATH="$HOME/go/bin:$PATH"
+export PATH=/usr/local/go/bin:$HOME/go/bin:$PATH

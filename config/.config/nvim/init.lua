@@ -1,5 +1,8 @@
 vim.opt.tags = './tags;,tags;'
+vim.opt.formatoptions:remove('r')
+vim.opt.formatoptions:remove('o') -- 换行时不自动延续注释
 vim.o.cmdheight = 0 -- 显示命令行区域
+vim.o.exrc = true -- 允许加载受信任的项目本地 .nvim.lua/.nvimrc/.exrc
 
 -- 映射 Ctrl+Shift+V 粘贴（插入模式）
 vim.api.nvim_set_keymap("i", "<C-S-v>", "<C-r>+", { noremap = true, silent = true })
@@ -34,6 +37,13 @@ vim.api.nvim_create_autocmd("User", {
   pattern = "VeryLazy",
   once = true,
   callback = function()
-    require("snippets.markdown")
+    local snippet_dir = vim.fn.stdpath("config") .. "/lua/snippets"
+    for _, file in ipairs(vim.fn.glob(snippet_dir .. "/*.lua", false, true)) do
+      local name = vim.fn.fnamemodify(file, ":t:r")
+      local ok, err = pcall(require, "snippets." .. name)
+      if not ok then
+        vim.notify(("Failed to load snippets.%s:\n%s"):format(name, err), vim.log.levels.WARN)
+      end
+    end
   end,
 })
