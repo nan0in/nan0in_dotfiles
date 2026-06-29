@@ -1,21 +1,27 @@
-# 美化这里的 piano 是我自己找的字符画
+# PATH 去重，避免每次 source / 嵌套 shell 重复追加
+typeset -U path PATH
+
 export TERM=xterm-256color
 export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
-export PATH="/snap/bin:$PATH"
-# uv Python 3.13 as default python3/python
-export PATH="$HOME/.local/share/uv/python/cpython-3.13-linux-x86_64-gnu/bin:$HOME/.local/bin:$HOME/.cargo/bin:$HOME/.npm-global/bin:$HOME/.local/share/nvim/mason/bin:$PATH"
 
-if [[ -d "$HOME/.opencode/bin" ]]; then
-  export PATH="$HOME/.opencode/bin:$PATH"
-fi
+path=(
+  /snap/bin
+  "$HOME/.local/share/uv/python/cpython-3.13-linux-x86_64-gnu/bin"
+  "$HOME/.local/bin"
+  "$HOME/.cargo/bin"
+  "$HOME/.npm-global/bin"
+  "$HOME/.local/share/nvim/mason/bin"
+  /usr/local/go/bin
+  "$HOME/go/bin"
+  "$HOME/.local/android-platform-tools"
+  $path
+)
 
-# p10k instant prompt — must be sourced BEFORE any console I/O
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
+[[ -d "$HOME/.opencode/bin" ]] && path=("$HOME/.opencode/bin" $path)
 
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+export PATH
 
+# fastfetch/cowsay — console output must happen BEFORE p10k instant prompt
 if [[ -o interactive && -z "$TMUX" ]] \
   && command -v fastfetch >/dev/null 2>&1 \
   && command -v fortune >/dev/null 2>&1 \
@@ -27,6 +33,13 @@ if [[ -o interactive && -z "$TMUX" ]] \
   echo "------------------------------------------------------------------------------"
   echo ""
 fi
+
+# p10k instant prompt — must be sourced BEFORE any console I/O
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -381,5 +394,3 @@ unsetproxy() {
   echo "Proxy OFF"
 }
 
-export PATH="$HOME/go/bin:$PATH"
-export PATH=/usr/local/go/bin:$HOME/go/bin:$PATH

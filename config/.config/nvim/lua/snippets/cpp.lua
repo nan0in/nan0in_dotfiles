@@ -1,0 +1,1 @@
+/home/nan0in27/.config/nvim/lua/snippets/cpp.lua

@@ -37,13 +37,7 @@ vim.api.nvim_create_autocmd("User", {
   pattern = "VeryLazy",
   once = true,
   callback = function()
-    local snippet_dir = vim.fn.stdpath("config") .. "/lua/snippets"
-    for _, file in ipairs(vim.fn.glob(snippet_dir .. "/*.lua", false, true)) do
-      local name = vim.fn.fnamemodify(file, ":t:r")
-      local ok, err = pcall(require, "snippets." .. name)
-      if not ok then
-        vim.notify(("Failed to load snippets.%s:\n%s"):format(name, err), vim.log.levels.WARN)
-      end
-    end
+    require("snippets.markdown")
+    require("snippets.cpp")
   end,
 })
