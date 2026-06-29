@@ -3,6 +3,11 @@ return {
     "github/copilot.vim",
     enabled = false,
   },
+  -- WSL: image.nvim 不支持 WSL 终端，手动禁用避免 startup error
+  {
+    "3rd/image.nvim",
+    enabled = false,
+  },
   -- Vundle 替代: lazy.nvim 自动管理插件
   -- 大纲式导航（Go 需 gotags 支持）
   { "preservim/tagbar" },
@@ -72,26 +77,11 @@ return {
       })
     end,
   },
-  -- 图片粘贴
+  -- 图片粘贴 (WSL: disabled — requires wl-paste/pngpaste unavailable in WSL terminal)
   {
     "HakonHarnes/img-clip.nvim",
-    event = "VeryLazy",
-    opts = {
-      defalte = {
-        embed_image_as_base64 = false, -- 是否以 base64 格式嵌入图片 
-        prompt_for_filename = false, -- 是否在粘贴时提示输入文件名 
-        drag_and_drop = {
-          insert_mode = true, -- 是否在插入模式下启用拖放功能
-        },
-        clipboard_command = "wl-paste",
-        img_dir = { "src", "assets", "images" },
-        img_dir_txt = { "src", "assets", "images" },
-        -- add options here
-        -- or leave it empty to use the default settings
-      },
-    },
+    enabled = false,
     keys = {
-      -- suggested keymap
       { "<leader>p", "<cmd>PasteImage<cr>", desc = "Paste image from system clipboard" },
     },
   },
