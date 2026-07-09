@@ -337,7 +337,7 @@ cd ~/.local/src/ambxst && bash install.sh
 
 ### 输入法
 
-fcitx5 + blog-dark 主题（Tokyo Night 毛玻璃磨砂暗色）
+[fcitx5中州韵输入法](https://github.com/fcitx/fcitx5-rime) + blog-dark 主题（Tokyo Night 毛玻璃磨砂暗色）
 
 <img width="822" height="88" alt="fcitx5" src="https://github.com/user-attachments/assets/a443702c-10c0-497e-85aa-71b569a378a5" />
 
