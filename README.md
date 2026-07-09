@@ -333,7 +333,7 @@ cd ~/.local/src/ambxst && bash install.sh
 
 ### 桌面 (KDE Plasma)
 
-终端: kitty，Shell: oh-my-zsh + powerlevel10k，字体: Maple Mono NF CN
+终端: kitty，Shell: oh-my-zsh + powerlevel10k，字体: [Maple Mono NF CN](https://github.com/subframe7536/maple-font) + [霞鹜文楷](https://github.com/lxgw/LxgwWenKai)
 
 ### 输入法
 
