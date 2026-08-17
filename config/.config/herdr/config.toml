@@ -1,0 +1,48 @@
+onboarding = false
+[theme]
+name = "dracula"
+auto_switch = false
+
+[terminal]
+# Match tmux new-window/split behavior: inherit the source pane directory.
+new_cwd = "follow"
+
+[keys]
+# Match the tmux prefix and the direct Alt bindings.
+prefix = "ctrl+b"
+settings = "prefix+shift+s"
+new_tab = "alt+o"
+previous_tab = "alt+left"
+next_tab = "alt+right"
+focus_pane_left = "alt+a"
+focus_pane_down = "alt+s"
+focus_pane_up = "alt+w"
+focus_pane_right = "alt+d"
+split_vertical = "prefix+v"
+split_horizontal = "prefix+s"
+close_pane = "alt+q"
+
+# Keep the same movement keys when Herdr's navigate mode is open.
+navigate_pane_left = "a"
+navigate_pane_down = "s"
+navigate_pane_up = "w"
+navigate_pane_right = "d"
+
+[ui]
+mouse_capture = true
+copy_on_select = true
+prompt_new_tab_name = false
+
+[session]
+# Equivalent to tmux-resurrect for supported agent sessions.
+resume_agents_on_restore = true
+
+[experimental]
+# Keep recent pane history across a full Herdr server restart.
+pane_history = true
+
+[remote]
+manage_ssh_config = true
+
+[ui.sound]
+enabled = true

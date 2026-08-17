@@ -10,9 +10,9 @@ log() {
 
 # 先停掉托盘相关进程，再按面板 -> applet 的顺序重启，
 # 尽量让 StatusNotifier 项重新注册到 ambxst/quickshell 上。
-pkill -TERM -f 'qs -p /home/nan0in27/.local/src/ambxst/shell.qml' 2>/dev/null || true
+pkill -TERM -f 'qs -p .*/\.local/src/ambxst/shell\.qml' 2>/dev/null || true
 sleep 1
-pkill -KILL -f 'qs -p /home/nan0in27/.local/src/ambxst/shell.qml' 2>/dev/null || true
+pkill -KILL -f 'qs -p .*/\.local/src/ambxst/shell\.qml' 2>/dev/null || true
 pkill axctl 2>/dev/null || true
 pkill nm-applet 2>/dev/null || true
 pkill blueman-applet 2>/dev/null || true

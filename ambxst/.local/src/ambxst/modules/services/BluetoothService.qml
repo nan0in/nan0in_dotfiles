@@ -284,13 +284,20 @@ Singleton {
 
     Process {
         id: checkConnectedProcess
-        command: ["bash", "-c", "bluetoothctl devices Connected | wc -l"]
+        command: ["bash", "-c", "count=0; for addr in $(bluetoothctl devices 2>/dev/null | awk '/^Device / {print $2}'); do bluetoothctl info \"$addr\" 2>/dev/null | grep -q 'Connected: yes' && count=$((count + 1)); done; printf '%s\\n' \"$count\""]
         running: false
         stdout: SplitParser {
             onRead: (data) => {
                 const output = data ? data.trim() : "0";
                 root.connectedDevices = parseInt(output) || 0;
                 root.connected = root.connectedDevices > 0;
+                root.isUpdating = false;
+            }
+        }
+        onExited: (exitCode, exitStatus) => {
+            if (exitCode !== 0) {
+                root.connectedDevices = 0;
+                root.connected = false;
                 root.isUpdating = false;
             }
         }

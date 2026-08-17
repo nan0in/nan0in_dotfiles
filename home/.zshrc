@@ -1,19 +1,25 @@
 #美化这里的piano是我自己找的字符画
 #
-fastfetch --logo none --structure title:os:host:kernel:uptime:shell:terminal:localip:cpu:gpu:colors --data-raw "$(fortune | cowsay -W 30 -f piano)" | lolcat
+[[ -d "$HOME/.cows" ]] && export COWPATH="$HOME/.cows${COWPATH:+:$COWPATH}"
+if (( $+commands[fastfetch] && $+commands[fortune] && $+commands[cowsay] && $+commands[lolcat] )); then
+  fastfetch --logo none --structure title:os:host:kernel:uptime:shell:terminal:localip:cpu:gpu:colors --data-raw "$(fortune | cowsay -W 30 -f piano)" | lolcat
+fi
 # fastfetch --logo none --data-raw "$(fortune | cowsay -W 30 -f piano)" | lolcat
 echo "------------------------------------------------------------------------------"
 echo "\n"
 
 # 自己记得改
-export XDG_CONFIG_HOME=/home/nan0in27/.config
+export XDG_CONFIG_HOME=/home/nan0in/.config
 export TERM=xterm-256color
 
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
 source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
+
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+if [[ -f ~/.p10k.zsh ]] ; then
+  source ~/.p10k.zsh
+fi
 
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -22,10 +28,16 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 #extract--使用x 文件名 进行解压
 #z-- z 文件夹 快速跳转到上一次文件夹
 
-plugins=(z git zsh-syntax-highlighting extract web-search jsontools vi-mode zsh-autosuggestions )
+plugins=(z git zsh-syntax-highlighting extract web-search jsontools vi-mode zsh-autosuggestions python)
 
 export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
-source $ZSH/oh-my-zsh.sh
+
+# kitty / kitten completion must be on fpath before Oh My Zsh runs compinit.
+if [[ -d /usr/lib/kitty/shell-integration/zsh/completions ]]; then
+  fpath=(/usr/lib/kitty/shell-integration/zsh/completions $fpath)
+fi
+
+[[ -r "$ZSH/oh-my-zsh.sh" ]] && source "$ZSH/oh-my-zsh.sh"
 
 # open buffer line in editor
 autoload -Uz edit-command-line 
@@ -33,76 +45,65 @@ zle -N edit-command-line
 bindkey '^X^E' edit-command-line
 
 # 常规一些配置
-export SUDO_EDITOR="nvim"
-export EDITOR="nvim"          # 默认编辑器设为 Neovim,也是为了yazi配置的
-export VISUAL="nvim"          # 图形环境备用编辑器
+if (( $+commands[nvim] )); then
+  export SUDO_EDITOR="nvim"
+  export EDITOR="nvim"          # 默认编辑器设为 Neovim,也是为了yazi配置的
+  export VISUAL="nvim"          # 图形环境备用编辑器
+  alias vim='nvim'
+else
+  export SUDO_EDITOR="${EDITOR:-vi}"
+  export EDITOR="${EDITOR:-vi}"
+  export VISUAL="${VISUAL:-vi}"
+fi
 alias gdb="gdb -q"
-alias ran='ranger'
-alias vim='nvim'
-alias ls='exa'
-alias burp='/home/nan0in27/tools/Burpsuite/burp/Linux/CN_Burp.sh'
-alias reload_kde="kquitapp5 plasmashell && kstart5 plasmashell"
+(( $+commands[ranger] )) && alias ran='ranger'
+if (( $+commands[eza] )); then
+  alias ls='eza'
+elif (( $+commands[exa] )); then
+  alias ls='exa'
+else
+  alias ls='ls --color=auto'
+fi
+alias burp='/home/nan0in/tools/Burpsuite/burp/Linux/CN_Burp.sh'
+# alias checksec="/usr/bin/checksec"
 
 # yazi 退出后同步 shell 当前目录
-yazi() {
-  local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
-  command yazi "$@" --cwd-file="$tmp"
-  IFS= read -r -d '' cwd < "$tmp"
-  [[ -n "$cwd" && "$cwd" != "$PWD" && -d "$cwd" ]] && builtin cd -- "$cwd"
-  rm -f -- "$tmp"
-}
+if (( $+commands[yazi] )); then
+  yazi() {
+    local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+    command yazi "$@" --cwd-file="$tmp"
+    IFS= read -r -d '' cwd < "$tmp"
+    [[ -n "$cwd" && "$cwd" != "$PWD" && -d "$cwd" ]] && builtin cd -- "$cwd"
+    rm -f -- "$tmp"
+  }
 
-alias y='yazi'
- 
-# 防御性清理：移除从父进程继承的 conda 环境变量（如 tmux 会话）
-unset CONDA_PREFIX CONDA_DEFAULT_ENV CONDA_PROMPT_MODIFIER CONDA_SHLVL CONDA_PYTHON_EXE CONDA_EXE
-unset _CE_CONDA _CE_M
-unset VIRTUAL_ENV VIRTUAL_ENV_PROMPT
-
-# >>> conda initialize >>>
-__conda_setup="$('/home/nan0in27/miniforge3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/home/nan0in27/miniforge3/etc/profile.d/conda.sh" ]; then
-        . "/home/nan0in27/miniforge3/etc/profile.d/conda.sh"
-    else
-        export PATH="/home/nan0in27/miniforge3/bin:$PATH"
-    fi
+  alias y='yazi'
 fi
-unset __conda_setup
-# <<< conda initialize <<<
-
+compdef _kitty kitten
 # ======================
 # UV Python 环境配置
 # ======================
 
-# 确保本地 bin 目录在 PATH 中 (uv tools, uv python)
+# 确保本地 bin 目录在 PATH 中 (uv tools)
 export PATH="$HOME/.local/bin:$PATH"
+# UV_PYTHON 不再固定到 ~/.local/bin/python，避免替代系统 python
 
 # AwdPwnPatcher PYTHONPATH
-export PYTHONPATH=/home/nan0in27/pwn/tools/AwdPwnPatcher:$PYTHONPATH
+export PYTHONPATH=/home/nan0in/pwn/tools/AwdPwnPatcher:$PYTHONPATH
+export PYTHONPATH=/home/nan0in/pwn/tools/Some-of-House:$PYTHONPATH
 
 # UV 配置
 export UV_CACHE_DIR="$HOME/.cache/uv"
 export UV_CONFIG_HOME="$HOME/.config/uv"
-
-# 其他环境切换命令：
-#   ai    -> conda activate ai   (torch/tensorflow/CUDA)
-#   deact -> deactivate
-if [[ -z "$VIRTUAL_ENV" ]] && [[ -f "$HOME/.venvs/base/bin/activate" ]]; then
-    source "$HOME/.venvs/base/bin/activate"
-fi
-
-# 环境快速切换
-alias ai='conda activate ai'
-alias base='deactivate 2>/dev/null; source ~/.venvs/base/bin/activate'
-alias deact='deactivate'
-
 # 常用 UV 别名
 alias uvenv='uv venv'
 alias uvsync='uv sync'
 alias uvadd='uv add'
+
+# 自动激活 base venv (不覆盖已激活的环境)
+if [[ -z "$VIRTUAL_ENV" && -f "$HOME/.venvs/base/bin/activate" ]]; then
+  source "$HOME/.venvs/base/bin/activate"
+fi
 alias powerprofilesctl='/usr/bin/python /usr/bin/powerprofilesctl'
 
 
@@ -114,13 +115,10 @@ export QT_IM_MODULE=fcitx
 export XMODIFIERS=@im=fcitx
 export RANGER_LOAD_DEFAULT_RC=false
 
-. "$HOME/.local/bin/env"
+# ~/.local/bin is already added to PATH above. Do not source a user-local
+# executable named "env": it can shadow /usr/bin/env for every subprocess.
 
 # ----------some convenient fucntions for me------------- 
-export PWN_TOOL_PATH="$HOME/pwn/tools/gen_pwn.py"
-function exp(){
-      python "$PWN_TOOL_PATH" "$@"
-}
 
 rm() {
   if echo "$@" | grep -Eq -- '-[a-z]*f.*[a-z]*r|-[a-z]*r.*[a-z]*f'; then
@@ -242,12 +240,13 @@ alias setproxy="export http_proxy=$httpproxy; export https_proxy=$httpproxy; exp
 alias unsetproxy="unset http_proxy; unset https_proxy; unset all_proxy; echo 'Unset proxy successfully'"
 
 # 南大pa
-export NEMU_HOME=/home/nan0in27/projects/NJUPA_nan0in/nemu
-export AM_HOME=/home/nan0in27/projects/NJUPA_nan0in/abstract-machine
+export NEMU_HOME=/home/nan0in/projects/NJUPA_nan0in/nemu
+export AM_HOME=/home/nan0in/projects/NJUPA_nan0in/abstract-machine
 
 export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+nvm use --silent default >/dev/null
 
 
 # ---- TTY 优化：英文 locale + 大字体 ----
@@ -259,8 +258,8 @@ fi
 
 # >>> mamba initialize >>> (DISABLED - migrated to uv)
 # To re-enable mamba temporarily, uncomment below:
-# export MAMBA_EXE='/home/nan0in27/miniforge3/bin/mamba';
-# export MAMBA_ROOT_PREFIX='/home/nan0in27/miniforge3';
+# export MAMBA_EXE='/home/nan0in/miniforge3/bin/mamba';
+# export MAMBA_ROOT_PREFIX='/home/nan0in/miniforge3';
 # __mamba_setup="$("$MAMBA_EXE" shell hook --shell zsh --root-prefix "$MAMBA_ROOT_PREFIX" 2> /dev/null)"
 # if [ $? -eq 0 ]; then
 #     eval "$__mamba_setup"
@@ -293,14 +292,14 @@ export PATH="$PATH:$HOME/.npm-global/bin"
 export LIBC_DATABASE_PATH="$HOME/.libc-database"
 
 # go path
-[[ -s "/home/nan0in27/.gvm/scripts/gvm" ]] && source "/home/nan0in27/.gvm/scripts/gvm"
-export PATH=$PATH:$(go env GOPATH)/bin
+[[ -s "/home/nan0in/.gvm/scripts/gvm" ]] && source "/home/nan0in/.gvm/scripts/gvm"
+(( $+commands[go] )) && export PATH=$PATH:$(go env GOPATH)/bin
 
 # zoxide 
-eval "$(zoxide init zsh)"
+(( $+commands[zoxide] )) && eval "$(zoxide init zsh)"
 unset YAZI_ZOXIDE_OPTS
 export _ZO_EXCLUDE_DIRS="/mnt:/tmp"
-export RVDIFF_HOME=/home/nan0in27/projects/riscv-lab/difftest
+export RVDIFF_HOME=/home/nan0in/projects/riscv-lab/difftest
 
 # source secrets (API keys etc.) — not tracked by git
 [[ -f "$HOME/.zshrc.secrets" ]] && source "$HOME/.zshrc.secrets"
@@ -308,7 +307,24 @@ export PATH="$HOME/.local/bin:$PATH"
 
 # oslab: fix permissions after Docker build (Docker runs as root, host as nan0in27)
 fixoslab() {
-    local dir="${1:-/home/nan0in27/projects/oslab}"
+    local dir="${1:-/home/nan0in/projects/oslab}"
     docker exec 798c1a238ef9 chown -R 1000:1000 /root/oslab/ 2>/dev/null
     echo "oslab permissions synced"
 }
+
+
+# bun completions
+[ -s "/home/nan0in/.bun/_bun" ] && source "/home/nan0in/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+# kimi-code
+export PATH="/home/nan0in/.kimi-code/bin:$PATH"
+export PATH="$HOME/bin:$PATH"
+export SUDO_ASKPASS=/usr/bin/ksshaskpass
+export SUDO_ASKPASS=/usr/bin/ksshaskpass
+
+# opencode
+export PATH=/home/nan0in/.opencode/bin:$PATH

@@ -1,12 +1,12 @@
 {
-  "oledMode": true,
+  "oledMode": false,
   "lightMode": false,
   "roundness": 15,
   "font": "霞鹜文楷",
   "fontSize": 15,
   "monoFont": "Maple Mono NF CN",
   "monoFontSize": 14,
-  "tintIcons": false,
+  "tintIcons": true,
   "enableCorners": true,
   "animDuration": 300,
   "shadowOpacity": 0.5,
@@ -16,9 +16,9 @@
   "shadowBlur": 1,
   "gtkThemingEnabled": true,
   "qtThemingEnabled": true,
-  "cursorTheme": "猫标",
-  "cursorSize": 48,
-  "iconTheme": "dracula-icons-circle",
+  "cursorTheme": "Bibata-Modern-Ice",
+  "cursorSize": 24,
+  "iconTheme": "Win11-black-dark",
   "srBg": {
     "label": "Background",
     "gradient": [

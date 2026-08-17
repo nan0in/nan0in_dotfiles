@@ -51,6 +51,7 @@
     background_jobs         # presence of background jobs
     direnv                  # direnv status (https://direnv.net/)
     asdf                    # asdf version manager (https://github.com/asdf-vm/asdf)
+    custom_uv_python        # uvicorn python version (https://www.uvicorn.org/)
     virtualenv              # python virtual environment (https://docs.python.org/3/library/venv.html)
     anaconda                # conda environment (https://conda.io/)
     pyenv                   # python environment (https://github.com/pyenv/pyenv)
@@ -1002,7 +1003,7 @@
   typeset -g POWERLEVEL9K_VIRTUALENV_FOREGROUND=0
   typeset -g POWERLEVEL9K_VIRTUALENV_BACKGROUND=4
   # Don't show Python version next to the virtual environment name.
-  typeset -g POWERLEVEL9K_VIRTUALENV_SHOW_PYTHON_VERSION=false
+  typeset -g POWERLEVEL9K_VIRTUALENV_SHOW_PYTHON_VERSION=true
   # If set to "false", won't show virtualenv if pyenv is already shown.
   # If set to "if-different", won't show virtualenv if it's the same as pyenv.
   typeset -g POWERLEVEL9K_VIRTUALENV_SHOW_WITH_PYENV=false
@@ -1823,7 +1824,7 @@
   #   - verbose: Enable instant prompt and print a warning when detecting console output during
   #              zsh initialization. Choose this if you've never tried instant prompt, haven't
   #              seen the warning, or if you are unsure what this all means.
-  typeset -g POWERLEVEL9K_INSTANT_PROMPT=verbose
+  typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 
   # Hot reload allows you to change POWERLEVEL9K options after Powerlevel10k has been initialized.
   # For example, you can type POWERLEVEL9K_BACKGROUND=red and see your prompt turn red. Hot reload
@@ -1841,3 +1842,52 @@ typeset -g POWERLEVEL9K_CONFIG_FILE=${${(%):-%x}:a}
 
 (( ${#p10k_config_opts} )) && setopt ${p10k_config_opts[@]}
 'builtin' 'unset' 'p10k_config_opts'
+
+# ==================== UV Python 环境显示 ====================
+function prompt_custom_uv_python() {
+  local py_ver=""
+  local py_env=""
+  local py_icon="%F{blue}🐍%f"
+  
+  # 1. 获取 Python 版本
+  if command -v python &> /dev/null; then
+    py_ver=$(python --version 2>/dev/null | cut -d' ' -f2)
+  fi
+  
+  # 2. 检测环境类型（优先级：venv > uv > conda > 系统）
+  if [[ -n "$VIRTUAL_ENV" ]]; then
+    py_env="%F{green}venv%f"
+  elif [[ -n "$UV_PROJECT_ENVIRONMENT" ]]; then
+    # uv 项目虚拟环境
+    local uv_env_name=$(basename "$UV_PROJECT_ENVIRONMENT" 2>/dev/null)
+    py_env="%F{magenta}uv${uv_env_name:+($uv_env_name)}%f"
+  elif [[ -n "$CONDA_DEFAULT_ENV" ]]; then
+    py_env="%F{cyan}conda%f"
+  elif command -v uv &> /dev/null; then
+    # 检查是否在 uv 管理的 Python 中运行
+    local uv_python_path=$(which python 2>/dev/null)
+    if [[ "$uv_python_path" =~ "uv/python" ]]; then
+      py_env="%F{yellow}uv%f"
+    fi
+  fi
+  
+  # 3. 构建显示内容
+  local result=""
+  if [[ -n "$py_ver" ]]; then
+    result="${py_icon} ${py_ver}"
+  fi
+  if [[ -n "$py_env" ]]; then
+    result="${result} ${py_env}"
+  fi
+  
+  # 4. 如果有内容才显示
+  if [[ -n "$result" ]]; then
+    p10k segment -t "$result"
+  fi
+}
+
+# 自定义段的样式
+typeset -g POWERLEVEL9K_CUSTOM_UV_PYTHON_FOREGROUND=4
+typeset -g POWERLEVEL9K_CUSTOM_UV_PYTHON_BACKGROUND=0
+# 可选：添加图标在左侧
+# typeset -g POWERLEVEL9K_CUSTOM_UV_PYTHON_VISUAL_IDENTIFIER_EXPANSION='🐍'

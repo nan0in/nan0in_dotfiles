@@ -5,6 +5,11 @@ return {
       servers = {
         html = {
           filetypes = { "html" },
+          settings = {
+            html = {},
+            css = {},
+            javascript = {},
+          },
           init_options = {
             configurationSection = { "html", "css", "javascript" },
             embeddedLanguages = {

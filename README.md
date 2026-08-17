@@ -58,9 +58,9 @@ bash install.sh --dry-run install    # 预览将要执行的操作
 | 包 | Stow 目标 | 内容 |
 |---|---|---|
 | `config/` | `~/.config/` | **Hyprland**, **Waybar**, **Dunst**, **Kitty**, Neovim (LazyVim), Ranger, Yazi, fontconfig |
-| `fcitx5/` | `~/.local/share/fcitx5/` | fcitx5 blog-dark 主题及输入法配置 |
-| `home/` | `~/` | `.zshrc`, `.p10k.zsh`, tmux 配置 (`.tmux.conf` + 插件) |
-| `theme/` | `/usr/share/` | SDDM / grub 主题（需 **root** 权限，手动安装） |
+| `fcitx5/` | `~/.config/fcitx5/`, `~/.local/share/fcitx5/` | Fcitx5 profile、Rime 雾凇拼音 (`rime_ice`)、blog-dark 主题 |
+| `home/` | `~/` | `.zshrc`, `.p10k.zsh`, tmux 配置 (`~/.tmux.conf` + `~/.tmux/plugins`) |
+| `theme/` | `/usr/share/` | SilentSDDM 替换文件 / grub 主题（需 **root** 权限，手动安装） |
 | `ambxst/` | `~/.local/src/ambxst/` | ambxst 源码魔改版（stow 自动链接） |
 | `config/.config/ambxst/` | `~/.config/ambxst/` | 用户运行时配置（config 包内） |
 
@@ -181,6 +181,11 @@ sudo pacman -S kitty
 
 ```bash
 sudo pacman -S tmux xclip       # xclip 用于系统剪切板集成
+```
+
+dotfiles 会通过 `home/` 包管理 `~/.tmux.conf` 和 `~/.tmux/plugins`。
+
+```bash
 # 插件管理器 & 插件
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 git clone https://github.com/tmux-plugins/tmux-resurrect ~/.tmux/plugins/tmux-resurrect
@@ -200,15 +205,66 @@ sudo pacman -S neovim make cmake   # avante.nvim 需要 cmake
 yay -S kd                          # nan0in-plugins.lua 中的翻译工具
 # 字体：Maple Mono NF CN
 mkdir -p ~/.local/share/fonts/MapleMono
-curl -L -o /tmp/MapleMono-NF.zip https://github.com/nan0in/maple-font/releases/download/v1773727790/MapleMono-NF.zip
-unzip -o /tmp/MapleMono-NF.zip -d ~/.local/share/fonts/MapleMono/
+curl -L -o /tmp/MapleMono-NF-CN-v1780677570.zip https://github.com/nan0in/maple-font/releases/download/v1780677570/MapleMono-NF-CN.zip
+unzip -n /tmp/MapleMono-NF-CN-v1780677570.zip -d ~/.local/share/fonts/MapleMono/
 fc-cache -fv
 ```
 
 ### 输入法
 
 ```bash
-sudo pacman -S fcitx5 fcitx5-chinese-addons fcitx5-configtool fcitx5-qt fcitx5-gtk
+sudo pacman -S fcitx5 fcitx5-chinese-addons fcitx5-configtool fcitx5-qt fcitx5-gtk fcitx5-rime
+yay -S rime-ice-git
+```
+
+本仓库在 `fcitx5/` 包中管理 Fcitx5 profile 和 Rime 用户补丁：
+
+- 输入法引擎：`rime`
+- Rime schema：雾凇拼音 `rime_ice`
+- 用户补丁：`~/.local/share/fcitx5/rime/default.custom.yaml`
+
+部署后可执行：
+
+```bash
+rime_deployer --build ~/.local/share/fcitx5/rime /usr/share/rime-data ~/.local/share/fcitx5/rime/build
+cd ~/.local/share/fcitx5/rime && rime_deployer --set-active-schema rime_ice
+fcitx5-remote -r
+```
+
+### SDDM
+
+```bash
+# 基础主题
+git clone https://github.com/uiriansan/SilentSDDM /tmp/SilentSDDM
+
+# 字体：LXGW WenKai / 霞鹜文楷
+sudo pacman -S ttf-lxgw-wenkai
+```
+
+`theme/sddm/` 中保存的是 SilentSDDM 的替换文件：
+
+- `16_10.png`：登录背景
+- `nan0in.conf`：SilentSDDM 配置覆盖，字体使用 `LXGW WenKai`
+
+手动安装时，将 SilentSDDM 放入 `/usr/share/sddm/themes/`，先备份同名文件，再用本仓库中的 `nan0in.conf` 和 `16_10.png` 替换对应主题文件。
+
+### GRUB
+
+`theme/grub/blackice/` 保存当前使用的 GRUB 主题：
+
+- 原主题：[TomorrowX6/arch-grub](https://github.com/TomorrowX6/arch-grub)
+- 背景：`nan0in_banner.png`
+- 字体：Maple Mono NF CN（`.pf2` 已内置）
+- 分辨率：推荐 `2560x1600,2560x1440,1920x1080,auto`
+
+手动安装：
+
+```bash
+cd ~/projects/nan0in_dotfiles
+sudo cp -r theme/grub/blackice /boot/grub/themes/
+sudo sed -i 's|^#*GRUB_THEME=.*|GRUB_THEME="/boot/grub/themes/blackice/theme.txt"|' /etc/default/grub
+sudo sed -i 's|^#*GRUB_GFXMODE=.*|GRUB_GFXMODE="2560x1600,2560x1440,1920x1080,auto"|' /etc/default/grub
+sudo grub-mkconfig -o /boot/grub/grub.cfg
 ```
 
 ### 文件管理
@@ -333,11 +389,11 @@ cd ~/.local/src/ambxst && bash install.sh
 
 ### 桌面 (KDE Plasma)
 
-终端: kitty，Shell: oh-my-zsh + powerlevel10k，字体: [Maple Mono NF CN](https://github.com/subframe7536/maple-font) + [霞鹜文楷](https://github.com/lxgw/LxgwWenKai)
+终端: kitty，Shell: oh-my-zsh + powerlevel10k，字体: [Maple Mono NF CN](https://github.com/nan0in/maple-font/releases/tag/v1780677570) + [LXGW WenKai / 霞鹜文楷](https://github.com/lxgw/LxgwWenKai)
 
 ### 输入法
 
-[fcitx5中州韵输入法](https://github.com/fcitx/fcitx5-rime) + blog-dark 主题（Tokyo Night 毛玻璃磨砂暗色）
+[Fcitx5 Rime / 中州韵](https://github.com/fcitx/fcitx5-rime) + 雾凇拼音 `rime_ice` + blog-dark 主题（Tokyo Night 毛玻璃磨砂暗色）
 
 <img width="822" height="88" alt="fcitx5" src="https://github.com/user-attachments/assets/a443702c-10c0-497e-85aa-71b569a378a5" />
 
@@ -376,4 +432,3 @@ cd ~/.local/src/ambxst && bash install.sh
 ## License
 
 MIT  
-

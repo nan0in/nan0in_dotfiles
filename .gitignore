@@ -1,6 +1,13 @@
 *.bak
 *.tmp
 
+# agent/tool session state (local-only)
+.omo/
+.codegraph
+
+# zshrc auto-backups
+home/.zshrc.bak*
+
 # nvim lockfile (auto-generated)
 config/.config/nvim/lazy-lock.json
 config/.config/nvim/lua/*/*.bak
@@ -19,6 +26,7 @@ home/ida_theme/*.css.backup*
 
 # tmux plugins (installed separately via tpm)
 home/tmux/.tmux/plugins/
+home/.tmux/plugins/
 
 # ambxst runtime state
 config/.config/ambxst/presets/active_preset

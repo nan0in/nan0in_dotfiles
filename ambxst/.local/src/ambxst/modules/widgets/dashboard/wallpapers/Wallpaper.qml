@@ -738,6 +738,7 @@ PanelWindow {
                     var pathIndex = wallpaper.wallpaperPaths.indexOf(currentWall);
                     if (pathIndex !== -1) {
                         wallpaper.currentIndex = pathIndex;
+                        wallpaper.currentWallpaper = currentWall;
                         if (!wallpaper.initialLoadCompleted) {
                             wallpaper.initialLoadCompleted = true;
                         }

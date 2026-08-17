@@ -227,8 +227,10 @@ run)
 
 	# Fast path: Write directly to pipe if it exists (Zero latency)
 	if [ -p "$PIPE" ]; then
-		echo "$CMD" >"$PIPE" &
-		exit 0
+		if timeout 0.2s bash -c 'printf "%s\n" "$1" > "$2"' _ "$CMD" "$PIPE" 2>/dev/null; then
+			exit 0
+		fi
+		rm -f "$PIPE"
 	fi
 
 	# Fallback path: Use QS IPC with cached PID lookup

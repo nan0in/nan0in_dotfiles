@@ -337,18 +337,11 @@ Singleton {
             }
         }
 
-        // Layer rules for quickshell
+        // Layer rules for shell surfaces. Ambxst uses full-screen layer windows for
+        // input/focus coordination, so global layer blur would blur the whole desktop.
         toml += "\n[[layer_rules]]\n";
         toml += "namespace = \"quickshell\"\n";
         toml += "no_anim = true\n";
-
-        toml += "\n[[layer_rules]]\n";
-        toml += "namespace = \"quickshell\"\n";
-        toml += "blur = true\n";
-
-        toml += "\n[[layer_rules]]\n";
-        toml += "namespace = \"quickshell\"\n";
-        toml += "blur_popups = true\n";
 
         // Additional layer rules
         toml += "\n[[layer_rules]]\n";
@@ -361,8 +354,6 @@ Singleton {
 
         toml += "\n[[layer_rules]]\n";
         toml += "namespace = \"ambxst\"\n";
-        toml += "blur = true\n";
-        toml += "blur_popups = true\n";
         toml += "no_anim = true\n";
 
         toml += "\n[[layer_rules]]\n";

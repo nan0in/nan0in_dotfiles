@@ -16,7 +16,6 @@ return {
   },
   {
     "mason-org/mason-lspconfig.nvim",
-    enabled=false,
     dependencies = { "mason.nvim" },
     config = function()
       require("mason-lspconfig").setup({

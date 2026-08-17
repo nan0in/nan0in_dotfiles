@@ -4,10 +4,18 @@ return {
     opts = {
       servers = {
         pyright = {
+          cmd = {
+            require("config.node").command(),
+            vim.fn.expand("~/.local/share/nvim/mason/packages/pyright/node_modules/pyright/langserver.index.js"),
+            "--stdio",
+          },
           settings = {
             python = {
               analysis = {
-                reportPossiblyUnboundVariable = "none",
+                diagnosticSeverityOverrides = {
+                  reportPossiblyUnboundVariable = "none",
+                  reportOptionalMemberAccess = "none",
+                },
               },
             },
           },
@@ -33,6 +41,41 @@ return {
             },
           },
         },
+
+        lua_ls = {
+          settings = {
+            Lua = {
+              completion = { callSnippet = "Replace" },
+              diagnostics = { globals = { "vim" } },
+              workspace = {
+                library = vim.api.nvim_get_runtime_file("", true),
+                checkThirdParty = false,
+              },
+              telemetry = { enable = false },
+            },
+          },
+        },
+        -- JSON 支持注释
+        jsonls = {
+          settings = {
+            json = {
+              schemas = {},
+              validate = { enable = true },
+            },
+          },
+        },
+        -- YAML
+        yamlls = {
+          settings = {
+            yaml = {
+              keyOrdering = false,
+            },
+          },
+        },
+        -- Bash/Shell
+        bashls = {},
+        -- Dockerfile
+        dockerls = {},
       },
     },
   },

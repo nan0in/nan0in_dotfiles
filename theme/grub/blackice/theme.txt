@@ -1,0 +1,82 @@
+# ──────────────────────────────────────────────────────────────
+#  LINK START (blackice) — a neon HUD hacker theme for GRUB 2
+#  upstream: TomorrowX6/arch-grub
+#            https://github.com/TomorrowX6/arch-grub
+#  feat. Arch-chan (illust: ravimo, pixiv 101776734)
+#
+#  palette : void black · neon blue #23AAFF · ice #8CE1FF
+#  fonts   : Maple Mono NF CN, embedded as .pf2
+#  layout  : percentages align with a 16:9 stretched background
+# ──────────────────────────────────────────────────────────────
+
+title-text: ""
+desktop-image: "nan0in_banner.png"
+desktop-image-scale-method: "stretch"
+desktop-color: "#020406"
+
+terminal-font: "Maple Mono NF CN Regular 14"
+terminal-box: "terminal_box_*.png"
+terminal-left: "10%"
+terminal-top: "10%"
+terminal-width: "80%"
+terminal-height: "80%"
+terminal-border: "0"
+
+# ── boot entry list (inside the baked HUD panel) ──────────────
++ boot_menu {
+    left = 8%
+    top = 58%
+    width = 48%
+    height = 24%
+    item_font = "Maple Mono NF CN Regular 20"
+    selected_item_font = "Maple Mono NF CN Bold 20"
+    item_color = "#141B2D"
+    selected_item_color = "#FFFFFF"
+    item_height = 58
+    item_spacing = 6
+    item_padding = 16
+    icon_width = 28
+    icon_height = 28
+    item_icon_space = 16
+    selected_item_pixmap_style = "select_clean_*.png"
+    scrollbar = true
+    scrollbar_width = 6
+    scrollbar_thumb = "sb_thumb_*.png"
+    scrollbar_frame = "sb_frame_*.png"
+}
+
+# ── timeout progress bar ──────────────────────────────────────
++ progress_bar {
+    id = "__timeout__"
+    left = 8%
+    top = 85%
+    width = 48%
+    height = 12
+    show_text = false
+    bar_style = "progress_modern_frame_*.png"
+    highlight_style = "progress_modern_hl_*.png"
+    highlight_overlay = true
+}
+
+# ── countdown readout ─────────────────────────────────────────
++ label {
+    id = "__timeout__"
+    left = 8%
+    top = 88%
+    width = 48%
+    align = "center"
+    font = "Maple Mono NF CN Regular 14"
+    color = "#23AAFF"
+    text = "AUTO-EXEC IN %d SEC :: PRESS ANY KEY TO ABORT"
+}
+
+# ── key hints ─────────────────────────────────────────────────
++ label {
+    left = 0
+    top = 93%
+    width = 100%
+    align = "center"
+    font = "Maple Mono NF CN Regular 20"
+    color = "#4A5E78"
+    text = "[↑/↓] SELECT      [ENTER] EXECUTE      [E] EDIT      [C] CONSOLE"
+}

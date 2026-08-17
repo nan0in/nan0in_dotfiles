@@ -225,7 +225,50 @@ Item {
     }
 
     function runIconThemeUpdate() {
-        let command = Config.theme.iconTheme.trim() === "" ? "gsettings reset org.gnome.desktop.interface icon-theme" : "gsettings set org.gnome.desktop.interface icon-theme " + shellQuote(Config.theme.iconTheme);
+        let iconTheme = shellQuote(Config.theme.iconTheme.trim());
+        let command = `ICON_THEME=${iconTheme} python3 -c 'from pathlib import Path
+import configparser
+import os
+import subprocess
+
+icon_theme = os.environ.get("ICON_THEME", "").strip()
+home = Path.home()
+
+for name in ("gtk-3.0/settings.ini", "gtk-4.0/settings.ini"):
+    path = home / ".config" / name
+    path.parent.mkdir(parents=True, exist_ok=True)
+    config = configparser.ConfigParser(interpolation=None)
+    config.optionxform = str
+    config.read(path)
+    settings = dict(config["Settings"]) if config.has_section("Settings") else {}
+    if icon_theme:
+        settings["gtk-icon-theme-name"] = icon_theme
+    else:
+        settings.pop("gtk-icon-theme-name", None)
+    config["Settings"] = settings
+    with path.open("w") as f:
+        config.write(f, space_around_delimiters=False)
+
+for name in ("qt5ct/qt5ct.conf", "qt6ct/qt6ct.conf"):
+    path = home / ".config" / name
+    path.parent.mkdir(parents=True, exist_ok=True)
+    config = configparser.ConfigParser(interpolation=None)
+    config.optionxform = str
+    config.read(path)
+    appearance = dict(config["Appearance"]) if config.has_section("Appearance") else {}
+    if icon_theme:
+        appearance["icon_theme"] = icon_theme
+    else:
+        appearance.pop("icon_theme", None)
+    config["Appearance"] = appearance
+    with path.open("w") as f:
+        config.write(f, space_around_delimiters=False)
+
+if icon_theme:
+    subprocess.run(["gsettings", "set", "org.gnome.desktop.interface", "icon-theme", icon_theme], check=False)
+else:
+    subprocess.run(["gsettings", "reset", "org.gnome.desktop.interface", "icon-theme"], check=False)
+'`;
         iconThemeProcess.command = ["bash", "-c", command];
         iconThemeProcess.running = true;
     }

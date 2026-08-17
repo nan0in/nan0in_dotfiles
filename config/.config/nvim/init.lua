@@ -30,6 +30,7 @@ vim.diagnostic.config({
 
 --- 设置粘贴板
 vim.cmd([[set clipboard=unnamedplus]])
+vim.opt.clipboard = "unnamedplus"
 -- themes --
 -- vim.cmd([[colorscheme tokyonight]])
 

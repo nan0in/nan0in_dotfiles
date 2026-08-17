@@ -17,6 +17,10 @@ opt.shortmess:append("c")
 -- 补全菜单高度
 opt.pumheight = 10
 
+
+-- 设置列上限  
+opt.colorcolumn = "120"
+
 -- 系统剪贴板支持
 opt.clipboard = "unnamedplus"
 
@@ -36,8 +40,26 @@ opt.conceallevel = 0
 opt.list = true
 opt.listchars = { space = "·" }
 
--- 设置列上限  
-opt.colorcolumn = ""
+-- 为不同文件类型设置合适的 tab/indent
+local ft_tabs = {
+  lua = 2,
+  go = 2,
+  python = 4,
+  javascript = 2,
+  typescript = 2,
+  json = 2,
+  html = 2,
+  css = 2,
+}
+
+
+-- 为 Go 文件优化显示（Go 使用 Tab，显示为空格而非 ^I）
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "go",
+  callback = function()
+    vim.opt_local.listchars = { space = "·", tab = "  " }
+  end,
+})
 
 local function augroup(name)
   return vim.api.nvim_create_augroup("lazyvim_" .. name, { clear = true })

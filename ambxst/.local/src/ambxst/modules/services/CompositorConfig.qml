@@ -192,7 +192,7 @@ QtObject {
         batchCommand += ` ; ${workspaceCommand}`;
         // Note: workspaceCommand is dynamically calculated based on current animations and orientation.
 
-        batchCommand += ` ; keyword layerrule noanim,quickshell ; keyword layerrule blur,quickshell ; keyword layerrule blurpopups,quickshell`;
+        batchCommand += ` ; keyword layerrule noanim,quickshell ; keyword layerrule noanim,ambxst`;
         console.log("CompositorConfig: Refreshing TOML via CompositorTomlWriter");
         CompositorTomlWriter.refresh();
     }

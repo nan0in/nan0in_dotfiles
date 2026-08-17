@@ -9,6 +9,29 @@ if [ -e "$LOCKFILE" ]; then
 fi
 echo $$ >"$LOCKFILE"
 
+PARENT_PID="${AMBXST_PARENT_PID:-$PPID}"
+WATCHDOG_PID=""
+
+cleanup() {
+	rm -f "$LOCKFILE"
+	if [ -n "${DBUS_MONITOR_PID:-}" ]; then
+		kill "$DBUS_MONITOR_PID" 2>/dev/null || true
+	fi
+	if [ -n "$WATCHDOG_PID" ]; then
+		kill "$WATCHDOG_PID" 2>/dev/null || true
+	fi
+}
+trap cleanup EXIT INT TERM
+
+watch_parent() {
+	while kill -0 "$PARENT_PID" 2>/dev/null; do
+		sleep 1
+	done
+	kill -TERM "$$" 2>/dev/null || true
+}
+watch_parent &
+WATCHDOG_PID=$!
+
 # Sleep Monitor - Executes commands before and after sleep
 CONFIG_FILE="${XDG_CONFIG_HOME:-$HOME/.config}/ambxst/config/system.json"
 
@@ -29,25 +52,25 @@ get_cmd() {
 	fi
 }
 
-# Monitor logind's PrepareForSleep signal
-# We use grep --line-buffered to reliably capture the boolean argument
-# which indicates start (true) or end (false) of sleep
-dbus-monitor --system "type='signal',interface='org.freedesktop.login1.Manager',member='PrepareForSleep'" |
-	grep --line-buffered "boolean" |
-	while read -r line; do
-		if echo "$line" | grep -q "true"; then
-			# Going to sleep
-			echo "SUSPEND"
-			CMD=$(get_cmd "before")
-			if [ -n "$CMD" ]; then
-				eval "$CMD" &
-			fi
-		elif echo "$line" | grep -q "false"; then
-			# Waking up
-			echo "WAKE"
-			CMD=$(get_cmd "after")
-			if [ -n "$CMD" ]; then
-				eval "$CMD" &
-			fi
+# Monitor logind's PrepareForSleep signal.
+coproc DBUS_MONITOR { dbus-monitor --system "type='signal',interface='org.freedesktop.login1.Manager',member='PrepareForSleep'"; }
+while read -r line <&"${DBUS_MONITOR[0]}"; do
+	if ! echo "$line" | grep -q "boolean"; then
+		continue
+	fi
+	if echo "$line" | grep -q "true"; then
+		# Going to sleep
+		echo "SUSPEND"
+		CMD=$(get_cmd "before")
+		if [ -n "$CMD" ]; then
+			eval "$CMD" &
 		fi
-	done
+	elif echo "$line" | grep -q "false"; then
+		# Waking up
+		echo "WAKE"
+		CMD=$(get_cmd "after")
+		if [ -n "$CMD" ]; then
+			eval "$CMD" &
+		fi
+	fi
+done
