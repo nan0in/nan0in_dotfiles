@@ -122,3 +122,5 @@ previewers = [
     
 	{ name = "*", run = "file" },
 ]
+[theme]
+flavor = "catppuccin-mocha"

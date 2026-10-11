@@ -170,7 +170,7 @@ return {
   {
     "zbirenbaum/copilot.lua",
     opts = function(_, opts)
-      opts.copilot_node_command = vim.fn.expand("~/.local/bin/node-lsp-stable")
+      opts.copilot_node_command = vim.fn.exepath("node")
       opts.should_attach = function(bufnr, bufname)
         if vim.bo[bufnr].buftype ~= "" or not vim.bo[bufnr].modifiable then
           return false

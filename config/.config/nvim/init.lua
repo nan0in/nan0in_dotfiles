@@ -1,7 +1,7 @@
 vim.opt.tags = './tags;,tags;'
 vim.opt.formatoptions:remove('r')
 vim.opt.formatoptions:remove('o') -- 换行时不自动延续注释
-vim.o.cmdheight = 0 -- 显示命令行区域
+-- vim.o.cmdheight = 0 -- WSL: causes bottom black bar in Windows Terminal
 vim.o.exrc = true -- 允许加载受信任的项目本地 .nvim.lua/.nvimrc/.exrc
 
 -- 映射 Ctrl+Shift+V 粘贴（插入模式）

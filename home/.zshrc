@@ -21,8 +21,10 @@ path=(
 
 export PATH
 
+
+
 # fastfetch/cowsay — console output must happen BEFORE p10k instant prompt
-if [[ -o interactive && -z "$TMUX" ]] \
+if [[ -o interactive && -t 1 && -z "$TMUX" ]] \
   && command -v fastfetch >/dev/null 2>&1 \
   && command -v fortune >/dev/null 2>&1 \
   && command -v cowsay >/dev/null 2>&1 \
@@ -34,8 +36,8 @@ if [[ -o interactive && -z "$TMUX" ]] \
   echo ""
 fi
 
-# p10k instant prompt — must be sourced BEFORE any console I/O
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+# p10k instant prompt — source only after all intentional startup output
+if [[ -t 1 && -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
@@ -92,26 +94,6 @@ if command -v yazi >/dev/null 2>&1; then
   alias y='yazi'
 fi
 
-MINIFORGE_HOME=""
-for candidate in "$HOME/miniforge3" "$HOME/.miniforge3"; do
-  if [[ -d "$candidate" ]]; then
-    MINIFORGE_HOME="$candidate"
-    break
-  fi
-done
-
-if command -v conda >/dev/null 2>&1; then
-  __conda_setup="$(conda shell.zsh hook 2>/dev/null)"
-  if [[ $? -eq 0 ]]; then
-    eval "$__conda_setup"
-  fi
-  unset __conda_setup
-elif [[ -n "$MINIFORGE_HOME" && -f "$MINIFORGE_HOME/etc/profile.d/conda.sh" ]]; then
-  . "$MINIFORGE_HOME/etc/profile.d/conda.sh"
-elif [[ -n "$MINIFORGE_HOME" ]]; then
-  export PATH="$MINIFORGE_HOME/bin:$PATH"
-fi
-
 if command -v uv >/dev/null 2>&1; then
   export UV_CACHE_DIR="$HOME/.cache/uv"
   export UV_CONFIG_HOME="$HOME/.config/uv"
@@ -119,16 +101,9 @@ fi
 
 alias uvenv='uv venv'
 alias uvinit='uv pip install -e .'
-alias uvup='uv pip install --upgrade pip setuptools wheel'
+
 
 [[ -f "$HOME/.local/bin/env" ]] && . "$HOME/.local/bin/env"
-[[ "${OPENAI_API_KEY:-}" == "your-openai-api-key-here" ]] && unset OPENAI_API_KEY
-
-# ---------- some convenient functions for me -------------
-export PWN_TOOL_PATH="$HOME/pwn/tools/gen_pwn.py"
-exp() {
-  python "$PWN_TOOL_PATH" "$@"
-}
 
 rm() {
   if echo "$@" | grep -Eq -- '-[a-z]*f.*[a-z]*r|-[a-z]*r.*[a-z]*f'; then
@@ -155,49 +130,6 @@ rm() {
   command rm "$@"
 }
 
-pwncp() {
-  if [ $# -lt 1 ]; then
-    echo "用法:"
-    echo "  上传文件: pwncp <本地文件> [远程路径]"
-    echo "  下载文件: pwncp -r <远程文件> [本地路径]"
-    return 1
-  fi
-
-  local remote_host="hacker@dojo.pwn.college"
-  local key_path="$HOME/.ssh/key"
-  local remote_base="/home/hacker"
-
-  _remote_obs() {
-    local p="$1"
-    if [[ "$p" == /* || "$p" == ~* ]]; then
-      echo "$p"
-    else
-      p="${p#./}"
-      printf "%s/%s" "$remote_base" "$p"
-    fi
-  }
-
-  if [ "$1" = "-r" ]; then
-    if [ $# -lt 2 ]; then
-      echo "错误: 缺少远程文件路径"
-      return 1
-    fi
-    local remote_path="$(_remote_obs "$2")"
-    local local_path="${3:-.}"
-    echo "从 pwn.college 下载 $remote_path 到 $local_path ..."
-    scp -i "$key_path" "$remote_host:$remote_path" "$local_path"
-  else
-    local file="$1"
-    local remote_path="$(_remote_obs "$2")"
-    if [ ! -f "$file" ]; then
-      echo "错误: 文件 '$file' 不存在"
-      return 1
-    fi
-    echo "上传 $file 到 pwn.college..."
-    scp -i "$key_path" "$file" "$remote_host:$remote_path"
-  fi
-}
-
 gdiff() {
   if [ $# -eq 0 ]; then
     git difftool --tool=nvimdiff
@@ -206,51 +138,13 @@ gdiff() {
   fi
 }
 
-snap-copy() {
-  local tmp_file="/tmp/codesnap_$(date +%s).png"
-  codesnap "$@" --output "$tmp_file"
 
-  if [[ -f "$tmp_file" ]]; then
-    if command -v wl-copy >/dev/null 2>&1; then
-      wl-copy --type image/png < "$tmp_file"
-    elif command -v xclip >/dev/null 2>&1; then
-      xclip -selection clipboard -t image/png -i "$tmp_file"
-    else
-      echo "没有可用的图片剪贴板命令，文件保留在: $tmp_file"
-      return 1
-    fi
-    rm "$tmp_file"
-    print -P "%F{green}✔ Snapshot copied to clipboard!%f"
-  else
-    print -P "%F{red}✘ Failed to generate snapshot.%f"
-  fi
-}
-
-unalias setproxy unsetproxy 2>/dev/null
 
 wsl_host_ip() {
   awk '/^nameserver / {print $2; exit}' /etc/resolv.conf 2>/dev/null \
     || ip route show default 2>/dev/null | awk '{print $3; exit}'
 }
 
-setproxy() {
-  local host="${1:-$(wsl_host_ip)}"
-  if [[ -z "$host" ]]; then
-    echo "Failed to detect WSL host IP"
-    return 1
-  fi
-
-  echo "Set proxy successfully: ${host}:30000"
-}
-
-unsetproxy() {
-  unset http_proxy https_proxy all_proxy HTTP_PROXY HTTPS_PROXY ALL_PROXY
-  echo "Unset proxy successfully"
-}
-
-[[ -d "$HOME/projects/NJUPA_nan0in/nemu" ]] && export NEMU_HOME="$HOME/projects/NJUPA_nan0in/nemu"
-[[ -d "$HOME/projects/NJUPA_nan0in/abstract-machine" ]] && export AM_HOME="$HOME/projects/NJUPA_nan0in/abstract-machine"
-[[ -d "$HOME/projects/riscv-lab/difftest" ]] && export RVDIFF_HOME="$HOME/projects/riscv-lab/difftest"
 
 export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
@@ -283,9 +177,8 @@ fi
 export LIBC_DATABASE_PATH="$HOME/.libc-database"
 
 [[ -s "$HOME/.gvm/scripts/gvm" ]] && source "$HOME/.gvm/scripts/gvm"
-if command -v go >/dev/null 2>&1; then
-  export PATH="$PATH:$(go env GOPATH)/bin"
-fi
+export GOPATH="${GOPATH:-$HOME/go}"
+export PATH="$PATH:$GOPATH/bin"
 
 if command -v zoxide >/dev/null 2>&1; then
   eval "$(zoxide init zsh)"
@@ -362,35 +255,13 @@ cd() {
 }
 
 [[ -f "$HOME/.zshrc.secrets" ]] && source "$HOME/.zshrc.secrets"
+[[ "${OPENAI_API_KEY:-}" == "your-openai-api-key-here" ]] && unset OPENAI_API_KEY
+[[ "${SERPAPI_API_KEY:-}" == "your-serpapi-key-here" ]] && unset SERPAPI_API_KEY
 
-# === WSL Proxy Control ===
-unalias setproxy unsetproxy 2>/dev/null
+# bun completions
+[ -s "/home/nan0in_wsl/.bun/_bun" ] && source "/home/nan0in_wsl/.bun/_bun"
 
-wsl_host_ip() {
-  awk '/^nameserver / {print $2; exit}' /etc/resolv.conf 2>/dev/null \
-    || ip route show default 2>/dev/null | awk '{print $3; exit}'
-}
-
-setproxy() {
-  local host="${1:-$(wsl_host_ip)}"
-  if [[ -z "$host" ]]; then
-    echo "Failed to detect WSL host IP"
-    return 1
-  fi
-
-  export http_proxy="http://${host}:30000"
-  export https_proxy="$http_proxy"
-  export all_proxy="socks5://${host}:30000"
-  export HTTP_PROXY="$http_proxy"
-  export HTTPS_PROXY="$https_proxy"
-  export ALL_PROXY="$all_proxy"
-  export no_proxy="localhost,127.0.0.1,::1"
-  export NO_PROXY="$no_proxy"
-  echo "Proxy ON: ${host}:30000"
-}
-
-unsetproxy() {
-  unset http_proxy https_proxy all_proxy HTTP_PROXY HTTPS_PROXY ALL_PROXY no_proxy NO_PROXY
-  echo "Proxy OFF"
-}
-
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+export PATH="/opt/loongarch32r-linux-gnusf-2022-05-20/bin:$PATH"
