@@ -1,5 +1,7 @@
 *.bak
 *.tmp
+.gdb_history
+*.bak-*
 
 # agent/tool session state (local-only)
 .omo/

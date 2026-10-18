@@ -17,6 +17,11 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
+-- Markdown 文本区固定 200 列（纯视觉软换行，不改文件内容）
+-- 必须放在上面那个 FileType 之后：它要先看到 wrap = true 才肯干活。
+-- 想改宽度就动 config/markdown_width.lua 顶部的 TARGET，平时用 :MdWidth 手动开关。
+require("config.markdown_width")
+
 -- 记住上次编辑位置
 local lastplace = vim.api.nvim_create_augroup("LastPlace", { clear = true })
 vim.api.nvim_create_autocmd("BufReadPost", {

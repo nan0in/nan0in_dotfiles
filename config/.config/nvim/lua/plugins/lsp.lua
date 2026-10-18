@@ -1,3 +1,5 @@
+local pyright_python = vim.fn.expand("~/.venvs/base/bin/python")
+
 return {
   {
     "neovim/nvim-lspconfig",
@@ -11,7 +13,11 @@ return {
           },
           settings = {
             python = {
+              pythonPath = pyright_python,
               analysis = {
+                autoSearchPaths = true,
+                useLibraryCodeForTypes = true,
+                diagnosticMode = "openFilesOnly",
                 diagnosticSeverityOverrides = {
                   reportPossiblyUnboundVariable = "none",
                   reportOptionalMemberAccess = "none",

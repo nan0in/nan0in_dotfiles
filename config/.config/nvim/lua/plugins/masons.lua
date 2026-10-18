@@ -7,7 +7,8 @@ return {
       require("mason").setup({
         automatic_enable={
           exclude={
-            marksman,
+            "marksman",
+            "rust_analyzer",
           }
         }
  
@@ -22,7 +23,8 @@ return {
         ensure_installed = { "lua_ls","html", "cssls", "jsonls" },
         automatic_enable={
           exclude={
-            marksman,
+            "marksman",
+            "rust_analyzer",
           }
         }
       })

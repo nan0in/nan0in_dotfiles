@@ -1,0 +1,34 @@
+{
+  "repository": "https://github.com/hitokoto-osc/sentences-bundle",
+  "commit": "07a74e13b572c2ad861d91f791788fd4253fc086",
+  "filter": "Chinese text; 2..60 characters; no control characters; deduplicated",
+  "categories": {
+    "a": {
+      "name": "动画",
+      "count": 1385
+    },
+    "b": {
+      "name": "漫画",
+      "count": 100
+    },
+    "c": {
+      "name": "游戏",
+      "count": 1111
+    },
+    "d": {
+      "name": "文学",
+      "count": 1818
+    },
+    "i": {
+      "name": "诗词",
+      "count": 721
+    }
+  },
+  "sha256": {
+    "upstream/a.json": "b5d1c732b3be43ea405eddfdf10f2b9dea16ee477849acced3a75725fbd42eae",
+    "upstream/b.json": "ab18c480ae7a7c93676b2c60267e5b4f95348e379e8c8986b79e2e95eb2f56b9",
+    "upstream/c.json": "e7412333b3ade1e7f06c1d07d46bf381712f6527e0a866ba376ba48c23ce0cc9",
+    "upstream/d.json": "5031a97dc071d5637bd0752fa3369ad7ee771431872f2b1811e8967cebed3ca5",
+    "upstream/i.json": "4a244cd2ea6f1fc50dd097d7fc1a0424cc597d80e4cf686c76688b4fd0917a40"
+  }
+}

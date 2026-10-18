@@ -1,8 +1,26 @@
 #美化这里的piano是我自己找的字符画
 #
 [[ -d "$HOME/.cows" ]] && export COWPATH="$HOME/.cows${COWPATH:+:$COWPATH}"
-if (( $+commands[fastfetch] && $+commands[fortune] && $+commands[cowsay] && $+commands[lolcat] )); then
-  fastfetch --logo none --structure title:os:host:kernel:uptime:shell:terminal:localip:cpu:gpu:colors --data-raw "$(fortune | cowsay -W 30 -f piano)" | lolcat
+# 不带参数时使用用户本地句库；显式参数仍原样交给系统 fortune。
+fortune() {
+  local quote_dir="${XDG_DATA_HOME:-$HOME/.local/share}/fortunes/hitokoto"
+  local -a quote_files
+  local category
+  for category in a b c d i; do
+    [[ -r "$quote_dir/$category" && -r "$quote_dir/$category.dat" ]] && quote_files+=("$quote_dir/$category")
+  done
+  if (( $# == 0 && ${#quote_files} > 0 )); then
+    command fortune "${quote_files[@]}"
+  else
+    command fortune "$@"
+  fi
+}
+if [[ -o interactive ]] && (( $+commands[fastfetch] && $+commands[fortune] && $+commands[cowsay] && $+commands[lolcat] )); then
+  if [[ -x "$HOME/.local/bin/shell-quote" ]] && (( $+commands[python3] )); then
+    fastfetch --logo none --structure title:os:host:kernel:uptime:shell:terminal:localip:cpu:gpu:colors --data-raw "$("$HOME/.local/bin/shell-quote")" | lolcat
+  else
+    fastfetch --logo none --structure title:os:host:kernel:uptime:shell:terminal:localip:cpu:gpu:colors --data-raw "$(fortune | cowsay -W 30 -f piano)" | lolcat
+  fi
 fi
 # fastfetch --logo none --data-raw "$(fortune | cowsay -W 30 -f piano)" | lolcat
 echo "------------------------------------------------------------------------------"
@@ -64,7 +82,7 @@ elif (( $+commands[exa] )); then
 else
   alias ls='ls --color=auto'
 fi
-alias burp='/home/nan0in/tools/Burpsuite/burp/Linux/CN_Burp.sh'
+alias burp='/home/nan0in/tools/BurpSuite/burpsuite_jar/linux/CN_Burp.sh'
 # alias checksec="/usr/bin/checksec"
 
 # yazi 退出后同步 shell 当前目录
@@ -328,3 +346,10 @@ export SUDO_ASKPASS=/usr/bin/ksshaskpass
 
 # opencode
 export PATH=/home/nan0in/.opencode/bin:$PATH
+
+# pnpm user-global binaries
+export PNPM_HOME="$HOME/.local/share/pnpm"
+export PATH="$PNPM_HOME/bin:$PATH"
+
+# Shared Python environment for IDA and HCLI.
+export IDAPYTHON_VENV_EXECUTABLE="/home/nan0in/.venvs/base/bin/python3"

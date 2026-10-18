@@ -1,0 +1,322 @@
+{
+  "source": "/usr/share/fortune",
+  "package": "fortune-mod 3.26.1-1",
+  "files": {
+    "art": {
+      "sha256": "ffa86c725dac97b4cf82a229c60c6a66ce408cfbc3c186b824d597439402ea2e"
+    },
+    "art.dat": {
+      "sha256": "27088ebc8ebd6ffafd4f53d329bd9d5389af5e0007e00ab2ccf68e2b81700c6d",
+      "quotes": 474
+    },
+    "ascii-art": {
+      "sha256": "6f031a4a93aa541222834ddb93675b44b8e66970205c52dc1c618db0678eac29"
+    },
+    "ascii-art.dat": {
+      "sha256": "ce097f3f923511dcd7a1329afd1dc34a9be8ca79327d82b8dad5d75b86fac717",
+      "quotes": 10
+    },
+    "computers": {
+      "sha256": "dd0f402de7fa059474d0beb62434f104b8c43dae317cd8af2eba6c0489d05971"
+    },
+    "computers.dat": {
+      "sha256": "5c59858cb8d7828a1cd05802547e8f5d01dbb02d73d7d117ce3d10e7aa3b9000",
+      "quotes": 1066
+    },
+    "cookie": {
+      "sha256": "5474a2ad680a059a4032967739d3af8db9bc62653ef8ca27e160818036c1914b"
+    },
+    "cookie.dat": {
+      "sha256": "d18dd49846dc600c2dbb21a3f8c5d1591ddb922c16e013c01cd7652eab20dae2",
+      "quotes": 1134
+    },
+    "debian": {
+      "sha256": "0a3bd809bf260a22355adfdb90660f545286d3b537a52c76ff174441389c03fc"
+    },
+    "debian.dat": {
+      "sha256": "c3ce8690b9088af92ebd779be31cf9569a7a0df5d6843b1c26dbdde9f3c66f09",
+      "quotes": 85
+    },
+    "definitions": {
+      "sha256": "de4d02452d81a8c99ebf4fac11fd381e38837093e7ca3b0a2ac407c4a416de2f"
+    },
+    "definitions.dat": {
+      "sha256": "0cf4419388981caeb475e535e52331bbec6fa1bed4abe33cc8c7bfda2d17b7e9",
+      "quotes": 1203
+    },
+    "disclaimer": {
+      "sha256": "c085d66ea68686d5e28852cef77c3eeb3640895c5647b148deeaaada2c07fa7b"
+    },
+    "disclaimer.dat": {
+      "sha256": "d5e8f1bd12323c330bd6e8f868bc5149321a7dade87956ed3ccfdb30602a5313",
+      "quotes": 284
+    },
+    "drugs": {
+      "sha256": "3401bef7ac46054c624020be8299b898da30f871dc2e32738cbd7720aaa726b0"
+    },
+    "drugs.dat": {
+      "sha256": "a7dca264237e3358abc4d4027dd2f0817f6e97d123430b55b001c2e9fe495dc9",
+      "quotes": 207
+    },
+    "education": {
+      "sha256": "1ab3e719b3ac26203cbb2c2be5900121931dc3500695128692d9edb76a5cd5d2"
+    },
+    "education.dat": {
+      "sha256": "f942f4a12392f9c7d0a70d3e0ec53b0853bd0a197c04e43e9021ce1a84231e7d",
+      "quotes": 205
+    },
+    "ethnic": {
+      "sha256": "2372efca809ec676ce0efe563f2427dfa5a4a77622cd24e95024c5407b1e0311"
+    },
+    "ethnic.dat": {
+      "sha256": "ea02dd615fd0d5219236889600a4760b00ed473a9ece48d510577c46e3318965",
+      "quotes": 162
+    },
+    "food": {
+      "sha256": "5bd9b85137360eda2187df1b65801a9399a0007f56b700762d7d372ffeeaec85"
+    },
+    "food.dat": {
+      "sha256": "d9257127eb345b17147e7e82a75124571e18d7ebe009609dfb9ff56b8e093296",
+      "quotes": 196
+    },
+    "fortunes": {
+      "sha256": "59767da5b93bb647f0963ee5c9866a9297a6ab04e5ce6110ba8ae305bd578228"
+    },
+    "fortunes.dat": {
+      "sha256": "79cbb92913b8041f51390688324eb413825fc8a27243e58526c8e9c6a1ca2e4e",
+      "quotes": 431
+    },
+    "goedel": {
+      "sha256": "897da4af9e4cfcb86fd0983a6aad423cef6237207a1fce88e186d5cfbbfa3891"
+    },
+    "goedel.dat": {
+      "sha256": "6593dcc431c083ab574aae2f28961690629c77b88b4015896e37301b76576903",
+      "quotes": 52
+    },
+    "humorists": {
+      "sha256": "ddac9ee6905a9ae267132dcd1ba2c24e0f7d3a658b16477e896a89f9eff33bf9"
+    },
+    "humorists.dat": {
+      "sha256": "b5e40e92b09decd96b20e4b76e70c5acac616db0c25e0e0a1b724432e06d43e5",
+      "quotes": 197
+    },
+    "kids": {
+      "sha256": "732d19a46fd54a7a6e0c9d0183213c8988f1b07bd822907ed2391c49380a1b0a"
+    },
+    "kids.dat": {
+      "sha256": "43bf7c13f8970ee46a553687f4203747e482d687df1cf2e9143ee0959bc17688",
+      "quotes": 151
+    },
+    "knghtbrd": {
+      "sha256": "795ae8ce24f7623ed5d8f23b73c72dec821acdb6b2f926a5cd3e7a483c31af0b"
+    },
+    "knghtbrd.dat": {
+      "sha256": "cd0520151c41ea62d56301a7b2c1c4b94593baf8ef3aab43e66f23dc91fe188c",
+      "quotes": 539
+    },
+    "law": {
+      "sha256": "1cf7ab509ed78c82f7205bb78b430e776afc8b30decb24efb420ebd434a1943f"
+    },
+    "law.dat": {
+      "sha256": "5ab956310d9f6632b9ecf6b80c8b9ca6335a9e487ee8849debb04983555d26b7",
+      "quotes": 206
+    },
+    "linux": {
+      "sha256": "2ae9cdd10358763b84d2128956cee88999461a59903ac86659469916af5f68b0"
+    },
+    "linux.dat": {
+      "sha256": "4d6b0826fd4d5407cda089778ad00622b4f997e89d8e29bc4140c9d93fc895c2",
+      "quotes": 398
+    },
+    "literature": {
+      "sha256": "0c9d1b12f6d4492125785cb9b3974435057f58be7e72be50bcaeb4c704f377bf"
+    },
+    "literature.dat": {
+      "sha256": "1f812b4b31499535fc6ef77731536761db0304c7b02089c0574993ee76fdc38e",
+      "quotes": 260
+    },
+    "love": {
+      "sha256": "7cbb38a1adcdd4925638f4f059c78b6f918348d24c77a1d13eca682592cc7aa6"
+    },
+    "love.dat": {
+      "sha256": "26ed0d5979ba90c1f8c289d55e624307dbfe67bfdd422de2489236f8c8cd6a35",
+      "quotes": 150
+    },
+    "magic": {
+      "sha256": "da5757613d1e69df6b1f2d976b1728ce491504f0f1017acef9207d0d393139ca"
+    },
+    "magic.dat": {
+      "sha256": "d9424273f46815dd25b87181b18e84b9e7b57d28f988c9a64309257d749e923d",
+      "quotes": 30
+    },
+    "medicine": {
+      "sha256": "4b4ec69e40ae39d9c8387179a39a5519a6e4a809387272036eda7979db855a7a"
+    },
+    "medicine.dat": {
+      "sha256": "f822d0e50b82f717f1fdd5b11440768fd49cf672e12a12b09fae2e0a2d5e1353",
+      "quotes": 74
+    },
+    "men-women": {
+      "sha256": "c9921ad257185515b1ce0d2610653043158b364cd28ea5e552f44cdf524deffb"
+    },
+    "men-women.dat": {
+      "sha256": "0a42325519e99463689fb89335ec1a61529a6107b8b90a7e189fb327a762cb56",
+      "quotes": 581
+    },
+    "miscellaneous": {
+      "sha256": "f5fbc32a3277a451177b97180b449f6267ddf6e94a2733c234991596777c5d81"
+    },
+    "miscellaneous.dat": {
+      "sha256": "1f42d0653646e9c21964a7a7402add116c2f03eb35ed2fbb46b2ea7e33fd25dc",
+      "quotes": 644
+    },
+    "news": {
+      "sha256": "0115ac7bf3c2b2880cb3ea0f35c9b06a645fb1fc9c9b9a79b0b61b44bad78206"
+    },
+    "news.dat": {
+      "sha256": "6790af996b7e9de4a1e258e17255d93eb3c22fdde3be4da9230e9f4922a7ea0a",
+      "quotes": 52
+    },
+    "paradoxum": {
+      "sha256": "71f009258e65c512024f671b9a41ae48bc1adb84cb477882cdce9f1fac6da8b8"
+    },
+    "paradoxum.dat": {
+      "sha256": "0ec352c1dc9e8c7c268095910bc07783dedeab3cdf8e4a1f13ad5754236b9042",
+      "quotes": 70
+    },
+    "people": {
+      "sha256": "cd46e670e7b56c7fc745d3fddcbd2e379410bf145359ec356aa1143114f8f52f"
+    },
+    "people.dat": {
+      "sha256": "006b98b456b8444db1e4877374232f17388da3056824205045f510de73d29780",
+      "quotes": 1244
+    },
+    "perl": {
+      "sha256": "05165d48c1e8852d2afbbd6dbe196b5ffcdbc853246e02c2bb87d6cfa7fa42de"
+    },
+    "perl.dat": {
+      "sha256": "02655ed818168c19d9a920f889bbb613111c904ee4e36c5a7b1a376f74dfc881",
+      "quotes": 272
+    },
+    "pets": {
+      "sha256": "f995bf9ea09cece7a4d0079aeda8c2222ac3e2b469c06ee81a2cb7b6a07563b8"
+    },
+    "pets.dat": {
+      "sha256": "50a95ad6eaed6b0d9f8cd9ef67240f3c771b30c4493e05f0cdd37d3c4e15eebf",
+      "quotes": 51
+    },
+    "platitudes": {
+      "sha256": "0ae0dbe2fc62d275cb54ea9f72438d8a3d02b1844eb74b81bd1761557245be42"
+    },
+    "platitudes.dat": {
+      "sha256": "17b26d86fb2d84704e8695f97ef2b50f753d6eb352a4c6873b4a88daab7ff790",
+      "quotes": 496
+    },
+    "politics": {
+      "sha256": "d87bab83c652fbdf3eb510a29cf217fda650c73dc566ec7ddc2d042699a795a9"
+    },
+    "politics.dat": {
+      "sha256": "70904c1606421187f437cf711b8c228df3d89f14ec33e79f87ae0dccaeb0fcf2",
+      "quotes": 697
+    },
+    "pratchett": {
+      "sha256": "701d9be1fa6d45db0f9feaef976c7daf8e491bec2d131d7be59d8f61c046ef7f"
+    },
+    "pratchett.dat": {
+      "sha256": "1eb42d38bb10aed6680014159d0caeb33ec1985cae0761535193edd9f5e8f696",
+      "quotes": 677
+    },
+    "riddles": {
+      "sha256": "5d2521a3556d07a20d6e70b9a07f92a32bcfc02d54ede6d5b765b1dda0b1b55c"
+    },
+    "riddles.dat": {
+      "sha256": "5196fb3f6c749bb2c47cee18db6c9fe42f0804276dd38464aa5e18eb89c297f0",
+      "quotes": 127
+    },
+    "rules-of-acquisition": {
+      "sha256": "0743d21dbb5ed883d43a82de69079a8f29a8674df8e234f8074f4e19528729fd"
+    },
+    "rules-of-acquisition.dat": {
+      "sha256": "05d39575f7acd37d229584f76a6815961854128ef484cf2d89c964ab29d2ceb4",
+      "quotes": 159
+    },
+    "science": {
+      "sha256": "8ef1135881079ddcd85d8a02dc635a8b511c1f71f0e944b1ab751b496ff0e800"
+    },
+    "science.dat": {
+      "sha256": "ffcb16c0eee61300ef49a27be4d7ba00616fbf96cfdb3cf4f2c8949a50c078c6",
+      "quotes": 623
+    },
+    "shlomif-fav": {
+      "sha256": "c145be0d18601bacdf2dd3bbf4a6833f08d1309ad35042f4bc5481a8de7afcf7"
+    },
+    "shlomif-fav.dat": {
+      "sha256": "31e2f3fc7dd7a31b6d259ab789b0ffe024dc5532a4fdaf3a2e3f40d22ed51b90",
+      "quotes": 247
+    },
+    "songs-poems": {
+      "sha256": "844d55063780cf0e60b043f72847e2f91062b0c15496615fe11aec681d847b07"
+    },
+    "songs-poems.dat": {
+      "sha256": "bcbff0830d04c3787cf8d6e438dfe017812b47d634024b4e43005edf6e91f64c",
+      "quotes": 707
+    },
+    "sports": {
+      "sha256": "48358a805efc34a7a85ee3dac17f3a7c69e895fa2f8a2daff2f0486fba8dc002"
+    },
+    "sports.dat": {
+      "sha256": "f4d04144be92958aeb552aa2e69dac0e1e900ea67ca59c3be6474d001f9776e9",
+      "quotes": 146
+    },
+    "startrek": {
+      "sha256": "94c57f2e551066968857b0cffd9f8eb31ac15e416050d717175c21fdd587e9bb"
+    },
+    "startrek.dat": {
+      "sha256": "be2c8bde64b40eb7fc21c9438f0408dd998855f515b179d90ae55a55325875fa",
+      "quotes": 228
+    },
+    "tao": {
+      "sha256": "dbd37b9e17738d34aaea13aae0b805e83a31e72fa1350e80a2c5575d4165cedd"
+    },
+    "tao.dat": {
+      "sha256": "4a87b734013da519ad3239df58383a19111a0361bb147f6dd2d3168d831cbef6",
+      "quotes": 82
+    },
+    "the-x-files-taglines": {
+      "sha256": "13db8c224f808784dbf9bc09dbbf4206dee5278cdfcab635c16ac54b36057e44"
+    },
+    "the-x-files-taglines.dat": {
+      "sha256": "bcaf1ca47c21afce71861b0e7efe900f772d8e6efecd927a609b5d3934f2bd7c",
+      "quotes": 25
+    },
+    "translate-me": {
+      "sha256": "d2c3eda6f2b200febb67fa41564df77cd73b0342cb6d37b81293d5ce8868def5"
+    },
+    "translate-me.dat": {
+      "sha256": "6b1c05bf0e2116ec43cc2ce894ca29d292a9dc6b0d6ce361ada1fc62fc2d6156",
+      "quotes": 12
+    },
+    "wisdom": {
+      "sha256": "4c8d75cc20839d03a39cb9356cf6673ab57423e6db8ffad648257ba7db5602fc"
+    },
+    "wisdom.dat": {
+      "sha256": "dce3d94dca9be70d6c7917f7a55fe38fe39cc06f706407db3d89cddcd79fd924",
+      "quotes": 427
+    },
+    "work": {
+      "sha256": "cb409643b9a83c8675c01acae614a57361e3712f66d15e5733b7f8c171b1e354"
+    },
+    "work.dat": {
+      "sha256": "15e8bf6378936acf3784dd418d78aa7f0aadd21193f8d48de660b2ec6cd45e4a",
+      "quotes": 626
+    },
+    "zippy": {
+      "sha256": "958abb8f202e41871c442950dd243130a9c9614cda60df06ce6b6403622bae86"
+    },
+    "zippy.dat": {
+      "sha256": "08e2dfe75cf4e5f8824fcf1fcfc5f91986584cd13c346e6398416619316e5919",
+      "quotes": 546
+    }
+  },
+  "total_quotes": 16253
+}

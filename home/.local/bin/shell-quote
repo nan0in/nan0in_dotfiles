@@ -1,0 +1,82 @@
+#!/usr/bin/env python3
+"""Offline fortune + cowsay, wrapping Chinese by terminal cell width."""
+import os
+from pathlib import Path
+import shutil
+import subprocess
+import sys
+import unicodedata
+
+
+def cells(character):
+    if unicodedata.combining(character):
+        return 0
+    return 2 if unicodedata.east_asian_width(character) in "WF" else 1
+
+
+def wrap(text, width=42):
+    lines = []
+    for paragraph in text.splitlines():
+        line, size = "", 0
+        for char in paragraph:
+            if unicodedata.category(char).startswith("C"):
+                continue
+            length = cells(char)
+            if size + length > width and line:
+                lines.append(line)
+                line, size = "", 0
+            line += char
+            size += length
+        lines.append(line)
+    return lines or [""]
+
+
+def main():
+    data = Path(os.environ.get("XDG_DATA_HOME", str(Path.home() / ".local/share")))
+    directory = data / "fortunes/hitokoto"
+    files = [str(directory / key) for key in "abcdi"
+             if (directory / key).is_file() and (directory / (key + ".dat")).is_file()]
+    # Default: 70% ACG, 30% Chinese literature/poetry; fortune chooses within each group.
+    acg = [path for path in files if Path(path).name in "abc"]
+    chinese = [path for path in files if Path(path).name in "di"]
+    import random
+    selected = random.choices([acg, chinese], weights=[70, 30])[0] if acg and chinese else files
+    text = "今天也要元气满满！"
+    if shutil.which("fortune"):
+        try:
+            result = subprocess.run(["fortune", *selected], capture_output=True,
+                                    encoding="utf-8", errors="replace", timeout=3)
+            if result.returncode == 0 and result.stdout.strip():
+                text = result.stdout.strip()
+        except (OSError, subprocess.TimeoutExpired):
+            pass
+    lines = wrap(text)
+    if not shutil.which("cowsay"):
+        print("\n".join(lines))
+        return
+    # cowsay measures bytes, not display cells. Render ASCII stand-ins and then
+    # replace them with equal-cell-width Unicode text, leaving the cow untouched.
+    width = max(8, max(sum(cells(c) for c in line) for line in lines))
+    tokens = [f"Q{index:06d}Q".ljust(width, "Q") for index in range(len(lines))]
+    piano = Path.home() / ".cows/piano.cow"
+    if not piano.is_file():
+        # stow also makes the repository's piano.cow available here.
+        piano = Path.home() / "piano.cow"
+    args = ["cowsay", "-n"]
+    if piano.is_file():
+        args += ["-f", str(piano)]
+    try:
+        result = subprocess.run(args, input="\n".join(tokens) + "\n", capture_output=True,
+                                encoding="utf-8", errors="replace", timeout=3)
+        if result.returncode:
+            raise OSError("cowsay failed")
+        output = result.stdout
+        for token, line in zip(tokens, lines):
+            output = output.replace(token, line + " " * (width - sum(cells(c) for c in line)), 1)
+        sys.stdout.write(output)
+    except (OSError, subprocess.TimeoutExpired):
+        print("\n".join(lines))
+
+
+if __name__ == "__main__":
+    main()

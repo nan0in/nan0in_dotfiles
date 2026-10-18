@@ -1,0 +1,33 @@
+# 文件操作快捷键；其余 Yazi 默认快捷键保持不变，退出使用 q。
+# 原生拖放需要 kitty >= 0.47.1；拖入当前目录时选择 Copy / Move 区域。
+
+[[mgr.prepend_keymap]]
+on = "<C-x>"
+run = "yank --cut"
+desc = "剪切选中文件（进入目标目录后粘贴）"
+
+[[mgr.prepend_keymap]]
+on = "<C-c>"
+run = "yank"
+desc = "复制选中文件"
+
+[[mgr.prepend_keymap]]
+on = "<C-v>"
+run = "paste"
+desc = "粘贴文件（不强制覆盖同名文件）"
+
+[[mgr.prepend_keymap]]
+on = "<F2>"
+run = "rename --cursor=before_ext"
+desc = "修改文件名（支持多选批量重命名）"
+
+[[mgr.prepend_keymap]]
+on = "<F4>"
+run = 'shell --block -- ${EDITOR:-nvim} %s'
+desc = "使用编辑器修改选中文件"
+
+[[mgr.prepend_keymap]]
+on = "<C-n>"
+for = "linux"
+run = 'shell --orphan -- kitty --directory %d1 yazi'
+desc = "打开第二个 Yazi 窗口（可在两窗口间拖放）"

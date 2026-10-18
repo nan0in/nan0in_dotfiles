@@ -171,6 +171,40 @@ sudo pacman -S eza zoxide
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
+#### 启动语录（中文 / 二次元，离线）
+
+`home/` 包包含 `~/.local/bin/shell-quote` 和
+`~/.local/share/fortunes/hitokoto/`。安装或重新 stow `home` 后，新交互式
+zsh 启动时使用本地语录，保留 piano 字符画、fastfetch 和 lolcat；不发起网络请求。
+需要 Python 3，以及上面的 `fortune-mod cowsay lolcat fastfetch`。
+
+在 zsh 中直接运行 `fortune` 也默认抽取用户本地的五类句库；显式传入参数时
+保持系统 fortune 的行为（例如 `fortune /usr/share/fortune/computers`）。
+
+原系统 `/usr/share/fortune` 的 **45 组文库**也完整保存在
+`~/.local/share/fortunes/legacy/`（含原始文本、索引、`COPYING.txt` 和校验清单），
+不覆盖或删除系统原文件。使用 `fortune ~/.local/share/fortunes/legacy` 可抽取旧文库，
+新机器 stow `home` 后同样可用。旧文库沿用上游许可，不适用本仓库 MIT 许可。
+This product includes software developed by the University of California,
+Berkeley and its contributors.
+
+- 来源：[一言官方句库](https://github.com/hitokoto-osc/sentences-bundle)。
+- 默认 70% 动画 / 漫画 / 游戏，30% 中文文学 / 诗词。
+- 仅保留含中文、正文 2–60 字的短句，去重并保留作者 / 作品出处。
+- 按终端显示宽度换行，避免 cowsay 按 UTF-8 字节截断中文。
+- `upstream/` 保留原始 JSON；`manifest.json` 记录上游 commit、SHA-256 和数量。
+- 上游数据及转换结果按随附的 **AGPL-3.0** 许可提供，不适用本仓库的 MIT 许可。
+  原始句子的著作权说明见同目录 `UPSTREAM_README.md`；转换脚本源码随仓库提供。
+
+在仓库根目录更新句库（仅此步骤联网，需要 `strfile`）：
+
+```bash
+python3 scripts/update-hitokoto.py
+./install.sh stow home
+```
+
+缺少本地句库时回退到系统 fortune；缺少新脚本时保留原启动显示逻辑。
+
 ### 终端
 
 ```bash
@@ -431,4 +465,4 @@ cd ~/.local/src/ambxst && bash install.sh
 
 ## License
 
-MIT  
+MIT（第三方一言句库、转换数据和旧 fortune 文库除外，见上面的来源与许可说明）。

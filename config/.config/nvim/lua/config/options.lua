@@ -19,7 +19,7 @@ opt.pumheight = 10
 
 
 -- 设置列上限  
-opt.colorcolumn = "120"
+opt.colorcolumn = "180"
 
 -- 系统剪贴板支持
 opt.clipboard = "unnamedplus"
