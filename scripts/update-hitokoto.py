@@ -10,7 +10,7 @@ import tempfile
 import urllib.request
 
 ROOT = Path(__file__).resolve().parents[1]
-DEST = ROOT / "home/.local/share/fortunes/hitokoto"
+DEST = ROOT / "config/.config/fortune/hitokoto"
 REPO = "hitokoto-osc/sentences-bundle"
 CATEGORIES = {"a": "动画", "b": "漫画", "c": "游戏", "d": "文学", "i": "诗词"}
 

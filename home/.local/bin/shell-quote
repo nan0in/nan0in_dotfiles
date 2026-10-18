@@ -32,8 +32,8 @@ def wrap(text, width=42):
 
 
 def main():
-    data = Path(os.environ.get("XDG_DATA_HOME", str(Path.home() / ".local/share")))
-    directory = data / "fortunes/hitokoto"
+    config = Path(os.environ.get("XDG_CONFIG_HOME", str(Path.home() / ".config")))
+    directory = config / "fortune/hitokoto"
     files = [str(directory / key) for key in "abcdi"
              if (directory / key).is_file() and (directory / (key + ".dat")).is_file()]
     # Default: 70% ACG, 30% Chinese literature/poetry; fortune chooses within each group.

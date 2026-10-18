@@ -3,7 +3,7 @@
 [[ -d "$HOME/.cows" ]] && export COWPATH="$HOME/.cows${COWPATH:+:$COWPATH}"
 # 不带参数时使用用户本地句库；显式参数仍原样交给系统 fortune。
 fortune() {
-  local quote_dir="${XDG_DATA_HOME:-$HOME/.local/share}/fortunes/hitokoto"
+  local quote_dir="${XDG_CONFIG_HOME:-$HOME/.config}/fortune/hitokoto"
   local -a quote_files
   local category
   for category in a b c d i; do

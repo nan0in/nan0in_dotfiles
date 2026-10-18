@@ -173,8 +173,8 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 
 #### 启动语录（中文 / 二次元，离线）
 
-`home/` 包包含 `~/.local/bin/shell-quote` 和
-`~/.local/share/fortunes/hitokoto/`。安装或重新 stow `home` 后，新交互式
+`home/` 包包含 `~/.local/bin/shell-quote`；新旧文库统一由 `config/` 包管理，
+存放在 `~/.config/fortune/`。安装或重新 stow `home config` 后，新交互式
 zsh 启动时使用本地语录，保留 piano 字符画、fastfetch 和 lolcat；不发起网络请求。
 需要 Python 3，以及上面的 `fortune-mod cowsay lolcat fastfetch`。
 
@@ -182,9 +182,9 @@ zsh 启动时使用本地语录，保留 piano 字符画、fastfetch 和 lolcat�
 保持系统 fortune 的行为（例如 `fortune /usr/share/fortune/computers`）。
 
 原系统 `/usr/share/fortune` 的 **45 组文库**也完整保存在
-`~/.local/share/fortunes/legacy/`（含原始文本、索引、`COPYING.txt` 和校验清单），
-不覆盖或删除系统原文件。使用 `fortune ~/.local/share/fortunes/legacy` 可抽取旧文库，
-新机器 stow `home` 后同样可用。旧文库沿用上游许可，不适用本仓库 MIT 许可。
+`~/.config/fortune/legacy/`（含原始文本、索引、`COPYING.txt` 和校验清单），
+不覆盖或删除系统原文件。使用 `fortune ~/.config/fortune/legacy` 可抽取旧文库，
+新机器 stow `home config` 后同样可用。旧文库沿用上游许可，不适用本仓库 MIT 许可。
 This product includes software developed by the University of California,
 Berkeley and its contributors.
 
@@ -200,7 +200,7 @@ Berkeley and its contributors.
 
 ```bash
 python3 scripts/update-hitokoto.py
-./install.sh stow home
+./install.sh stow home config
 ```
 
 缺少本地句库时回退到系统 fortune；缺少新脚本时保留原启动显示逻辑。
