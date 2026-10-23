@@ -13386,16 +13386,6 @@ detected</source>
         <translation>錄電腦聲音</translation>
     </message>
     <message>
-        <location filename="../Modules/Keystone/Tools/ToolsContent.qml" line="23"/>
-        <source>Calculator</source>
-        <translation>計算機</translation>
-    </message>
-    <message>
-        <location filename="../Modules/Keystone/Tools/ToolsContent.qml" line="28"/>
-        <source>Unit converter</source>
-        <translation>單位換算</translation>
-    </message>
-    <message>
         <location filename="../Modules/Keystone/Tools/ToolsContent.qml" line="33"/>
         <source>Screenshot</source>
         <translation>螢幕擷取</translation>

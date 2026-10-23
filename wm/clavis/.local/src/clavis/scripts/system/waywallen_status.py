@@ -34,14 +34,14 @@ def live_selection():
             '/org/waywallen/waywallen/Daemon', 'org.waywallen.waywallen.Daemon1', 'CurrentWallpaperId'
         ], text=True, stderr=subprocess.DEVNULL, timeout=2)
         fields = shlex.split(response)
-        return fields[1] if len(fields) == 2 and fields[0] == 's' and fields[1].isdigit() else ''
+        return fields[1] if len(fields) == 2 and fields[0] == 's' and fields[1] else ''
     except (OSError, ValueError, subprocess.SubprocessError):
         return ''
 
 
 def cached_preview(identifier, source, video):
     stat = source.stat()
-    key = hashlib.sha256(f'{identifier}\0{source}\0{stat.st_mtime_ns}\0{stat.st_size}'.encode()).hexdigest()[:32]
+    key = hashlib.sha256(f'v2\0{identifier}\0{source}\0{stat.st_mtime_ns}\0{stat.st_size}'.encode()).hexdigest()[:32]
     cache = Path(os.environ.get('CLAVIS_CACHE_HOME', str(Path(os.environ.get('XDG_CACHE_HOME', str(Path.home() / '.cache'))) / 'clavis'))) / 'waywallen-previews'
     if cache.is_symlink():
         raise ValueError('Linked preview cache preserved')
@@ -59,19 +59,28 @@ def cached_preview(identifier, source, video):
         if not shutil.which('ffmpeg'):
             # Existing still previews remain usable without the optional decoder.
             return str(source) if not video and source.suffix.lower() in {'.jpg', '.jpeg', '.png', '.webp'} else ''
-        for seek in ([1, 0] if video else [0]):
+        # Prefer a representative video frame over the first frame: many clips
+        # fade in from black, and that black frame would become the theme color.
+        if video:
+            attempts = [
+                ((), 'thumbnail=100,scale=512:512:force_original_aspect_ratio=decrease'),
+                (('-ss', '1'), 'scale=512:512:force_original_aspect_ratio=decrease'),
+                ((), 'scale=512:512:force_original_aspect_ratio=decrease'),
+            ]
+        else:
+            attempts = [((), 'scale=512:512:force_original_aspect_ratio=decrease')]
+        for seek, filter_spec in attempts:
             with tempfile.TemporaryDirectory(prefix='.frame-', dir=cache) as temporary:
                 output = Path(temporary) / 'preview.png'
                 command = ['ffmpeg', '-nostdin', '-hide_banner', '-loglevel', 'error',
                            '-protocol_whitelist', 'file,pipe', '-threads', '1']
-                if seek:
-                    command += ['-ss', str(seek)]
+                command += list(seek)
                 command += ['-i', str(source), '-an', '-sn', '-dn', '-map', '0:v:0',
-                            '-vf', 'scale=512:512:force_original_aspect_ratio=decrease',
+                            '-vf', filter_spec,
                             '-frames:v', '1', '-threads', '1', '-filter_threads', '1',
                             '-update', '1', str(output)]
                 try:
-                    result = subprocess.run(command, capture_output=True, timeout=12)
+                    result = subprocess.run(command, capture_output=True, timeout=20)
                     if result.returncode == 0 and output.is_file() and output.stat().st_size > 8:
                         os.chmod(output, 0o600)
                         os.replace(output, target)
@@ -95,7 +104,18 @@ def item_preview(identifier, row):
     if not media.is_absolute():
         media = base / media
     directory = media if media.is_dir() else media.parent
+    is_image = media.is_file() and media.suffix.lower() in IMAGES
+    is_video = media.is_file() and media.suffix.lower() in VIDEOS
+    # The wallpaper itself is the authoritative color source. Database and
+    # project previews can be cropped, letterboxed, or captured from a different
+    # frame, so they are fallbacks rather than the first choice.
+    if is_video:
+        path = cached_preview(identifier, media, True)
+        if path:
+            return dict(title=name, previewPath=path, previewState='ready', previewSource='video-frame', wallpaperId=str(identifier))
     candidates = []
+    if is_image:
+        candidates.append((media, 'image'))
     if preview:
         candidate = Path(preview)
         candidates.append((candidate if candidate.is_absolute() else base / candidate, 'database-preview'))
@@ -109,17 +129,11 @@ def item_preview(identifier, row):
             pass
     for suffix in ['jpg', 'png', 'gif', 'webp', 'jpeg']:
         candidates.append((directory / ('preview.' + suffix), 'project-preview'))
-    if media.suffix.lower() in IMAGES:
-        candidates.append((media, 'image'))
     for candidate, origin in candidates:
         if candidate.is_file() and candidate.suffix.lower() in IMAGES:
             path = cached_preview(identifier, candidate, False)
             if path:
                 return dict(title=name, previewPath=path, previewState='ready', previewSource=origin, wallpaperId=str(identifier))
-    if media.is_file() and media.suffix.lower() in VIDEOS:
-        path = cached_preview(identifier, media, True)
-        if path:
-            return dict(title=name, previewPath=path, previewState='ready', previewSource='video-frame', wallpaperId=str(identifier))
     return dict(title=name, previewPath='', previewState='unavailable', previewSource='', wallpaperId=str(identifier))
 
 

@@ -88,6 +88,43 @@ trap 'exit 130' INT
 trap 'exit 143' HUP TERM
 runtime_config="$runtime_dir/config.toml"
 
+# Material You's first source color is the most dominant one. On dark images
+# that is often a near-black background, which makes the whole theme look
+# unrelated to the visible wallpaper. When the dominant color is both dark and
+# muted, prefer the lightest extracted color instead; it usually matches the
+# subject or highlight users read as the wallpaper's main color.
+source_args=(--source-color-index 0)
+if [[ -n "$image_path" ]]; then
+    prefer=${CLAVIS_MATUGEN_PREFER:-auto}
+    case "$prefer" in
+        auto)
+            first=$(matugen image "$image_path" --show-source-colors 2>/dev/null | head -n1 || true)
+            if [[ "$first" =~ ^#[0-9a-fA-F]{6}$ ]]; then
+                read -r luminance saturation < <(python3 -c '
+import colorsys, sys
+h = sys.argv[1].lstrip("#")
+r, g, b = (int(h[i:i + 2], 16) / 255 for i in (0, 2, 4))
+print(f"{0.2126 * r + 0.7152 * g + 0.0722 * b:.4f} {colorsys.rgb_to_hsv(r, g, b)[1]:.4f}")
+' "$first")
+                if [[ -n "$luminance" && -n "$saturation" ]] &&
+                    awk -v l="$luminance" -v s="$saturation" 'BEGIN { exit !(l < 0.18 && s < 0.70) }'; then
+                    source_args=(--prefer lightness)
+                fi
+            fi
+            ;;
+        dominant)
+            source_args=(--source-color-index 0)
+            ;;
+        saturation|lightness|value|darkness|less-saturation)
+            source_args=(--prefer "$prefer")
+            ;;
+        *)
+            printf 'Unknown CLAVIS_MATUGEN_PREFER value: %s\n' "$prefer" >&2
+            exit 2
+            ;;
+    esac
+fi
+
 run_template() {
     local entry=$1 output
     {
@@ -101,7 +138,7 @@ run_template() {
     local common_args=(--mode "$mode" --type "$scheme" --config "$runtime_config")
     if [[ "$dry_run" == true ]]; then common_args+=(--dry-run); fi
     if [[ -n "$image_path" ]]; then
-        matugen --source-color-index 0 image "$image_path" "${common_args[@]}" || return
+        matugen "${source_args[@]}" image "$image_path" "${common_args[@]}" || return
     else
         matugen color hex "$source_color" "${common_args[@]}" || return
     fi

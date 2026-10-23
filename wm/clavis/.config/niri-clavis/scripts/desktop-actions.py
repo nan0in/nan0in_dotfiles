@@ -6,6 +6,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import shutil
 import signal
 import subprocess
 import sys
@@ -94,14 +95,20 @@ def ocr():
     runtime = os.environ['XDG_RUNTIME_DIR']
     with tempfile.TemporaryDirectory(prefix='niri-ocr-', dir=runtime) as directory:
         image = Path(directory) / 'capture.png'
-        action('screenshot', '--path', image)
-        deadline = time.monotonic() + 120
-        while time.monotonic() < deadline:
-            if image.exists() and image.read_bytes().endswith(b'\x00\x00\x00\x00IEND\xaeB`\x82'):
-                break
-            time.sleep(.15)
+        if shutil.which('slurp') and shutil.which('grim'):
+            selection = subprocess.run(['slurp', '-d'], capture_output=True, text=True, timeout=120)
+            if selection.returncode != 0 or not selection.stdout.strip():
+                return  # Cancellation must release the lock immediately.
+            run('grim', '-g', selection.stdout.strip(), image, timeout=15)
         else:
-            return
+            action('screenshot', '--path', image)
+            deadline = time.monotonic() + 45
+            while time.monotonic() < deadline:
+                if image.exists() and image.read_bytes().endswith(b'\x00\x00\x00\x00IEND\xaeB`\x82'):
+                    break
+                time.sleep(.15)
+            else:
+                return
         result = subprocess.check_output(
             ['tesseract', str(image), 'stdout', '-l', 'chi_sim+eng'],
             text=True, stderr=subprocess.PIPE, timeout=90)

@@ -18,16 +18,6 @@ Item {
     readonly property int crossExtent: 128
     property var toolsModel: [
         {
-            "action": "calculator",
-            "icon": "calculate",
-            "tip": qsTr("Calculator")
-        },
-        {
-            "action": "converter",
-            "icon": "swap_horiz",
-            "tip": qsTr("Unit converter")
-        },
-        {
             "action": "screenshot",
             "icon": "screenshot_region",
             "tip": qsTr("Screenshot")

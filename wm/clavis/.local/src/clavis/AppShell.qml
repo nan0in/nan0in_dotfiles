@@ -256,6 +256,14 @@ Item {
             return sessionLocker.secure;
         }
 
+        function isPresented(): bool {
+            return sessionLocker.presented;
+        }
+
+        function redraw(): void {
+            sessionLocker.redraw();
+        }
+
         function cancelPending(): bool {
             return sessionLocker.cancelPending();
         }

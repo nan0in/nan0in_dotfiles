@@ -409,3 +409,37 @@ Qt 翻译目录编译、已有 i18n_manager_tests 1/1、scoped check 均通过�
 2 个 QML 文件有 **1 条 advisory warning**，日志：
 `/home/nan0in/.local/state/clavis/waywallen-colors-20261023-010908/quality/qml-lint.log`。
 仅刷新 Clavis，Niri 和已打开应用未重启；配置和修复前源码备份位于 `/home/nan0in/.local/state/clavis/waywallen-colors-20261023-010908/before/`。
+
+## 挂起红屏、取色/OCR、Launcher 换算与 Waywallen 取色
+
+锁屏：`LockSurface` 先提交纯色底色，避免 niri 在锁表面尚无 buffer 时露出
+`CLEAR_COLOR_LOCKED` 红底；`Lock` 增加 presentation 跟踪、`isPresented`/`redraw`
+IPC，`lock.py` 在 secure 后等待 presentation，新增 `--resume`，swayidle 增加
+`after-resume`，Shell 启动时读取 `LockedHint` 并在会话仍锁定时重新获取锁。
+已验证：新 QML 加载无 `lockedHintProcess` 错误，`LockSurface` 组件可创建为
+`WlSessionLockSurface`，presentation 状态在 `notePresented` 后为 true、`redraw`
+后复位并递增 revision，`lock.py --sleep` 的 secure/presentation 控制流及
+`--resume` 两次 redraw 通过 fake IPC。真实挂起→唤醒→输入密码仍待用户验收，
+未在 `wrong.md` 划掉该项。
+
+取色/OCR：取色器改用 niri 原生 `niri msg -j pick-color`，实测 Keystone 完整路径
+取到 `#10101a`，剪贴板与“取色器 / 已复制到剪贴板: #10101a”通知均正确；OCR/二维码
+改用 `slurp` + `grim`，取消立即返回，保留 niri 截图 UI 作为缺失依赖时的回退，并支持
+`--image`。合成文字与二维码的 `--image` 识别通过，OCR 端到端剪贴板/通知通过。
+计算器与单位换算已从拱心工具模型和 `desktop_tools.py` 移除，launcher 的
+`/calc`、`/convert`、`/unit`、`/units`、`/conversion` 已由真实 IPC 验证，未知命令
+`/unitx` 返回 `INVALID_COMMAND`；qalc 实测 `1 km to m` → `1000 m`、`10 kg to lb`
+→ `approx. 22 lb`。
+
+Waywallen：取色候选优先实际图片/视频帧，数据库/项目预览降为回退；视频改用
+`thumbnail=100` 选取代表帧，缓存键升级避免复用旧黑帧。Matugen 在源色亮度 < 0.18
+且饱和度 < 0.70 时使用 `--prefer lightness`，否则保留 dominant index 0，并支持
+`CLAVIS_MATUGEN_PREFER` 覆盖。实测 11546 图片主色 `#e7c26c`（此前为暗紫）、1418
+视频主色 `#f3b2e3`、11538 保持 `#d7bafb`；真实切换 1418 后主题变粉，已恢复 11544
+并确认主色回到 `#ffb77c`。
+
+检查：相关 QML 经 `qmlformat` 与 `qmllint` 通过（退出码 0；22 条 advisory
+warnings，主要是既有的 `unqualified` 与动态颜色属性触发的 `missing-property`）；
+`bash -n`、Python `py_compile` 通过；`generate_matugen_colors.sh` 的独立生成（临时
+XDG 目录、仅 quickshell 模板）通过；`waywallen_status.py` 图片/视频预览生成通过；
+`lock.py` fake IPC 集成通过。未新增测试，未重启 Niri 或已打开应用。

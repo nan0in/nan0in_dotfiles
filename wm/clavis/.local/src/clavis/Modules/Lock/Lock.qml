@@ -1,5 +1,6 @@
 import QtQuick
 import Quickshell
+import Quickshell.Io
 import Quickshell.Services.Pam
 import Quickshell.Wayland
 import qs.Common
@@ -10,22 +11,13 @@ Scope {
 
     readonly property bool active: sessionLocked || capturePending
     readonly property bool secure: sessionLock.secure
+    readonly property bool presented: active && Object.keys(presentedScreens).length > 0
     property bool sessionLocked: false
     property bool capturePending: false
     property int activeCaptureRequestId: 0
     property string sessionStyle: "default"
-
-    Binding {
-        target: WindowPreviewService
-        property: "suspended"
-        value: root.active
-    }
-
-    Binding {
-        target: WidgetState
-        property: "sessionLocked"
-        value: root.active
-    }
+    property var presentedScreens: ({})
+    property int presentationRevision: 0
 
     signal unlocked
     signal secured
@@ -35,26 +27,56 @@ Scope {
         // the native state after our operations, not only its notifications.
         sessionLocked = sessionLock.locked;
     }
-    Component.onCompleted: Qt.callLater(root.syncSessionLock)
+
+    function notePresented(screenName) {
+        if (!active)
+            return;
+
+        const next = Object.assign({}, presentedScreens);
+        next[screenName || "default"] = true;
+        presentedScreens = next;
+    }
+
+    function redraw() {
+        if (!active)
+            return;
+
+        // Resume can lose the committed lock buffer. Reset the presentation
+        // marker and dirty the scene twice so the compositor gets a new frame.
+        presentedScreens = ({});
+        presentationRevision++;
+        Qt.callLater(() => {
+            if (active)
+                presentationRevision++;
+        });
+    }
+
+    function isPresented() {
+        return presented;
+    }
 
     function open(skipCapture = false) {
         if (sessionLock.locked)
             return "ALREADY_LOCKED";
+
         if (capturePending) {
             if (skipCapture) {
                 preLockCapture.cancel();
                 preLockCapture.clear();
                 activeCaptureRequestId = 0;
-                Qt.callLater(() => root.finishCapture(0));
+                Qt.callLater(() => {
+                    return root.finishCapture(0);
+                });
             }
             return "ALREADY_LOCKED";
         }
-
         sessionStyle = PersonalizationConfig.lockScreenStyle;
         internalContext.authRevealed = false;
         internalContext.currentText = "";
         internalContext.unlockInProgress = false;
         internalContext.showFailure = false;
+        presentedScreens = ({});
+        presentationRevision++;
         capturePending = true;
         WidgetState.closeAllPopups();
         ControlCenterService.close();
@@ -64,7 +86,9 @@ Scope {
             preLockCapture.clear();
             // Sleep must not wait for desktop capture on powering-down outputs.
             activeCaptureRequestId = 0;
-            Qt.callLater(() => root.finishCapture(0));
+            Qt.callLater(() => {
+                return root.finishCapture(0);
+            });
         } else {
             activeCaptureRequestId = preLockCapture.capture();
         }
@@ -79,6 +103,7 @@ Scope {
     function cancelPending() {
         if (sessionLock.locked)
             return false;
+
         capturePending = false;
         activeCaptureRequestId = 0;
         preLockCapture.cancel();
@@ -95,7 +120,18 @@ Scope {
         capturePending = false;
     }
 
+    Component.onCompleted: {
+        Qt.callLater(root.syncSessionLock);
+        const sessionId = Quickshell.env("XDG_SESSION_ID");
+        if (sessionId)
+            Qt.callLater(() => {
+                return lockedHintProcess.running = true;
+            });
+    }
     onActiveChanged: {
+        if (!root.active)
+            presentedScreens = ({});
+
         SystemIdentityService.setUptimeConsumer("lock-screen", root.active);
         SystemMonitorService.setConsumerModules("lock-screen", root.active ? ["cpu", "memory", "disk"] : []);
     }
@@ -104,6 +140,40 @@ Scope {
         preLockCapture.clear();
         SystemIdentityService.setUptimeConsumer("lock-screen", false);
         SystemMonitorService.clearConsumer("lock-screen");
+    }
+
+    // The delayed callback resolves this id only after the component is
+    // complete, so it is safe even when the Process is declared later.
+    Process {
+        id: lockedHintProcess
+
+        // A shell restart must not leave niri showing its red lock backdrop.
+        // If logind says the session is still locked, re-acquire the lock.
+        command: ["loginctl", "show-session", Quickshell.env("XDG_SESSION_ID") || "", "-p", "LockedHint",
+            "--value"]
+
+        stdout: StdioCollector {
+            id: lockedHintOutput
+
+            onStreamFinished: {
+                if (!root.sessionLocked && !root.capturePending && lockedHintOutput.text.trim() === "yes")
+                    Qt.callLater(() => {
+                        return root.open(true);
+                    });
+            }
+        }
+    }
+
+    Binding {
+        target: WindowPreviewService
+        property: "suspended"
+        value: root.active
+    }
+
+    Binding {
+        target: WidgetState
+        property: "sessionLocked"
+        value: root.active
     }
 
     PreLockCapture {
@@ -135,6 +205,7 @@ Scope {
         function finishUnlock() {
             if (!sessionLock.locked)
                 return;
+
             sessionLock.locked = false;
             root.syncSessionLock();
             root.unlocked();
@@ -181,6 +252,7 @@ Scope {
 
         LockSurface {
             lock: sessionLock
+            lockRoot: root
             context: internalContext
             snapshotProvider: preLockCapture
             style: root.sessionStyle

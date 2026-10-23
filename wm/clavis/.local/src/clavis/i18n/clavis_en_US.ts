@@ -13397,16 +13397,6 @@ detected</translation>
         <translation>Record system audio</translation>
     </message>
     <message>
-        <location filename="../Modules/Keystone/Tools/ToolsContent.qml" line="23"/>
-        <source>Calculator</source>
-        <translation>Calculator</translation>
-    </message>
-    <message>
-        <location filename="../Modules/Keystone/Tools/ToolsContent.qml" line="28"/>
-        <source>Unit converter</source>
-        <translation>Unit converter</translation>
-    </message>
-    <message>
         <location filename="../Modules/Keystone/Tools/ToolsContent.qml" line="33"/>
         <source>Screenshot</source>
         <translation>Screenshot</translation>

@@ -128,12 +128,28 @@ def watch(owner):
     return 0
 
 
+def wait_presented(owner, timeout=2):
+    if ipc('isPresented', owner=owner) == 'true':
+        return True
+    # The compositor is secure, but its surface may not have committed a frame.
+    ipc('redraw', owner=owner)
+    deadline = time.monotonic() + timeout
+    while time.monotonic() < deadline:
+        if ipc('isPresented', timeout=min(0.4, max(0.01, deadline - time.monotonic())),
+               owner=owner) == 'true':
+            return True
+        time.sleep(0.1)
+    return False
+
+
 def lock(for_sleep=False):
     if swaylock_running():
         return 0
     owner = session_owner()
     if ipc('isSecure', owner=owner) == 'true':
         start_watch(owner)
+        if not wait_presented(owner, 1):
+            print('Clavis lock is secure but its surface has not presented yet.', file=sys.stderr)
         return 0
     # Sleep bypasses screenshot capture, avoiding a slow/dead powered-down output.
     requested = ipc('openForSleep' if for_sleep else 'open', owner=owner)
@@ -142,7 +158,14 @@ def lock(for_sleep=False):
         while time.monotonic() < deadline:
             if ipc('isSecure', timeout=min(0.4, max(0.01, deadline - time.monotonic())), owner=owner) == 'true':
                 start_watch(owner)
-                return 0
+                # niri is secure as soon as it has a lock surface, but the
+                # surface can still be waiting for its first buffer. Wait for
+                # presentation before returning so suspend does not expose the
+                # compositor's red lock backdrop.
+                if wait_presented(owner, 2):
+                    return 0
+                print('Clavis lock is secure but its surface has not presented yet.', file=sys.stderr)
+                return 1
             time.sleep(0.1)
         cancelled = ipc('cancelPending', owner=owner)
         if ipc('isSecure', owner=owner) == 'true':
@@ -160,11 +183,19 @@ def main():
     modes = parser.add_mutually_exclusive_group()
     modes.add_argument('--sleep', action='store_true', help='lock without desktop capture')
     modes.add_argument('--recover', action='store_true', help='use the independent password locker')
+    modes.add_argument('--resume', action='store_true', help='redraw an existing lock after resume')
     modes.add_argument('--watch', nargs=3, metavar=('ID', 'PID', 'TOKEN'), help=argparse.SUPPRESS)
     args = parser.parse_args()
     if not all(os.environ.get(name) for name in ('XDG_RUNTIME_DIR', 'NIRI_SOCKET', 'WAYLAND_DISPLAY')):
         print('Lock entry requires a niri Wayland session.', file=sys.stderr)
         return 1
+    if args.resume:
+        owner = session_owner()
+        ipc('redraw', owner=owner)
+        # Give the compositor a moment to finish reinitializing output buffers.
+        time.sleep(1)
+        ipc('redraw', owner=owner)
+        return 0
     if args.watch:
         instance, pid, token = args.watch
         return watch({'id': instance, 'pid': int(pid), 'token': token})

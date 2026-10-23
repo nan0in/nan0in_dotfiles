@@ -9,7 +9,7 @@ var entries = [
     { id: "mode.commands", slashName: "commands", title: "Commands", icon: "terminal", kind: "mode", value: "commands" },
     { id: "tool.emoji", slashName: "emoji", title: "Emoji", icon: "sentiment_satisfied", kind: "tool", value: "emoji" },
     { id: "tool.web", slashName: "search", aliases: ["web"], title: "Web search", icon: "travel_explore", kind: "tool", value: "web" },
-    { id: "tool.calculator", slashName: "calc", title: "Calculator", icon: "calculate", kind: "tool", value: "calculator" },
+    { id: "tool.calculator", slashName: "calc", aliases: ["convert", "unit", "units", "conversion"], title: "Calculator", icon: "calculate", kind: "tool", value: "calculator" },
     { id: "tool.currency", slashName: "fx", aliases: ["currency"], title: "Currency", icon: "currency_exchange", kind: "tool", value: "currency" },
     { id: "tool.time", slashName: "time", aliases: ["tz"], title: "Time zone", icon: "schedule", kind: "tool", value: "time" },
     { id: "theme.light", slashName: "light", title: "Light theme", icon: "light_mode", kind: "action" },
