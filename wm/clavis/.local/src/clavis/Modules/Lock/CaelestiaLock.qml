@@ -41,12 +41,18 @@ Item {
         if (startupStarted || !snapshotResolved)
             return;
 
-        if (snapshotResult && snapshotImage.status !== Image.Ready && snapshotImage.status !== Image.Error)
+        // Only a genuinely loading image should hold back the lock UI. A null
+        // source (Image.Null) or a failed decode must not leave the compact
+        // lock icon on screen forever.
+        if (snapshotResult && snapshotImage.status === Image.Loading)
             return;
 
         if (snapshotResult && snapshotImage.status === Image.Error)
             console.warn("Unable to display pre-lock snapshot for output " + root.screen.name);
 
+        console.debug("Caelestia lock startup for " + (root.screen && root.screen.name ? root.screen.name :
+                                                                                        "unknown") + " (snapshot="
+                      + (snapshotResult ? "yes" : "no") + ", status=" + snapshotImage.status + ")");
         startupStarted = true;
         startupAnim.start();
     }
@@ -204,6 +210,24 @@ Item {
                     easing.bezierCurve: Appearance.animation.expressiveDefaultSpatial.bezierCurve
                 }
             }
+        }
+    }
+
+    // A pre-lock snapshot is decorative. Never let a missing, delayed, or
+    // broken snapshot leave the lock at the compact icon with no password
+    // field, especially after resume when outputs were powered off.
+    Timer {
+        interval: 1200
+        running: !root.startupStarted && !root.isExiting
+        repeat: false
+        onTriggered: {
+            if (root.startupStarted)
+                return;
+            console.warn("Pre-lock snapshot did not resolve for output " + (root.screen && root.screen.name
+                                                                           ? root.screen.name : "unknown")
+                         + "; revealing lock content");
+            root.startupStarted = true;
+            root.startupAnim.start();
         }
     }
 
