@@ -440,7 +440,7 @@ git clone https://github.com/nan0in/nan0in-ambxst ~/.local/src/ambxst
 cd ~/.local/src/ambxst && bash install.sh
 ```
 
-dotfiles 内置源码与 fork 的 `nan0in` 分支保持同步；不 clone fork 也能直接安装。
+dotfiles 内置源码与 fork 的 `nan0in` 分支核心源码保持同步；不 clone fork 也能直接安装。
 
 ### 预设切换
 
