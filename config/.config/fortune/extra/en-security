@@ -1,0 +1,281 @@
+acolyte n. obs.
+[TMRC] An OSU privileged enough to submit data and programs to a member of the priesthood.
+-- Jargon File 4.2.2 (definition excerpt)
+%
+AIDS /aydz/ n.
+Short for A* Infected Disk Syndrome (`A*' is a glob pattern that matches, but is not limited to, Apple or Amiga), this condition is quite often the result of practicing unsafe SEX. See virus, worm, Trojan horse, virgin.
+-- Jargon File 4.2.2 (definition excerpt)
+%
+channel op /chan'l op/ n.
+[IRC] Someone who is endowed with privileges on a particular IRC channel; commonly abbreviated `chanop' or `CHOP' or just `op' (as of 2000 these short forms have almost crowded out the parent usage). These privileges include the right to kick users, to change various status bits, and to make others into CHOPs.
+-- Jargon File 4.2.2 (definition excerpt)
+%
+copyleft /kop'ee-left/ n.
+[play on `copyright'] 1. The copyright notice (`General Public License') carried by GNU EMACS and other Free Software Foundation software, granting reuse and reproduction rights to all comers (but see also General Public Virus). 2. By extension, any copyright notice intended to achieve similar aims.
+-- Jargon File 4.2.2 (definition excerpt)
+%
+courier
+[BBS & cracker cultures] A person who distributes newly cracked warez, as opposed to a server who makes them available for download or a leech who merely downloads them. Hackers recognize this term but don't use it themselves, as the act is not part of their culture. See also warez d00dz, cracker, elite.
+-- Jargon File 4.2.2 (definition excerpt)
+%
+cracker n.
+One who breaks security on a system. Coined ca. 1985 by hackers in defense against journalistic misuse of hacker (q.v., sense 8). An earlier attempt to establish `worm' in this sense around 1981-82 on Usenet was largely a failure.
+-- Jargon File 4.2.2 (definition excerpt)
+%
+crayola books n.
+The rainbow series of National Computer Security Center (NCSC) computer security standards (see Orange Book). Usage: humorous and/or disparaging.
+-- Jargon File 4.2.2 (definition excerpt)
+%
+dark-side hacker n.
+A criminal or malicious hacker; a cracker. From George Lucas's Darth Vader, "seduced by the dark side of the Force". The implication that hackers form a sort of elite of technological Jedi Knights is intended. Oppose samurai.
+-- Jargon File 4.2.2 (definition excerpt)
+%
+DEC Wars n.
+A 1983 Usenet posting by Alan Hastings and Steve Tarr spoofing the "Star Wars" movies in hackish terms. Some years later, ESR (disappointed by Hastings and Tarr's failure to exploit a great premise more thoroughly) posted a 3-times-longer complete rewrite called Unix WARS; the two are often confused.
+-- Jargon File 4.2.2 (definition excerpt)
+%
+elder days n.
+The heroic age of hackerdom (roughly, pre-1980); the era of the PDP-10, TECO, ITS, and the ARPANET. This term has been rather consciously adopted from J. R. R. Tolkien's fantasy epic "The Lord of the Rings". Compare Iron Age; see also elvish and Great Worm.
+-- Jargon File 4.2.2 (definition excerpt)
+%
+flytrap n.
+[rare] See firewall machine.
+-- Jargon File 4.2.2 (definition excerpt)
+%
+go root vi.
+[Unix; common] To temporarily enter root mode in order to perform a privileged operation. This use is deprecated in Australia, where v. `root' is a synonym for "fuck".
+-- Jargon File 4.2.2 (definition excerpt)
+%
+GPV /G-P-V/ n.
+Abbrev. for General Public Virus in widespread use.
+-- Jargon File 4.2.2 (definition excerpt)
+%
+hacker ethic n.
+1. The belief that information-sharing is a powerful positive good, and that it is an ethical duty of hackers to share their expertise by writing open-source and facilitating access to information and to computing resources wherever possible. 2. The belief that system-cracking for fun and exploration is ethically OK as long as the cracker commits no theft, vandalism, or breach of confidentiality.
+-- Jargon File 4.2.2 (definition excerpt)
+%
+ice n.
+[coined by Usenetter Tom Maddox, popularized by William Gibson's cyberpunk SF novels: a contrived acronym for `Intrusion Countermeasure Electronics'] Security software (in Gibson's novels, software that responds to intrusion by attempting to immobilize or even literally kill the intruder). Hence, `icebreaker': a program designed for cracking security on a system.
+-- Jargon File 4.2.2 (definition excerpt)
+%
+leapfrog attack n.
+Use of userid and password information obtained illicitly from one host (e.g., downloading a file of account IDs and passwords, tapping TELNET, etc.) to compromise another host. Also, the act of TELNETting through one or more hosts in order to confuse a trace (a standard cracker procedure).
+-- Jargon File 4.2.2 (definition excerpt)
+%
+logic bomb n.
+Code surreptitiously inserted into an application or OS that causes it to perform some destructive or security-compromising activity whenever specified conditions are met. Compare back door.
+-- Jargon File 4.2.2 (definition excerpt)
+%
+mockingbird n.
+Software that intercepts communications (especially login transactions) between users and hosts and provides system-like responses to the users while saving their responses (especially account IDs and passwords). A special case of Trojan horse.
+-- Jargon File 4.2.2 (definition excerpt)
+%
+munching n.
+Exploration of security holes of someone else's computer for thrills, notoriety, or to annoy the system manager. Compare cracker. See also hacked off.
+-- Jargon File 4.2.2 (definition excerpt)
+%
+phage n.
+A program that modifies other programs or databases in unauthorized ways; esp. one that propagates a virus or Trojan horse. See also worm, mockingbird. The analogy, of course, is with phage viruses in biology.
+-- Jargon File 4.2.2 (definition excerpt)
+%
+phreaker /freek'r/ n.
+One who engages in phreaking. See also blue box.
+-- Jargon File 4.2.2 (definition excerpt)
+%
+poser n.
+A wannabee; not hacker slang, but used among crackers, phreaks and warez d00dz. Not as negative as lamer or leech. Probably derives from a similar usage among punk-rockers and metalheads, putting down those who "talk the talk but don't walk the walk".
+-- Jargon File 4.2.2 (definition excerpt)
+%
+rainbow series n.
+Any of several series of technical manuals distinguished by cover color. The original rainbow series was the NCSC security manuals (see Orange Book, crayola books); the term has also been commonly applied to the PostScript reference set (see Red Book, Green Book, Blue Book, White Book). Which books are meant by "`the' rainbow series" unqualified is thus dependent on one's local technical culture.
+-- Jargon File 4.2.2 (definition excerpt)
+%
+replicator n.
+Any construct that acts to produce copies of itself; this could be a living organism, an idea (see meme), a program (see quine, worm, wabbit, fork bomb, and virus), a pattern in a cellular automaton (see life, sense 1), or (speculatively) a robot or nanobot. It is even claimed by some that Unix and C are the symbiotic halves of an extremely successful replicator; see Unix conspiracy.
+-- Jargon File 4.2.2 (definition excerpt)
+%
+root mode n.
+Syn. with wizard mode or `wheel mode'. Like these, it is often generalized to describe privileged states in systems other than OSes.
+-- Jargon File 4.2.2 (definition excerpt)
+%
+salt n.
+A tiny bit of near-random data inserted where too much regularity would be undesirable; a data frob (sense 1). For example, the Unix crypt(3) man page mentions that "the salt string is used to perturb the DES algorithm in one of 4096 different ways."
+-- Jargon File 4.2.2 (definition excerpt)
+%
+sniff v.,n.
+1. To watch IP packets traversing a local network. Most often in the phrase `packet sniffer', a program for doing same. 2.Synonym for poll.
+-- Jargon File 4.2.2 (definition excerpt)
+%
+toast 1. n.
+Any completely inoperable system or component, esp. one that has just crashed and burned: "Uh, oh ... I think the serial board is toast." 2. vt. To cause a system to crash accidentally, especially in a manner that requires manual rebooting. "Rick just toasted the firewall machine again." Compare fried.
+-- Jargon File 4.2.2 (definition excerpt)
+%
+trap door n.
+(alt. `trapdoor') 1. Syn. back door -- a Bad Thing. 2. [techspeak] A `trap-door function' is one which is easy to compute but very difficult to compute the inverse of. Such functions are Good Things with important applications in cryptography, specifically in the construction of public-key cryptosystems.
+-- Jargon File 4.2.2 (definition excerpt)
+%
+Trojan horse n.
+[coined by MIT-hacker-turned-NSA-spook Dan Edwards] A malicious, security-breaking program that is disguised as something benign, such as a directory lister, archiver, game, or (in one notorious 1990 case on the Mac) a program to find and destroy viruses! See back door, virus, worm, phage, mockingbird.
+-- Jargon File 4.2.2 (definition excerpt)
+%
+Venus flytrap n.
+[after the insect-eating plant] See firewall machine.
+-- Jargon File 4.2.2 (definition excerpt)
+%
+wheel n.
+[from slang `big wheel' for a powerful person] A person who has an active wheel bit. "We need to find a wheel to unwedge the hung tape drives." (See wedged, sense 1.) The traditional name of security group zero in BSD (to which the major system-internal users like root belong) is `wheel'. Some vendors have expanded on this usage, modifying Unix so that only members of group `wheel' can go root.
+-- Jargon File 4.2.2 (definition excerpt)
+%
+wizard mode n.
+[from rogue] A special access mode of a program or system, usually passworded, that permits some users godlike privileges. Generally not used for operating systems themselves (`root mode' or `wheel mode' would be used instead). This term is often used with respect to games that have editable state.
+-- Jargon File 4.2.2 (definition excerpt)
+%
+As of next week, passwords will be entered in Morse code.
+[legacy/computers]
+%
+Multics is security spelled sideways.
+[legacy/computers]
+%
+New crypt.  See /usr/news/crypt.
+[legacy/computers]
+%
+Passwords are implemented as a result of insecurity.
+[legacy/computers]
+%
+Put no trust in cryptic comments.
+[legacy/computers]
+%
+Security check: INTRUDER ALERT!
+[legacy/computers]
+%
+Stinginess with privileges is kindness in disguise.
+		-- Guide to VAX/VMS Security, Sep. 1984
+[legacy/computers]
+%
+Your password is pitifully obvious.
+[legacy/computers]
+%
+We have a policy that we are not being hacked.
+		-- Lisa Kopp, Friendster rep, commenting on a security flaw
+       http://www.wired.com/wired/archive/12.06/dating_pr.html
+[legacy/computers]
+%
+The state of some commercial Un*x is more unsecure than any Linux box
+without a root password...
+	-- Bernd Eckenfels
+[legacy/linux]
+%
+Win95 is not a virus; a virus does something.
+	-- unknown source
+[legacy/linux]
+%
+Linux, the way to get rid of boot viruses
+	-- MaDsen Wikholm, mwikholm@at8.abo.fi
+[legacy/linux]
+%
+Be warned that typing \fBkillall \fIname\fP may not have the desired
+effect on non-Linux systems, especially when done by a privileged user.
+	-- From the killall manual page
+[legacy/linux]
+%
+Note that if I can get you to "su and say" something just by asking,
+you have a very serious security problem on your system and you should
+look into it.
+	-- Paul Vixie, vixie-cron 3.0.1 installation notes
+[legacy/linux]
+%
+DOS: n., A small annoying boot virus that causes random spontaneous system
+     crashes, usually just before saving a massive project.  Easily cured by
+     UNIX.  See also MS-DOS, IBM-DOS, DR-DOS.
+	-- David Vicker's .plan
+[legacy/linux]
+%
+The easiest way to get the root password is to become system admin.
+	-- Unknown source
+[legacy/linux]
+%
+RIP is irrelevant.  Spoofing is futile.  Your routes will be aggregated.
+	-- Alex Yuriev
+[legacy/linux]
+%
+Alan Cox wrote:
+>> On any procmail new enough not to be full of security holes you set
+>Brain on, Imeant majordomo of course 8)
+You got me worried there for a brief (very brief) moment :-).
+	-- Stephen R. van den Berg (AKA BuGless)
+[legacy/linux]
+%
+The first is to ensure your partner understands that nature has root
+privileges - nature doesn't have to make sense.
+	-- Telsa Gwynne
+[legacy/linux]
+%
+Remember: While root can do most everything, there are certain
+privileges that only a partner can grant.
+	-- Telsa Gwynne
+[legacy/linux]
+%
+"Actually, the only distribution of Linux I've ever used that passed the
+rootshell test out of the box (hit rootshell at the time the dist is
+released and see if you can break the OS with scripts from there) is
+Debian."
+		-- seen on the Linux security-audit mailing list
+[legacy/knghtbrd]
+%
+<Overfiend> xhost +localhost should only be done by people who would
+            paint their hostname and root password on an interstate
+            overpass.
+[legacy/knghtbrd]
+%
+<SilverStr> media ethics is an oxymoron, much like Jumbo Shrimp and
+            Microsoft Works.
+<MonkAway> not to mention NT Security
+[legacy/knghtbrd]
+%
+<rcw> those apparently-bacteria-like multicolor worms coming out of
+      microsoft's backorifice
+<rcw> that's the backoffice logo
+[legacy/knghtbrd]
+%
+Hi! I'm a .signature virus! Copy me into your ~/.signature to help me sprea=
+d!
+[legacy/knghtbrd]
+%
+Red Hat has recently released a Security Advisory (RHSA-1999:030-01)
+covering a buffer overflow in the vixie cron package.  Debian has
+discovered this bug two years ago and fixed it.  Therefore versions in
+both, the stable and the unstable, distributions of Debian are not
+vulnerable to this problem..
+[legacy/knghtbrd]
+%
+knghtbrd: there may be no spoon, but can you spot the vulnerability in
+eye_render_shiny_object.c?
+		-- rcw
+[legacy/knghtbrd]
+%
+<knghtbrd> If charging someone for violation of US crypto laws would get
+           you laughed out of court, just "investigate" them on hte charge
+           of TREASON!
+<knghtbrd> Tea, anyone?
+<Espy> I'd rather drown politicians instead of tea :)
+<stu> espy: politicians have gills, duh
+<Espy> weasels don't have gills
+[legacy/knghtbrd]
+%
+* Equivalent code is available from RSA Data Security, Inc.
+ * This code has been tested against that, and is equivalent,
+ * except that you don't need to include two pages of legalese
+ * with every copy.
+		-- public domain MD5 source
+[legacy/knghtbrd]
+%
+<Knghtbrd> I'd better put the incriminating stuff into code:  ahfuiovka
+           ikperoa edfr ade 9 enbuw ejasxleme ka iena df4mesa
+<Knghtbrd> If you can decrypt that, you're a better cryptographer than I
+           am.  =)
+[legacy/knghtbrd]
+%
+Well, you can implement a Perl peek() with unpack('P',...).  Once you
+have that, there's only security through obscurity.  :-)
+		-- Larry Wall in <199710161537.IAA07828@wall.org>
+[legacy/perl]

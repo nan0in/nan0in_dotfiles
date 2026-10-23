@@ -1,0 +1,24 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>Clavis Matugen 模板</title>
+<style>body{max-width:900px;margin:40px auto;padding:0 24px;background:#282a36;color:#f8f8f2;font:17px/1.7 sans-serif}a{color:#8be9fd}pre{padding:16px;background:#21222c;overflow:auto;border-radius:12px}code{font-family:monospace}h1,h2{color:#bd93f9}</style>
+<h1>Clavis Matugen 模板</h1>
+<p>主题设置决定颜色来源、强调色、亮暗模式和配色算法；高级页的模板决定把颜色写给哪些应用。这与 GTK／Qt 控件样式、字体不是一回事。</p>
+<h2>查看和编辑已有模板</h2><ol><li>设置 → 高级 → Matugen 模板，点击代码图标。</li><li>只读查看实际模板全文、输入路径、输出路径和生成后命令；查看不会生成文件或执行命令。</li><li>用户模板可用文件夹图标定位并在编辑器修改，再刷新模板。内置模板的定制建议另建用户模板，不直接改上游文件。</li></ol>
+<p>查看器限制为可读、非目录、256 KiB 以内的文件。输入或输出错误、读取失败仍会显示，关闭查看器不会删除模板。</p>
+<h2>新建一个模板</h2><p>例如创建 <code>example-colors.css</code>，内容：</p>
+<pre>:root {
+  --background: {{colors.surface.default.hex}};
+  --foreground: {{colors.on_surface.default.hex}};
+  --accent: {{colors.primary.default.hex}};
+}</pre>
+<ol><li>高级页点“添加”，ID 使用字母、数字、点、横线或下划线；不要使用内置模板 ID。</li><li>选模板源文件，并指定独立输出文件，例如 <code>~/.cache/clavis/example-colors.css</code>。输出是文件，不是目录。</li><li>先使用临时输出，检查生成颜色；确认后在目标应用中引用该文件。</li><li>需要自动重载时再填写生成后命令。它会执行命令，只填写你已检查的内容。</li></ol>
+<p>用户注册文件位于 Clavis 设置目录的 <code>matugen/config.toml</code>；添加器会检查 ID、路径、语法与生成有效性。模板源和生成输出是两个文件，勿指向同一文件，也不要未经备份直接指向个人配置。</p>
+<h2>GTK / Nautilus</h2>
+<p>内置 <code>gtk</code> 模板写入 <code>~/.config/gtk-4.0/gtk.css</code>，让 Nautilus 等 GTK4／libadwaita 应用跟随 Matugen 配色。该文件会被整份生成覆盖；首次启用前请备份原有内容。GTK4 只在应用启动时读取用户 CSS，切换主题后需要重新打开 Nautilus（可先执行 <code>nautilus -q</code> 退出后台服务）。</p>
+
+<h2>Nautilus 文件夹图标</h2>
+<p>内置 <code>icons</code> 模板把当前主色写到生成目录的 <code>clavis/icon-primary</code>，并维护继承 Tela 系列的 <code>Tela-Matugen</code> 图标主题 overlay，只替换文件夹图标里的蓝色强调色。应用图标和 symbolic 图标不变。当前图标主题必须是 Tela／Tela-dark／Tela-light；其他主题会被跳过，不会覆盖你的选择。切换配色后需重新打开 Nautilus。关闭模板会恢复之前的 Tela 主题并删除 overlay；同名但非 Clavis 管理的目录不会被覆盖。</p>
+<h2>关闭与恢复</h2><p>关闭模板只停止后续生成，不等于通用撤销文件写入。删除用户模板会保留已经生成的输出文件。</p>
+<ul><li>Kitty 内置模板使用独立 Matugen.conf 和受保护的主题选择器。关闭后只恢复它仍管理的选择器；你手动改过的主题优先。缺少原始快照时会报告错误，不虚构原配置。</li><li>当前个人 Yazi 目录链接到 dotfiles。Yazi 的隔离接入方式仍待确认，现有配置保持原样；不要把旧的直接覆盖视为已经获得通用回退能力。</li><li>GTK 内置模板直接管理 <code>~/.config/gtk-4.0/gtk.css</code>；关闭模板只停止后续写入，不会自动恢复旧文件。启用前请先备份。</li><li>其他自定义输出应在生成前自行备份，或写入独立文件由应用引用；查看器不会替你执行输出文件回滚。</li></ul>
+<h2>配色含义</h2><p>强调色是生成算法的来源色，最终界面颜色会按亮暗模式、对比度及方案变化，不保证与输入十六进制逐字相同。壁纸来源使用当前所选渲染器；Waywallen 使用预览图取色，而非实时采样视频每一帧。</p>
+<p>参考：<a href="https://github.com/InioX/matugen/wiki/Configuration">Matugen 模板语法与迁移说明</a>、<a href="https://github.com/material-foundation/material-color-utilities/blob/main/dev_guide/creating_color_scheme.md">Material 配色算法</a>。</p>
+</html>

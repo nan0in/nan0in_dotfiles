@@ -1,0 +1,9 @@
+{
+  "computing": {"weight": 25, "files": ["extra/en-computing"]},
+  "security": {"weight": 20, "files": ["extra/en-security"]},
+  "psychology": {"weight": 2, "files": ["extra/en-psychology"]},
+  "japanese": {"weight": 20, "files": ["extra/ja-kotowaza"]},
+  "acg": {"weight": 23, "files": ["hitokoto/a", "hitokoto/b", "hitokoto/c"]},
+  "chinese": {"weight": 5, "files": ["hitokoto/d", "hitokoto/i"]},
+  "legacy": {"weight": 5, "files": ["legacy/*"]}
+}

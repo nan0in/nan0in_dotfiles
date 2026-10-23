@@ -1,0 +1,49 @@
+{
+  "sources": {
+    "jargon.txt": {
+      "url": "https://www.gutenberg.org/ebooks/3008.txt.utf-8",
+      "sha256": "bd62c763d10add0e27547a43706379444ecfcbc5fce7aaa097a1798a2f5ba21a"
+    },
+    "epigrams.txt": {
+      "url": "https://raw.githubusercontent.com/JKirchartz/fortunes/8c337f35a3956acf0609f955b0c536920bd46f92/epigrams_in_programming",
+      "sha256": "415cd7e91a9b982cd776cba4a092da1f7a90591ba21c154500d9f0776085021a"
+    },
+    "jung.txt": {
+      "url": "https://raw.githubusercontent.com/JKirchartz/fortunes/8c337f35a3956acf0609f955b0c536920bd46f92/jung",
+      "sha256": "f895021567ff7343fed181f0a927d71397c180157500ee2605bb33c1c2ebaf97"
+    },
+    "fortunes-LICENSE": {
+      "url": "https://raw.githubusercontent.com/JKirchartz/fortunes/8c337f35a3956acf0609f955b0c536920bd46f92/LICENSE",
+      "sha256": "6b0382b16279f26ff69014300541967a356a666eb0b91b422f6862f6b7dad17e"
+    },
+    "fortunes-README.md": {
+      "url": "https://raw.githubusercontent.com/JKirchartz/fortunes/8c337f35a3956acf0609f955b0c536920bd46f92/README.md",
+      "sha256": "5b0b0b7bd7aa1c1e50c19d7002b8fec94d3492926735939b85148d91907c6dbf"
+    },
+    "kotowaza.json": {
+      "url": "https://raw.githubusercontent.com/sepTN/kotowaza/c6435b3e13937fbfb6d464410f68dccf76384264/data/kotowaza.json",
+      "sha256": "ffbb704668338c32aac88669a5e773f51e933f796f87340ac97f8a572e2f9ed7"
+    },
+    "kotowaza-LICENSE": {
+      "url": "https://raw.githubusercontent.com/sepTN/kotowaza/c6435b3e13937fbfb6d464410f68dccf76384264/LICENSE",
+      "sha256": "61128c53539d1d8bb57e3f6d0f20e99813218d9b3a3bba037892ab403d410080"
+    },
+    "kotowaza-README.md": {
+      "url": "https://raw.githubusercontent.com/sepTN/kotowaza/c6435b3e13937fbfb6d464410f68dccf76384264/README.md",
+      "sha256": "25e36006c37c6afdb5ea572814f28a7efd6b8443532e9aa09d4707c799c74a4c"
+    }
+  },
+  "counts": {
+    "en-computing": 812,
+    "en-security": 64,
+    "en-psychology": 12,
+    "ja-kotowaza": 70
+  },
+  "notes": [
+    "Jargon File 4.2.2 (2000): historical terminology, not current security guidance.",
+    "Jargon: first definition paragraph only, at most 400 characters; not whole entries.",
+    "Psychology: at most 12 short Jung quotations; upstream attributions are unverified.",
+    "Security fortunes also include keyword-selected records from the preserved legacy database.",
+    "Upstream collection licenses do not establish rights to every attributed quotation."
+  ]
+}

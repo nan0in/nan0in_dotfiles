@@ -1,0 +1,13 @@
+[Unit]
+Description=Clavis username startup animation
+Requisite=niri.service
+PartOf=niri.service
+After=niri.service
+ConditionEnvironment=XDG_CURRENT_DESKTOP=niri
+ConditionEnvironment=NIRI_SOCKET
+
+[Service]
+Type=simple
+Environment="QT_WAYLAND_DISABLE_WINDOWDECORATION=1"
+ExecStart=/usr/bin/qs -p %h/.local/src/clavis/Startup.qml --no-duplicate
+TimeoutStopSec=3

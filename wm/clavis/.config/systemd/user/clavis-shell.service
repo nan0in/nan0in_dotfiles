@@ -1,0 +1,28 @@
+[Unit]
+Description=Clavis desktop shell for niri
+Requisite=niri.service
+PartOf=niri.service
+After=niri.service
+ConditionEnvironment=XDG_CURRENT_DESKTOP=niri
+ConditionEnvironment=NIRI_SOCKET
+StartLimitIntervalSec=30
+StartLimitBurst=5
+
+[Service]
+Type=simple
+# Qt application styling follows qt6ct, not an inherited fixed widget style.
+UnsetEnvironment=QT_STYLE_OVERRIDE GTK_THEME
+Environment="MALLOC_CONF=thp:never,narenas:4,dirty_decay_ms:3000"
+Environment="QML_IMPORT_PATH=%h/.local/src/clavis/build/qml:%h/.local/opt/nan0in-clavis-deps/lib/qt6/qml:%h/.local/opt/nan0in-clavis-deps/usr/lib/qt6/qml"
+Environment="LD_LIBRARY_PATH=%h/.local/opt/nan0in-clavis-deps/lib:%h/.local/opt/nan0in-clavis-deps/usr/lib"
+Environment="QT_PLUGIN_PATH=%h/.local/opt/nan0in-clavis-deps/usr/lib/qt6/plugins"
+Environment="FONTCONFIG_FILE=%h/.local/opt/nan0in-clavis-deps/fontconfig.conf"
+Environment="PATH=%h/.local/bin:%h/.local/opt/nan0in-clavis-deps/key-cli/bin:%h/.local/opt/nan0in-clavis-deps/usr/bin:/usr/local/bin:/usr/bin"
+Environment="CLAVIS_KEY=%h/.local/opt/nan0in-clavis-deps/key-cli/bin/key"
+Environment="CLAVIS_CONFIG_HOME=%h/.config/niri-clavis/settings"
+Environment="NIRI_CONFIG=%h/.config/niri-clavis/config.kdl"
+Environment="YAZI_CONFIG_HOME=%h/.config/niri-clavis/settings/yazi"
+ExecStart=/usr/bin/qs -c clavis --no-duplicate
+Restart=on-failure
+RestartSec=2
+TimeoutStopSec=10

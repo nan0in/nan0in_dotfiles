@@ -1,0 +1,18 @@
+// From Hyprland 90-local.conf: tile real IDA top-level windows.
+// Do not match every generic “Output/Strings” title (could affect unrelated apps).
+window-rule {
+    match app-id="(?i)(ida|hexrays)"
+    open-floating false
+}
+
+// A restrained Dracula glow identifies the focused window only.
+window-rule {
+    match is-focused=true
+    shadow {
+        on
+        softness 22
+        spread 3
+        offset x=0 y=0
+        color "#bd93f955"
+    }
+}

@@ -6,9 +6,14 @@
 # agent/tool session state (local-only)
 .omo/
 .codegraph
+.agents/
+.codex/
+__pycache__/
+*.pyc
 
 # zshrc auto-backups
 home/.zshrc.bak*
+*.bak.*
 
 # nvim lockfile (auto-generated)
 config/.config/nvim/lazy-lock.json
@@ -33,3 +38,6 @@ home/.tmux/plugins/
 # ambxst runtime state
 config/.config/ambxst/presets/active_preset
 config/.config/ambxst/presets/*.example
+
+# niri
+/wm/clavis/wrong.md

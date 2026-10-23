@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 """Offline fortune + cowsay, wrapping Chinese by terminal cell width."""
+import argparse
+import json
 import os
 from pathlib import Path
+import random
 import shutil
 import subprocess
 import sys
@@ -23,24 +26,70 @@ def wrap(text, width=42):
                 continue
             length = cells(char)
             if size + length > width and line:
-                lines.append(line)
-                line, size = "", 0
+                boundary = line.rfind(" ")
+                if char.isascii() and char.isalnum() and line[-1].isascii() and line[-1].isalnum() and boundary > 0:
+                    lines.append(line[:boundary])
+                    line = line[boundary + 1:]
+                    size = sum(cells(c) for c in line)
+                else:
+                    lines.append(line)
+                    line, size = "", 0
             line += char
             size += length
         lines.append(line)
     return lines or [""]
 
 
+def load_groups(root):
+    """Load user weights, dropping missing databases and zero-weight groups."""
+    fallback = {"acg": {"weight": 70, "files": ["hitokoto/a", "hitokoto/b", "hitokoto/c"]},
+                "chinese": {"weight": 30, "files": ["hitokoto/d", "hitokoto/i"]}}
+    try:
+        settings = json.loads((root / "settings.json").read_text())
+        if not isinstance(settings, dict):
+            raise ValueError("Expected an object")
+    except (OSError, ValueError):
+        settings = fallback
+    groups = {}
+    for name, item in settings.items():
+        if not isinstance(item, dict):
+            continue
+        weight = item.get("weight", 0)
+        if not isinstance(weight, (int, float)) or not 0 < weight <= 100:
+            continue
+        patterns = item.get("files", [])
+        if not isinstance(patterns, list):
+            continue
+        files = set()
+        for pattern in patterns:
+            if not isinstance(pattern, str) or Path(pattern).is_absolute() or ".." in Path(pattern).parts:
+                continue
+            for path in root.glob(pattern):
+                if path.is_file() and path.with_name(path.name + ".dat").is_file():
+                    files.add(str(path))
+        if files:
+            groups[name] = {"weight": weight, "files": sorted(files)}
+    return groups
+
+
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--text", action="store_true", help="Print quote without cowsay")
+    parser.add_argument("--category", help="Choose a category from settings.json")
+    parser.add_argument("--list", action="store_true", help="List enabled categories and weights")
+    options = parser.parse_args()
     config = Path(os.environ.get("XDG_CONFIG_HOME", str(Path.home() / ".config")))
-    directory = config / "fortune/hitokoto"
-    files = [str(directory / key) for key in "abcdi"
-             if (directory / key).is_file() and (directory / (key + ".dat")).is_file()]
-    # Default: 70% ACG, 30% Chinese literature/poetry; fortune chooses within each group.
-    acg = [path for path in files if Path(path).name in "abc"]
-    chinese = [path for path in files if Path(path).name in "di"]
-    import random
-    selected = random.choices([acg, chinese], weights=[70, 30])[0] if acg and chinese else files
+    groups = load_groups(config / "fortune")
+    if options.list:
+        print(json.dumps(groups, ensure_ascii=False, indent=2))
+        return
+    if options.category and options.category not in groups:
+        parser.error("Category unavailable: " + options.category)
+    selected = []
+    if groups:
+        category = options.category or random.choices(
+            list(groups), weights=[item["weight"] for item in groups.values()])[0]
+        selected = groups[category]["files"]
     text = "今天也要元气满满！"
     if shutil.which("fortune"):
         try:
@@ -50,6 +99,9 @@ def main():
                 text = result.stdout.strip()
         except (OSError, subprocess.TimeoutExpired):
             pass
+    if options.text:
+        print(text)
+        return
     lines = wrap(text)
     if not shutil.which("cowsay"):
         print("\n".join(lines))

@@ -1,0 +1,17 @@
+[Unit]
+Description=Clavis X11 minimize request bridge for niri
+Requisite=niri.service
+PartOf=niri.service
+After=niri.service
+ConditionEnvironment=XDG_CURRENT_DESKTOP=niri
+ConditionEnvironment=NIRI_SOCKET
+ConditionEnvironment=DISPLAY
+StartLimitIntervalSec=30
+StartLimitBurst=4
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 %h/.local/src/clavis/scripts/system/x11_minimize.py --niri %h/.local/opt/niri-edge/bin/niri
+Restart=on-failure
+RestartSec=2
+TimeoutStopSec=5

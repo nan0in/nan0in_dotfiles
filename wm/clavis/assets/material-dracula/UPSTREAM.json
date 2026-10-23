@@ -1,0 +1,11 @@
+{
+  "url": "https://github.com/tsujan/Kvantum",
+  "tag": "V1.1.8",
+  "commit": "058534fc15d1798c3887590166f05c598e8e946c",
+  "license": "GPL-3.0-or-later",
+  "files": {
+    "KvAdaptaDark.kvconfig": "42be591b0fda618335930b12a63f14a5cde2624b816e6ff949259b054d3fc27e",
+    "KvAdaptaDark.svg": "a86952e8c95c99d807107c515d36c24ac90d42bd1b219251bda30a32ff07ea7c",
+    "COPYING": "0ae0485a5bd37a63e63603596417e4eb0e653334fa6c7f932ca3a0e85d4af227"
+  }
+}

@@ -3,7 +3,7 @@
 > [!IMPORTANT]
 > 已经重装3次Arch Linux，btrfs损坏直接repair修复好了一次
 
-nan0in's dotfiles for Arch Linux — **Hyprland + KDE Plasma** 双桌面环境.
+nan0in's dotfiles for Arch Linux — **Hyprland + KDE Plasma + niri/Clavis** 多桌面环境.
 使用 [GNU Stow](https://www.gnu.org/software/stow/) 管理配置文件，通过符号链接让 `$HOME` 下的文件直接指向此仓库，编辑即追踪。
 
 ## 目录
@@ -20,6 +20,7 @@ nan0in's dotfiles for Arch Linux — **Hyprland + KDE Plasma** 双桌面环境.
   - [编辑器 (Neovim)](#编辑器-neovim)
   - [输入法](#输入法)
   - [文件管理](#文件管理)
+- [niri + Clavis（迁移与使用教程）](#niri--clavis迁移与使用教程)
 - [ambxst (窗口装饰与面板)](#ambxst-窗口装饰与面板)
 - [配置说明](#配置说明)
   - [Hyprland (窗口管理器)](#hyprland-窗口管理器)
@@ -61,7 +62,8 @@ bash install.sh --dry-run install    # 预览将要执行的操作
 | `fcitx5/` | `~/.config/fcitx5/`, `~/.local/share/fcitx5/` | Fcitx5 profile、Rime 雾凇拼音 (`rime_ice`)、blog-dark 主题 |
 | `home/` | `~/` | `.zshrc`, `.p10k.zsh`, tmux 配置 (`~/.tmux.conf` + `~/.tmux/plugins`) |
 | `theme/` | `/usr/share/` | SilentSDDM 替换文件 / grub 主题（需 **root** 权限，手动安装） |
-| `ambxst/` | `~/.local/src/ambxst/` | ambxst 源码魔改版（stow 自动链接） |
+| `wm/` | 桌面 Shell 源码与模板 | [Clavis / Ambxst 组织说明](wm/README.md) |
+| `wm/ambxst/` | `~/.local/src/ambxst/` | ambxst 源码魔改版（stow 自动链接） |
 | `config/.config/ambxst/` | `~/.config/ambxst/` | 用户运行时配置（config 包内） |
 
 ### config 包内各模块
@@ -84,7 +86,6 @@ config/.config/
 ├── kitty/          # 终端模拟器
 │   ├── kitty.conf            # 主配置
 │   └── *.conf                # 主题变体（dracula, translucent, opaque, dank）
-├── ambxst/         # ambxst 面板配置 + 预设
 ├── nvim/           # Neovim (LazyVim)
 ├── ranger/         # 文件管理器
 └── fontconfig/     # 字体配置
@@ -171,14 +172,14 @@ sudo pacman -S eza zoxide
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
-#### 启动语录（中文 / 二次元，离线）
+#### 启动语录（中英日 / 计算机 / 网安，离线）
 
 `home/` 包包含 `~/.local/bin/shell-quote`；新旧文库统一由 `config/` 包管理，
 存放在 `~/.config/fortune/`。安装或重新 stow `home config` 后，新交互式
 zsh 启动时使用本地语录，保留 piano 字符画、fastfetch 和 lolcat；不发起网络请求。
 需要 Python 3，以及上面的 `fortune-mod cowsay lolcat fastfetch`。
 
-在 zsh 中直接运行 `fortune` 也默认抽取用户本地的五类句库；显式传入参数时
+在 zsh 中直接运行 `fortune` 也按 `~/.config/fortune/settings.json` 的权重抽取本地句库；显式传入参数时
 保持系统 fortune 的行为（例如 `fortune /usr/share/fortune/computers`）。
 
 原系统 `/usr/share/fortune` 的 **45 组文库**也完整保存在
@@ -189,7 +190,7 @@ This product includes software developed by the University of California,
 Berkeley and its contributors.
 
 - 来源：[一言官方句库](https://github.com/hitokoto-osc/sentences-bundle)。
-- 默认 70% 动画 / 漫画 / 游戏，30% 中文文学 / 诗词。
+- 抽取权重：英语计算机 25%、英语网安 20%、心理学 2%、日语 20%、中文 ACG 23%、中文文学 / 诗词 5%、旧文库 5%。
 - 仅保留含中文、正文 2–60 字的短句，去重并保留作者 / 作品出处。
 - 按终端显示宽度换行，避免 cowsay 按 UTF-8 字节截断中文。
 - `upstream/` 保留原始 JSON；`manifest.json` 记录上游 commit、SHA-256 和数量。
@@ -200,10 +201,25 @@ Berkeley and its contributors.
 
 ```bash
 python3 scripts/update-hitokoto.py
+python3 scripts/update-extra-fortunes.py
 ./install.sh stow home config
 ```
 
 缺少本地句库时回退到系统 fortune；缺少新脚本时保留原启动显示逻辑。
+
+新增句库在 `~/.config/fortune/extra/`：计算机 812 条、安全相关 64 条、心理学 12 条、日语谚语 70 条。
+日语条目带假名和英语释义。心理学仅少量上游署名荣格的引言，署名未逐条考证，不作专业建议。
+英语俚语来自历史 Jargon File 4.2.2，安全库另含旧技术文库的关键词精选，不作现行技术指南。
+原始来源、许可和 SHA-256 在 `extra/sources/`、`extra/manifest.json` 中保留，第三方内容不统一改授 MIT。
+详见 `config/.config/fortune/extra/README.md`。
+
+```bash
+~/.local/bin/shell-quote --list
+~/.local/bin/shell-quote --category japanese
+~/.local/bin/shell-quote --text --category security
+# 仅用已下载原始文件重建，不联网
+python3 scripts/update-extra-fortunes.py --offline
+```
 
 ### 终端
 
@@ -382,34 +398,49 @@ hyprland.conf
 
 ## ambxst (窗口装饰与面板)
 
-[ambxst](https://github.com/nan0in/ambxst) 是基于 Quickshell 构建的 Hyprland 桌面面板，提供：
+[ambxst](https://github.com/Axenide/Ambxst) 是基于 Quickshell 构建的 Hyprland 桌面面板，提供：
 - 毛玻璃液态窗口装饰
 - 配色方案预设切换
 - 工作区管理、启动器、系统托盘
 
-本仓库包含 ambxst 的**用户配置**和**源码魔改补丁**。
+本仓库保留一份可直接安装的魔改源码，同时把魔改版单独发布为 fork：
+
+- 独立 fork：[nan0in-ambxst](https://github.com/nan0in/nan0in-ambxst)
+- 修改点 / 参考 / 原项目：[NAN0IN.md](https://github.com/nan0in/nan0in-ambxst/blob/nan0in/NAN0IN.md)
+- 上游原项目：[Axenide/Ambxst](https://github.com/Axenide/Ambxst)
 
 ### 仓库中的 ambxst 文件
 
-| `ambxst/`（stow 包） | 完整 ambxst 源码（stow 到 `~/.local/src/ambxst/`） |
+| 路径 | 内容 |
+|---|---|
+| `wm/ambxst/`（stow 包） | 完整 ambxst 源码（stow 到 `~/.local/src/ambxst/`） |
 | `config/.config/ambxst/` | 用户运行时配置 |
+| `config/.config/ambxst/presets/nan0in_liquid/` | 当前 Liquid Glass 预设 |
 
-### 魔改内容
+### 魔改内容（摘要）
 
-- **CompositorTomlWriter**：重新启用 `ignore_alpha` layerrule 生成（Hyprland 0.54+ 支持）
-- **CompositorConfig**：增加 `blurExplicitIgnoreAlpha` / `blurIgnoreAlphaValue` 字段
-- **GlobalShortcuts**：托盘恢复快捷键 `SUPER+SHIFT+B`
-- **ThemePanel**：UI 调整，支持字体设置
-- **其他**：`wal_sync.py` pywal 配色同步脚本
+- **主题系统**：GTK / Qt / cursor / icon 主题字段与 ThemePanel 控件
+- **启动器**：内置计算器 `=` 与单位转换 `cv` 标签页、工具菜单和 IPC
+- **布局**：Float 伪布局，联动 Hyprland 工作区浮动切换脚本
+- **Assistant**：移除侧栏、快捷键和全屏输入抓取
+- **Compositor**：移除 quickshell 全局 blur / blur_popups / ignorealpha layer rule
+- **稳定性**：IPC FIFO watchdog、锁屏/休眠 watchdog、蓝牙计数、OSD 首事件抑制
+- **预设**：`assets/presets/new-liquid` 与 `presets/nan0in_liquid`（参考 Horizon0427 Liquid Glass）
+
+完整文件清单与参考链接见 fork 的 `NAN0IN.md`。
 
 ### 新机器安装
 
 ```bash
-# ambxst 源码已包含在 dotfiles 中，由 install.sh 自动 stow 到 ~/.local/src/ambxst/
+# 方式一：使用 dotfiles 内置源码（install.sh 自动 stow 到 ~/.local/src/ambxst/）
+cd ~/.local/src/ambxst && bash install.sh
+
+# 方式二：单独 clone fork
+git clone https://github.com/nan0in/nan0in-ambxst ~/.local/src/ambxst
 cd ~/.local/src/ambxst && bash install.sh
 ```
 
-无需额外 clone 或 apply patch，clone dotfiles 即包含完整魔改版 ambxst 源码。
+dotfiles 内置源码与 fork 的 `nan0in` 分支保持同步；不 clone fork 也能直接安装。
 
 ### 预设切换
 
@@ -465,4 +496,29 @@ cd ~/.local/src/ambxst && bash install.sh
 
 ## License
 
-MIT（第三方一言句库、转换数据和旧 fortune 文库除外，见上面的来源与许可说明）。
+MIT（Clavis 源码遵循其 GPL-3.0 许可证；第三方一言句库、转换数据和旧 fortune 文库见各自来源与许可说明）。
+
+## niri + Clavis（迁移与使用教程）
+
+正常登录原 **Niri** 项即使用 Clavis；不新增会话入口或自定义 PATH 命令。
+旧 Hyprland/Ambxst 和原 niri 个人配置保留。此包不纳入主 install.sh 默认 Stow 列表，
+由 `scripts/setup-clavis.sh` 的冲突检查安装流程管理。
+
+本仓库使用的私有 niri compositor 补丁也单独发布为 fork：
+
+- [nan0in-niri-edge](https://github.com/nan0in/nan0in-niri-edge)（基于 [StatIndet/niri-edge](https://github.com/StatIndet/niri-edge)）
+- 修改点 / 参考 / 原项目：[NAN0IN.md](https://github.com/nan0in/nan0in-niri-edge/blob/nan0in/NAN0IN.md)
+- 上游 niri：[YaLTeR/niri](https://github.com/YaLTeR/niri)
+- 本仓库内的固定来源、补丁与 systemd drop-in：`wm/niri-edge/`
+
+- [完整入门与使用手册（网页版）](wm/clavis/docs/START-HERE.html)
+- [wrong.md 处理记录](wm/clavis/docs/WRONG-FIXES.md)
+- [安装总览](wm/clavis/README.md)
+- [登录、日常使用、排障和回退](wm/clavis/docs/USAGE.md)
+- [配置结构、覆盖顺序和定制入口](wm/clavis/docs/CONFIGURATION.md)
+- [与个人 Ambxst/Hyprland 的完整对照](wm/clavis/docs/MIGRATION-FROM-AMBXST.md)
+- [当前全部快捷键](wm/clavis/docs/KEYBINDINGS.md)
+
+已按个人选择恢复 Super+L 锁屏、Super+J 布局显示切换，方向键为主导航。
+niri 的列布局与 Hyprland dwindle/master/monocle 不一一对应；实际调整、
+保留组件和待主会话验收项均在迁移文档中单独说明。

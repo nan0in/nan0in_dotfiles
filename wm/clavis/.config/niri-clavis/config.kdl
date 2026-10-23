@@ -1,0 +1,26 @@
+// Selected by the normal niri.service at next login; old config remains untouched.
+// Personal compositor settings and migrated Hyprland bindings take priority.
+include "personal-base.kdl"
+include "shell-binds.kdl"
+include "compat-rules.kdl"
+spawn-at-startup "sh" "-c" "exec ~/.config/niri-clavis/startup.sh"
+// Explicit opt-in fragments written by Clavis settings, isolated from old niri.
+include optional=true "clavis/effects.kdl"
+include optional=true "clavis/cursor.kdl"
+include optional=true "clavis/layer-rules.kdl"
+include optional=true "clavis/binds.kdl"
+include optional=true "clavis/outputs.kdl"
+include optional=true "clavis/minimize-animation.kdl"
+include optional=true "clavis/hot-corners.kdl"
+
+// GTK3 settings and qt6ct own application appearance; no fixed session theme.
+environment {
+    GTK_THEME null
+    QT_STYLE_OVERRIDE null
+}
+
+include optional=true "clavis/yazi.kdl"
+include optional=true "clavis/window-appearance.kdl"
+
+// Your final overrides belong here, not in the upstream source.
+include "local.kdl"

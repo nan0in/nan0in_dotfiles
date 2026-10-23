@@ -1,0 +1,18 @@
+[Unit]
+Description=Clavis clipboard watcher for niri
+Requisite=niri.service
+PartOf=niri.service
+After=niri.service
+ConditionEnvironment=XDG_CURRENT_DESKTOP=niri
+ConditionEnvironment=NIRI_SOCKET
+
+[Service]
+Type=simple
+Environment="PATH=%h/.local/bin:%h/.local/opt/nan0in-clavis-deps/key-cli/bin:%h/.local/opt/nan0in-clavis-deps/usr/bin:/usr/local/bin:/usr/bin"
+Environment="CLAVIS_KEY=%h/.local/opt/nan0in-clavis-deps/key-cli/bin/key"
+Environment="CLAVIS_CONFIG_HOME=%h/.config/niri-clavis/settings"
+Environment="XDG_CONFIG_HOME=%h/.config/niri-clavis/settings/key-cli-config"
+ExecStart=%h/.local/opt/nan0in-clavis-deps/key-cli/bin/key clipboard watch
+Restart=on-failure
+RestartSec=2
+TimeoutStopSec=10

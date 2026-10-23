@@ -1,0 +1,32 @@
+[config]
+version_check = false
+
+[templates.quickshell]
+input_path = "templates/quickshell-colors.json"
+output_path = "@CLAVIS_GENERATED_HOME@/clavis/colors.json"
+
+[templates.gtk]
+input_path = "templates/gtk-colors.css"
+output_path = "~/.config/gtk-4.0/gtk.css"
+
+[templates.icons]
+input_path = "templates/icons-primary.txt"
+output_path = "@CLAVIS_GENERATED_HOME@/clavis/icon-primary"
+
+[templates.btop]
+input_path = "templates/btop.theme"
+output_path = "~/.config/btop/themes/matugen.theme"
+post_hook = "pkill -USR2 btop >/dev/null 2>&1 || true"
+
+[templates.cava]
+input_path = "templates/cava-colors.ini"
+output_path = "~/.config/cava/themes/matugen"
+post_hook = "pkill -USR1 cava >/dev/null 2>&1 || true"
+
+[templates.kitty]
+input_path = "templates/kitty-colors.conf"
+output_path = "~/.config/kitty/themes/Matugen.conf"
+
+[templates.yazi]
+input_path = "templates/yazi-theme.toml"
+output_path = "@CLAVIS_GENERATED_HOME@/yazi/theme.toml"

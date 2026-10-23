@@ -1,0 +1,96 @@
+// Hyprland -> niri migration, 2026-10-16. Original configuration is preserved.
+// Compositor settings only; keyboard bindings live in clavis/binds.kdl.
+// Runtime guide: docs/CURRENT.md; design/history: docs/HANDOVER.md
+input {
+    keyboard { xkb { layout "us"; }; numlock; }
+    touchpad { tap; }
+    mouse { accel-speed 0.0; }
+    focus-follows-mouse max-scroll-amount="0%"
+}
+cursor {
+    xcursor-theme "猫标"
+    xcursor-size 24
+}
+layout {
+    gaps 10
+    center-focused-column "never"
+    preset-column-widths {
+        proportion 0.33333
+        proportion 0.5
+        proportion 0.66667
+    }
+    default-column-width { proportion 0.5; }
+    focus-ring { off; }
+    border {
+        width 2
+        active-gradient from="#444693" to="#2a5caa" angle=45
+        inactive-color "#595959aa"
+        urgent-color "#f2b8b5"
+    }
+    shadow {
+        on
+        softness 12
+        spread 2
+        offset x=1 y=2
+        color "#40404066"
+    }
+}
+prefer-no-csd
+screenshot-path "~/Pictures/Screenshots/Screenshot-%Y-%m-%d-%H-%M-%S.png"
+hotkey-overlay { skip-at-startup; }
+environment {
+    LANG "zh_CN.UTF-8"
+    LANGUAGE "zh_CN:en_US"
+    XCURSOR_SIZE "24"
+    XCURSOR_THEME "猫标"
+    QT_QPA_PLATFORM "wayland;xcb"
+    GDK_BACKEND "wayland,x11"
+    SDL_VIDEODRIVER "wayland"
+    QT_QPA_PLATFORMTHEME "qt6ct"
+    QT_IM_MODULE "fcitx"
+    GTK_IM_MODULE "fcitx"
+    XMODIFIERS "@im=fcitx"
+    _JAVA_AWT_WM_NONREPARENTING "1"
+}
+// Startup is owned by the independent niri-clavis profile.
+window-rule {
+    geometry-corner-radius 10
+    clip-to-geometry true
+}
+window-rule {
+    match is-active=false
+    opacity 0.95
+}
+window-rule {
+    match app-id="^(org\\.kde\\.gwenview|gwenview|swayimg)$"
+    open-floating true
+    default-column-width { proportion 0.6; }
+    default-window-height { proportion 0.6; }
+}
+window-rule {
+    match app-id="firefox$" title="^Picture-in-Picture$"
+    open-floating true
+}
+window-rule {
+    match app-id="^(com\\.gabm\\.satty|org\\.satty\\.Satty)$"
+    open-floating true
+    default-column-width { proportion 0.8; }
+    default-window-height { proportion 0.8; }
+}
+workspace "1"
+workspace "2"
+workspace "3"
+workspace "4"
+workspace "5"
+workspace "6"
+workspace "7"
+workspace "8"
+workspace "9"
+workspace "10"
+workspace "scratch"
+
+// Closing the laptop lid locks the session; it does not force suspend.
+switch-events {
+    lid-close { spawn "/home/nan0in/.config/niri-clavis/scripts/lock.py"; }
+}
+

@@ -1,0 +1,419 @@
+// Single source for migrated key bindings; editable from Clavis settings.
+// Later installs preserve this file, including edits and deleted defaults.
+
+binds {
+    Alt+Print repeat=false {
+        spawn "python3" "/home/nan0in/.config/niri-clavis/scripts/screenshot.py" "window";
+    };
+    Alt+Shift+Tab repeat=false {
+        spawn "/home/nan0in/.config/niri/scripts/window-tools.py" "cycle" "prev";
+    };
+    Alt+Tab repeat=false {
+        spawn "/home/nan0in/.config/niri/scripts/window-tools.py" "cycle" "next";
+    };
+    Ctrl+Print repeat=false {
+        spawn "python3" "/home/nan0in/.config/niri-clavis/scripts/screenshot.py" "screen";
+    };
+    Mod+0 {
+        focus-workspace "10";
+    };
+    Mod+1 {
+        focus-workspace "1";
+    };
+    Mod+2 {
+        focus-workspace "2";
+    };
+    Mod+3 {
+        focus-workspace "3";
+    };
+    Mod+4 {
+        focus-workspace "4";
+    };
+    Mod+5 {
+        focus-workspace "5";
+    };
+    Mod+6 {
+        focus-workspace "6";
+    };
+    Mod+7 {
+        focus-workspace "7";
+    };
+    Mod+8 {
+        focus-workspace "8";
+    };
+    Mod+9 {
+        focus-workspace "9";
+    };
+    Mod+A repeat=false {
+        spawn "qs" "-c" "clavis" "ipc" "call" "sidebar" "toggle" "quicksettings";
+    };
+    Mod+Alt+0 {
+        move-window-to-workspace "10" focus=false;
+    };
+    Mod+Alt+1 {
+        move-window-to-workspace "1" focus=false;
+    };
+    Mod+Alt+2 {
+        move-window-to-workspace "2" focus=false;
+    };
+    Mod+Alt+3 {
+        move-window-to-workspace "3" focus=false;
+    };
+    Mod+Alt+4 {
+        move-window-to-workspace "4" focus=false;
+    };
+    Mod+Alt+5 {
+        move-window-to-workspace "5" focus=false;
+    };
+    Mod+Alt+6 {
+        move-window-to-workspace "6" focus=false;
+    };
+    Mod+Alt+7 {
+        move-window-to-workspace "7" focus=false;
+    };
+    Mod+Alt+8 {
+        move-window-to-workspace "8" focus=false;
+    };
+    Mod+Alt+9 {
+        move-window-to-workspace "9" focus=false;
+    };
+    Mod+Alt+B repeat=false {
+        spawn "systemctl" "--user" "restart" "clavis-shell.service" "clavis-clipboard.service";
+    };
+    Mod+Alt+Down {
+        set-window-height "+50";
+    };
+    Mod+Alt+F repeat=false {
+        switch-focus-between-floating-and-tiling;
+    };
+    Mod+Alt+L repeat=false allow-when-locked=true {
+        spawn "swaylock" "-f" "-c" "1e1e2e";
+    };
+    Mod+Alt+Left {
+        set-column-width "-50";
+    };
+    Mod+Alt+Print repeat=false {
+        screenshot;
+    };
+    Mod+Alt+Right {
+        set-column-width "+50";
+    };
+    Mod+Alt+Up {
+        set-window-height "-50";
+    };
+    Mod+Alt+V repeat=false {
+        spawn "/home/nan0in/.config/niri/scripts/window-tools.py" "scratch-send";
+    };
+    
+    
+    Mod+BracketLeft repeat=false {
+        consume-or-expel-window-left;
+    };
+    Mod+BracketRight repeat=false {
+        consume-or-expel-window-right;
+    };
+    Mod+Ctrl+Alt+B repeat=false {
+        spawn "systemctl" "--user" "stop" "clavis-shell.service" "clavis-clipboard.service";
+    };
+    Mod+Ctrl+B repeat=false {
+        spawn "qs" "-c" "clavis" "ipc" "call" "control-center" "open" "general.bar";
+    };
+    
+    Mod+Ctrl+Down {
+        focus-monitor-down;
+    };
+    Mod+Ctrl+Escape allow-inhibiting=false {
+        toggle-keyboard-shortcuts-inhibit;
+    };
+    Mod+Ctrl+H {
+        focus-monitor-left;
+    };
+    Mod+Ctrl+J {
+        focus-monitor-down;
+    };
+    Mod+Ctrl+K {
+        focus-monitor-up;
+    };
+    Mod+Ctrl+L {
+        focus-monitor-right;
+    };
+    Mod+Ctrl+Left {
+        focus-monitor-left;
+    };
+    Mod+Ctrl+N repeat=false {
+        spawn "qs" "-c" "clavis" "ipc" "call" "control-center" "open" "general.network";
+    };
+    Mod+Ctrl+R repeat=false {
+        consume-or-expel-window-right;
+    };
+    Mod+Ctrl+Right {
+        focus-monitor-right;
+    };
+    Mod+Ctrl+Shift+Down {
+        move-window-to-monitor-down;
+    };
+    Mod+Ctrl+Shift+H {
+        move-window-to-monitor-left;
+    };
+    Mod+Ctrl+Shift+J {
+        move-window-to-monitor-down;
+    };
+    Mod+Ctrl+Shift+K {
+        move-window-to-monitor-up;
+    };
+    Mod+Ctrl+Shift+L {
+        move-window-to-monitor-right;
+    };
+    Mod+Ctrl+Shift+Left {
+        move-window-to-monitor-left;
+    };
+    Mod+Ctrl+Shift+Right {
+        move-window-to-monitor-right;
+    };
+    Mod+Ctrl+Shift+Up {
+        move-window-to-monitor-up;
+    };
+    Mod+Ctrl+Shift+W repeat=false {
+        spawn "/home/nan0in/.local/bin/waywallen";
+    };
+    Mod+Ctrl+Space repeat=false {
+        spawn "fuzzel" "--config" "/home/nan0in/.config/niri/fuzzel/fuzzel.ini";
+    };
+    Mod+Ctrl+T repeat=false {
+        toggle-column-tabbed-display;
+    };
+    Mod+Ctrl+Up {
+        focus-monitor-up;
+    };
+    
+    Mod+D repeat=false {
+        spawn "qs" "-c" "clavis" "ipc" "call" "sidebar" "toggle" "dashboard";
+    };
+    Mod+Down {
+        focus-window-down;
+    };
+    Mod+E repeat=false {
+        spawn "python3" "/home/nan0in/.config/niri-clavis/scripts/desktop-actions.py" "folder";
+    };
+    Mod+Escape repeat=false {
+        spawn "qs" "-c" "clavis" "ipc" "call" "power-menu" "toggle";
+    };
+    Mod+F repeat=false {
+        fullscreen-window;
+    };
+    Mod+F1 repeat=false hotkey-overlay-title="全部快捷键（含覆盖配置）" {
+        spawn "python3" "/home/nan0in/.config/niri-clavis/scripts/keybindings.py";
+    };
+    Mod+H {
+        focus-column-left;
+    };
+    Mod+J repeat=false {
+        toggle-column-tabbed-display;
+    };
+    Mod+K {
+        focus-window-up;
+    };
+    Mod+L repeat=false {
+        spawn "/home/nan0in/.config/niri-clavis/scripts/lock.py";
+    };
+    Mod+Left {
+        focus-column-left;
+    };
+    Mod+M repeat=false {
+        maximize-column;
+    };
+    Mod+N repeat=false {
+        spawn "python3" "/home/nan0in/.config/niri-clavis/scripts/desktop-actions.py" "notes";
+    };
+    Mod+P {
+        switch-preset-column-width;
+    };
+    Mod+Page_Down {
+        focus-workspace-down;
+    };
+    Mod+Page_Up {
+        focus-workspace-up;
+    };
+    Mod+Period repeat=false {
+        spawn "python3" "/home/nan0in/.config/niri-clavis/scripts/desktop-actions.py" "emoji";
+    };
+    Mod+Q repeat=false {
+        spawn "kitty";
+    };
+    Mod+R repeat=false {
+        spawn "python3" "/home/nan0in/.config/niri-clavis/scripts/screenshot.py" "region";
+    };
+    Mod+Return repeat=false {
+        spawn "kitty";
+    };
+    Mod+Right {
+        focus-column-right;
+    };
+    Mod+S repeat=false {
+        spawn "/home/nan0in/.config/niri/scripts/window-tools.py" "scratch";
+    };
+    Mod+Shift+0 {
+        move-window-to-workspace "10";
+    };
+    Mod+Shift+1 {
+        move-window-to-workspace "1";
+    };
+    Mod+Shift+2 {
+        move-window-to-workspace "2";
+    };
+    Mod+Shift+3 {
+        move-window-to-workspace "3";
+    };
+    Mod+Shift+4 {
+        move-window-to-workspace "4";
+    };
+    Mod+Shift+5 {
+        move-window-to-workspace "5";
+    };
+    Mod+Shift+6 {
+        move-window-to-workspace "6";
+    };
+    Mod+Shift+7 {
+        move-window-to-workspace "7";
+    };
+    Mod+Shift+8 {
+        move-window-to-workspace "8";
+    };
+    Mod+Shift+9 {
+        move-window-to-workspace "9";
+    };
+    Mod+Shift+A repeat=false {
+        spawn "python3" "/home/nan0in/.config/niri-clavis/scripts/desktop-actions.py" "ocr";
+    };
+    Mod+Shift+B repeat=false {
+        spawn "python3" "/home/nan0in/.config/niri-clavis/scripts/desktop-actions.py" "recover-tray";
+    };
+    Mod+Shift+C repeat=false {
+        spawn "qs" "-c" "clavis" "ipc" "call" "control-center" "toggle" "general";
+    };
+    Mod+Shift+Down {
+        move-window-down;
+    };
+    Mod+Shift+F repeat=false {
+        spawn "python3" "/home/nan0in/.config/niri-clavis/scripts/desktop-actions.py" "float-workspace";
+    };
+    Mod+Shift+H {
+        consume-or-expel-window-left;
+    };
+    Mod+Shift+J {
+        move-window-down;
+    };
+    Mod+Shift+K {
+        move-window-up;
+    };
+    Mod+Shift+L {
+        consume-or-expel-window-right;
+    };
+    Mod+Shift+Left {
+        consume-or-expel-window-left;
+    };
+    Mod+Shift+M repeat=false {
+        quit;
+    };
+    
+    Mod+Shift+R repeat=false {
+        spawn "python3" "/home/nan0in/.config/niri-clavis/scripts/desktop-actions.py" "record";
+    };
+    Mod+Shift+Right {
+        consume-or-expel-window-right;
+    };
+    Mod+Shift+S repeat=false {
+        spawn "/home/nan0in/.config/niri/scripts/window-tools.py" "scratch-send";
+    };
+    Mod+Shift+Slash repeat=false {
+        show-hotkey-overlay;
+    };
+    Mod+Shift+Space repeat=false {
+        spawn "qs" "-c" "clavis" "ipc" "call" "spotlight" "web";
+    };
+    Mod+Shift+T repeat=false {
+        spawn "qs" "-c" "clavis" "ipc" "call" "keystone" "tools";
+    };
+    Mod+Shift+Up {
+        move-window-up;
+    };
+    Mod+Shift+V repeat=false {
+        toggle-window-floating;
+    };
+    Mod+Shift+W repeat=false {
+        spawn "qs" "-c" "clavis" "ipc" "call" "spotlight" "openMode" "wallpapers";
+    };
+    Mod+Shift+X {
+        focus-workspace-down;
+    };
+    Mod+Shift+Z {
+        focus-workspace-up;
+    };
+    Mod+Slash repeat=false {
+        spawn "qs" "-c" "clavis" "ipc" "call" "shortcut-map" "toggle";
+    };
+    Mod+Space repeat=false {
+        spawn "qs" "-c" "clavis" "ipc" "call" "spotlight" "toggle";
+    };
+    Mod+T repeat=false {
+        spawn "kitty" "tmux" "new-session" "-A" "-s" "main";
+    };
+    Mod+Tab repeat=false {
+        toggle-overview;
+    };
+    Mod+Up {
+        focus-window-up;
+    };
+    Mod+V repeat=false {
+        spawn "qs" "-c" "clavis" "ipc" "call" "spotlight" "openMode" "clipboard";
+    };
+    Mod+W repeat=false {
+        close-window;
+    };
+    Mod+WheelScrollDown cooldown-ms=150 {
+        focus-workspace-down;
+    };
+    Mod+WheelScrollUp cooldown-ms=150 {
+        focus-workspace-up;
+    };
+    Print repeat=false {
+        spawn "python3" "/home/nan0in/.config/niri-clavis/scripts/screenshot.py" "region";
+    };
+    Shift+Print repeat=false {
+        spawn "python3" "/home/nan0in/.config/niri-clavis/scripts/screenshot.py" "menu";
+    };
+    XF86AudioLowerVolume allow-when-locked=true {
+        spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "5%-";
+    };
+    XF86AudioMicMute allow-when-locked=true {
+        spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle";
+    };
+    XF86AudioMute allow-when-locked=true {
+        spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle";
+    };
+    XF86AudioNext allow-when-locked=true {
+        spawn "playerctl" "next";
+    };
+    XF86AudioPause allow-when-locked=true {
+        spawn "playerctl" "play-pause";
+    };
+    XF86AudioPlay allow-when-locked=true {
+        spawn "playerctl" "play-pause";
+    };
+    XF86AudioPrev allow-when-locked=true {
+        spawn "playerctl" "previous";
+    };
+    XF86AudioRaiseVolume allow-when-locked=true {
+        spawn "wpctl" "set-volume" "-l" "1" "@DEFAULT_AUDIO_SINK@" "5%+";
+    };
+    XF86MonBrightnessDown allow-when-locked=true {
+        spawn "brightnessctl" "-e4" "-n2" "set" "5%-";
+    };
+    XF86MonBrightnessUp allow-when-locked=true {
+        spawn "brightnessctl" "-e4" "-n2" "set" "5%+";
+    };
+
+Super_L repeat=false {
+    spawn "qs" "-c" "clavis" "ipc" "call" "spotlight" "toggle";
+};
+};

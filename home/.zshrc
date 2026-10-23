@@ -3,6 +3,10 @@
 [[ -d "$HOME/.cows" ]] && export COWPATH="$HOME/.cows${COWPATH:+:$COWPATH}"
 # 不带参数时使用用户本地句库；显式参数仍原样交给系统 fortune。
 fortune() {
+  if (( $# == 0 && $+commands[python3] )) && [[ -x "$HOME/.local/bin/shell-quote" ]]; then
+    "$HOME/.local/bin/shell-quote" --text
+    return $?
+  fi
   local quote_dir="${XDG_CONFIG_HOME:-$HOME/.config}/fortune/hitokoto"
   local -a quote_files
   local category
@@ -353,3 +357,14 @@ export PATH="$PNPM_HOME/bin:$PATH"
 
 # Shared Python environment for IDA and HCLI.
 export IDAPYTHON_VENV_EXECUTABLE="/home/nan0in/.venvs/base/bin/python3"
+
+# stepcode
+case ":$PATH:" in
+  *":/home/nan0in/.stepcode/bin:"*) ;;
+  *) export PATH="/home/nan0in/.stepcode/bin:$PATH" ;;
+esac
+case ":$PATH:" in
+  *":/home/nan0in/.stepcode/agent/bin:"*) ;;
+  *) export PATH="/home/nan0in/.stepcode/agent/bin:$PATH" ;;
+esac
+# stepcode end

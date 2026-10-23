@@ -1,0 +1,15 @@
+{
+  "project": "Unicode Emoji + CLDR",
+  "version": "Emoji 16.0 / CLDR 47.0.0",
+  "license": "Unicode-3.0",
+  "count": 3790,
+  "sources": {
+    "https://raw.githubusercontent.com/unicode-org/cldr-json/47.0.0/cldr-json/cldr-annotations-full/annotations/en/annotations.json": "2405d3f2e4c5812a4faf93d965630246269e0177ce907d863c7d6bb197e957c1",
+    "https://raw.githubusercontent.com/unicode-org/cldr-json/47.0.0/cldr-json/cldr-annotations-derived-full/annotationsDerived/en/annotations.json": "8ebc16e27adf6c555c9ce467335cee8fc9416e5d8646a91bd4eacbb450ebee22",
+    "https://raw.githubusercontent.com/unicode-org/cldr-json/47.0.0/cldr-json/cldr-annotations-full/annotations/zh/annotations.json": "c57fcb31e7f2ace00343b8578ae30a7856270bb23dc94e5ea02f3858ed875ef2",
+    "https://raw.githubusercontent.com/unicode-org/cldr-json/47.0.0/cldr-json/cldr-annotations-derived-full/annotationsDerived/zh/annotations.json": "1c3a4eb778737042aba1e14ff69a4264b22348981e51f0a34b98645d0b29ea1e",
+    "https://raw.githubusercontent.com/unicode-org/cldr-json/47.0.0/cldr-json/cldr-annotations-full/annotations/zh-Hant/annotations.json": "7b5ee72ea09c0adc7ae5f22192e142e7c2465f86cb0b6710737f3201e6dc9f8f",
+    "https://raw.githubusercontent.com/unicode-org/cldr-json/47.0.0/cldr-json/cldr-annotations-derived-full/annotationsDerived/zh-Hant/annotations.json": "99821612862a0595a99c2adffbeb26fb4c5393e20233668d495adf66c0315b2a",
+    "https://unicode.org/Public/emoji/16.0/emoji-test.txt": "24f0c534e86cf142e2496953e8f0e46a3e702392911eddcd29c6cced85139697"
+  }
+}

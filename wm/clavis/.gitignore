@@ -1,0 +1,8 @@
+.local/src/clavis/build/
+.local/src/clavis/.qmlls.ini
+.local/src/clavis/Common/generated/
+.local/src/clavis/assets/icons/weather/meteocons/
+**/__pycache__/
+# Shell runtime data: keep only the intentional initial idle policy.
+.config/niri-clavis/settings/*
+!.config/niri-clavis/settings/idle-policy.json

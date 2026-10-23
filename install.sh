@@ -37,12 +37,13 @@ require_cmd() {
 }
 
 stow_pkg() { # stow_pkg <action: --stow|--delete|--restow> <pkg>
-	local action=$1 pkg=$2
-	if [[ ! -d "$DOTFILES_DIR/$pkg" ]]; then
+	local action=$1 pkg=${2#wm/} stow_dir="$DOTFILES_DIR"
+	[[ $pkg != ambxst ]] || stow_dir="$DOTFILES_DIR/wm"
+	if [[ ! -d "$stow_dir/$pkg" ]]; then
 		warn "Package '$pkg' not found, skipping."
 		return
 	fi
-	run stow --dir="$DOTFILES_DIR" --target="$HOME" "$action" "$pkg"
+	run stow --dir="$stow_dir" --target="$HOME" "$action" "$pkg"
 }
 
 resolve_packages() { # resolve_packages [pkg ...] → uses ALL_PACKAGES if none given
@@ -73,7 +74,7 @@ cmd_help() {
     help                 Show this help message
 
   Packages:
-    ambxst   — ambxst source (stow to ~/.local/src/ambxst/)
+    ambxst   — wm/ambxst source (stow to ~/.local/src/ambxst/)
     config   — ~/.config/* (nvim, kitty, hypr, waybar, dunst, ambxst, ranger, yazi, fontconfig …)
     fcitx5   — fcitx5 theme (blog-dark) and input method config
     home     — ~/.zshrc, ~/.p10k.zsh, tmux config, …
@@ -95,10 +96,18 @@ cmd_help() {
 EOF
 }
 
+package_root() {
+	if [[ ${1#wm/} == ambxst ]]; then
+		printf "%s/wm/ambxst" "$DOTFILES_DIR"
+	else
+		printf "%s/%s" "$DOTFILES_DIR" "$1"
+	fi
+}
+
 cmd_list() {
 	header "Available packages in $DOTFILES_DIR:"
 	for pkg in "${ALL_PACKAGES[@]}"; do
-		if [[ -d "$DOTFILES_DIR/$pkg" ]]; then
+		if [[ -d "$(package_root "$pkg")" ]]; then
 			printf '  \033[1;32m✓\033[0m  %s\n' "$pkg"
 		else
 			printf '  \033[1;31m✗\033[0m  %s  (directory not found)\n' "$pkg"
@@ -111,18 +120,20 @@ cmd_status() {
 	require_cmd stow
 	header "Stow status (target: $HOME):"
 	for pkg in "${ALL_PACKAGES[@]}"; do
-		[[ ! -d "$DOTFILES_DIR/$pkg" ]] && continue
+		[[ ! -d "$(package_root "$pkg")" ]] && continue
 		# Pick the first tracked file in the package and check if it's a symlink into dotfiles
 		local sample
-		sample=$(find "$DOTFILES_DIR/$pkg" -not -type d | head -1)
+		sample=$(find "$(package_root "$pkg")" -not -type d -print -quit)
 		if [[ -z "$sample" ]]; then
 			printf '  \033[0;90m?\033[0m  %s  (empty package)\n' "$pkg"
 			continue
 		fi
 		# Compute relative path from package root
-		local rel="${sample#$DOTFILES_DIR/$pkg/}"
+		local pkg_root
+		pkg_root=$(package_root "$pkg")
+		local rel="${sample#$pkg_root/}"
 		local target_file="$HOME/$rel"
-		if [[ -L "$target_file" ]] && [[ "$(readlink -f "$target_file")" == "$(readlink -f "$sample")" ]]; then
+		if [[ -e "$target_file" ]] && [[ "$(readlink -f "$target_file")" == "$(readlink -f "$sample")" ]]; then
 			printf '  \033[1;32m✓ stowed  \033[0m  %s\n' "$pkg"
 		elif [[ -e "$target_file" ]]; then
 			printf '  \033[1;33m~ conflict\033[0m  %s  (%s exists but is not a symlink to dotfiles)\n' "$pkg" "$target_file"

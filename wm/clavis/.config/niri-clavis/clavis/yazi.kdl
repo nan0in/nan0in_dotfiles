@@ -1,0 +1,2 @@
+// Independent Yazi overlay; original personal configuration remains linked.
+environment { YAZI_CONFIG_HOME "@CLAVIS_YAZI_HOME@"; }
